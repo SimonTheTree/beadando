@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>HexMapTest</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="JS/jquery-3.1.1.js"></script>
+        <script src="JS/CustomTools.js"></script>
+        <script src="JS/Point.js"></script>
+        <script src="JS/HexLayout.js"></script>
+        <script src="JS/BasicHexTile.js"></script>
+        <script src="JS/MyTile.js"></script>
+        <script src="JS/HexMap.js"></script>
+        <script src="JS/MapGenerator.js"></script>
+    </head>
+    <body>
+        <canvas id="graphic">
+        </canvas> 
+    </body>
+    <script>
+        
+        var layout = new HexLayout(HexOrientation.LAYOUT_FLAT, new Point(30, 30), new Point(100,100))
+        var a = new BasicHexTile(0,0,0);
+        b = a.getNeighbor(1);
+        var c = new MyTile(0,0,0);
+        d = c.getNeighbor(1);
+        var map = new HexMap(new MapGeneratorHexRectangleFlat(MyTile, [10, 5]), layout);
+        var canvas = CustomTools.grab("graphic");
+        canvas.style.width  = 800 + "px"; 
+        canvas.style.height = 600 + "px"; 
+        ctx = canvas.getContext('2d');
+        ctx.canvas.width  = 800; 
+        ctx.canvas.height = 600;
+        map.render(canvas);
+        
+    </script>
+    
+</html>
