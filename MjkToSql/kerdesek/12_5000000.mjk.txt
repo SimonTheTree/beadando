@@ -1,0 +1,185 @@
+# MJK
+<felfedezés>
+=Hányszor járt Kolumbusz Amerikában?^egyszer^kétszer^háromszor^&négyszer
+=Hol halt meg a híres felfedező és tengerész, Vasco da Gama?^Amerikában^&Indiában^Kínában^Japánban
+=Kik alapították a mai New York városát?^angol fegyencek^ír földművesek^&holland telepesek^spanyol hódítók
+=Melyik magyar Afrika-kutató volt eredetileg autóversenyző és pilóta?^&Almásy László^Kittenberger Kálmán^Teleki Sámuel^Magyar László
+=Mit tárt fel a XX. század elején Robert Koldewey német régész?^&Babilont^a knósszoszi palotát^Tutanhamon sírját^kelta temetőt Hallstattban
+</felfedezés>
+<földrajz - egyéb>
+=Hány fokozatú a földrengések erősségét jelző Richter-skála?^&9^12^14^7
+=Hány fokozatú a szélerősségjelző Beaufort-skála?^&12^9^10^6
+=Hogy nevezik a Föld légkörének legalsó rétegét?^&troposzféra^sztratoszféra^mezoszféra^ionoszféra
+=Hogy nevezik a hideg mérsékelt öv erdősége alatt kifejlődött savanyú, kilúgozott talajt?^&podzol^csernozjom^andoszol^laterit
+=Hogy nevezik a jellegzetesen kifli alakú, szabadon mozgó sivatagi homokbuckát?^&barkán^drumlin^neck^rift
+=Kiről nevezték el Mount Everestnek a világ legmagasabb hegycsúcsát?^új-zélandi hegymászóról^amerikai utazóról^&brit földrajztudósról^ausztrál kalandorról
+=Megközelítőleg hány százaléka édesvíz a Föld vízkészletének?^&1%^8%^13%^20%
+=Melyik ásványt nevezik a bolondok aranyának?^&pirit^kvarc^ortoklász^nefelin
+=Melyik kémiai elemet tartalmazza legnagyobb arányban a cinnabarit nevű ásvány?^&higany^kén^bárium^cink
+=Milyen szél a misztrál?^meleg és nedves^hideg és nedves^meleg és száraz^&hideg és száraz
+=Milyen színű ásvány a greenockit?^sötétzöld^&élénksárga^halvány rózsaszínű^világosszürke
+=Milyen színű drágakő a malachit?^lila^sárga^kék^&zöld
+=Mit mér a pluviométer?^&csapadékmennyiséget^páratartalmat^légszennyezettséget^zajszintet
+</földrajz - egyéb>
+<földrajz - magyar>
+=Melyik Magyarország legalacsonyabban fekvő városa?^&Szeged^Kecskemét^Debrecen^Szolnok
+=Melyik Magyarország legnyugatabbra fekvő városa?^Kőszeg^Sopron^Szombathely^&Szentgotthárd
+=Melyik nem része Budapest XVII. kerületének?^Rákoscsaba^Rákoskeresztúr^&Rákosszentmihály^Rákoshegy
+=Melyik szomszédos országgal van a leghosszabb közös határunk?^&Szlovákia^Horvátország^Románia^Ausztria
+=Mi a Bakony legmagasabb pontja?^&Kőris-hegy^Öreg-Futóné^Bél-kő^Írott-kő
+</földrajz - magyar>
+<földrajz - világ>
+=Az alábbi USA-tagállamok közül melyik fekszik keletebbre?^Wyoming^Minnesota^Arkansas^&Tennessee
+=Hol feküdt a híres ókori város, Knósszosz?^Kis-Ázsiában^&Krétán^az Olümposz lábánál^Rodoszon
+=Hozzávetőlegesen hány négyzetkilométer Új-Zéland területe?^468,68 ezer^68,68 ezer^168,68 ezer^&268,68 ezer
+=Mely európai ország gyarmata volt az 1910-es évek elején a mai Líbia?^Hollandia^Franciaország^&Olaszország^Nagy-Britannia
+=Mely ország beszélt nyelvei: francia, volot, szerer, manding, diola?^Guinea^&Szenegál^Niger^Kamerun
+=Melyik a leghosszabb folyó az alábbiak közül?^&Huang-ho^Kongó^Mekong^Paraná
+=Melyik a világ legmagasabban fekvő fővárosa?^&La Paz^Quito^Katmandu^Jereván
+=Melyik a világ legmagasabban fekvő tava?^&Titicaca-tó^Tana-tó^Nagy Sós-tó^Felső-tó
+=Melyik amerikai államot nevezik "Zöld hegyek államának"?^&Vermont^Maine^Montana^Wisconsin
+=Melyik amerikai folyót becézik Old Muddynak?^&Mississippi^Missouri^Hudson^Colorado
+=Melyik Ázsia leghosszabb folyója?^&Jangce^Huang-ho^Amur^Léna
+=Melyik ázsiai hegycsúcsot nevezik K2-nek?^&Godwin Austen^Kanchenjunga^Broad Peak^Lhotse
+=Melyik Európa legnagyobb félszigete?^&Skandináv-félsziget^Pireneusi-félsziget^Balkán-félsziget^Appennini-félsziget
+=Melyik Franciaország leghosszabb folyója?^Szajna^Rhône^Garonne^&Loire
+=Melyik két ország határán található a Titicaca-tó?^Peru és Ecuador^Peru és Brazília^&Peru és Bolívia^Argentína és Bolívia
+=Melyik nem a Kanári-szigetek tagja?^Tenerife^Fuerteventura^&Porto Santo^Alegranza
+=Melyik ország fennhatósága alá tartoznak a Galápagos-szigetek?^&Ecuador^Panama^Honduras^Chile
+=Melyik ország fővárosa volt 1918 és 1940 között Kaunas?^Lettország^&Litvánia^Észtország^Moldova
+=Melyik ország nem határos Brazíliával?^&Ecuador^Guyana^Paraguay^Bolívia
+=Melyik országban található a Chimborazo vulkán?^&Ecuador^Venezuela^Kolumbia^Peru
+=Melyik országban található Bihar nevű szövetségi állam?^&Indiában^Brazíliában^Nigériában^Mexikóban
+=Melyik országgal nem szomszédos Chile?^Argentína^&Brazília^Peru^Bolívia
+=Melyik pannóniai település állt a mai Komárom területén?^&Brigetio^Mursella^Cirpi^Intercisa
+=Melyik sivatagban található a Death Valley?^&Mojave-sivatag^Gila-sivatag^Nagy-sóstó-sivatag^Gibson-sivatag
+=Melyik szigetcsoport tagja Hispaniola?^&Nagy-Antillák^Fülöp-szigetek^Bermuda-szigetek^Baleárok
+=Melyik USA tagállam székhelye Salt Lake City?^Texas^Arizona^Ohio^&Utah
+=Melyik USA tagállam székhelye Topeka?^&Kansas^Nebraska^Oregon^Wisconsin
+=Melyik USA tagállam területén található a Grand Canyon?^Nevada^Colorado^&Arizona^Utah
+=Melyik város a franciaországi Bretagne székhelye?^&Rennes^Toulouse^Caen^Dijon
+=Melyik város híres strandja a Copacabana?^Barcelona^&Rio de Janeiro^Havanna^Buenos Aires
+=Melyik város nem fekszik a Rajna partján?^Basel^Strasbourg^Düsseldorf^&Dortmund
+=Mi Burundi hivatalos nyelve?^kirundi^kayah^&francia^szuahéli
+=Mi Srí Lanka hivatalos nyelve?^&szingaléz^angol^hindi^szamojéd
+=Mi Sztálingrád mai neve?^Szentpétervár^Kalinyingrád^&Volgográd^Novgorod
+=Milyen hosszú a Nílus folyó?^5544 km^8460 km^&6695 km^7497 km
+=Milyen néven ismerjük a Lac Lémant?^&Genfi-tó^Boden-tó^Luganói-tó^Fertő-tó
+</földrajz - világ>
+<néprajz>
+=Az alábbi népcsoportok közül melyik nem tartozik az uráli népek finnugor ágába?^&enyec^lív^karjalai^vepsze
+=Melyik népcsoportban voltak a lófők?^a ruténeknél^a kunoknál^&a székelyeknél^a sokácoknál
+=Melyik ország lakosai a gurkhák?^&Nepál^Pakisztán^Banglades^Mianmar
+=Milyen eredetű a jász nemzetiség?^viking^germán^balti szláv^&iráni
+</néprajz>
+<Nobel-díj>
+=Ki kapott elsőként fizikai Nobel-díjat?^Antoine H. Becquerel^&Wilhelm C. Röntgen^Hendrik A. Lorentz^Ernest Rutherford
+=Ki kapta az irodalmi Nobel-díjat 1999-ben?^Robert Merle^José Saramago^&Günter Grass^Bohumil Hrabal
+=Ki nem Nobel-díjas az alábbiak közül?^Rudyard Kipling^Heinrich Böll^Camilo José Cela^&Umberto Eco
+=Melyik évben adták ki az első Nobel-díjat?^1899^1900^&1901^1902
+=Melyik évben egészítették ki közgazdasági kategóriával a Nobel-díjat?^&1969^1955^1915^1980
+=Melyik évben tüntették ki fizikai Nobel-díjjal Wigner Jenőt?^&1963^1961^1967^1957
+=Melyik országból származott a Nobel-békedíjas Teréz anya?^Indiából^Lengyelországból^&Albániából^Olaszországból
+=Melyik politikus kapta meg 1973-ban Le Duc Thóval megosztva a Nobel-díjat?^Gerald Ford^Willy Brandt^&Henry Kissinger^Anvar Szadat
+=Melyik tudományágban kapott Nobel-díjat Hevesy György 1943-ban?^&kémia^fizika^orvostudomány^közgazdaságtan
+=Melyik tudományágban kapott Nobel-díjat Oláh György 1994-ben?^&kémia^orvostudomány^közgazdaságtan^irodalom
+=Milyen Nobel-díjat kapott Bárány Róbert 1914-ben?^kémiai^&orvosi^közgazdasági^fizikai
+=Milyen Nobel-díjat kapott Andrej Szaharov?^kémiai^fizikai^&béke^közgazdasági
+</Nobel-díj>
+<oktatás>
+=Az alábbiak közül mi nem tartozott a "hét lovagi készség" közé a középkori lovagi nevelésben?^&birkózás^sakkozás^éneklés^úszás
+=Ki alapította hazánkban az első óvodát?^Kratochwill Georgina^Mária Terézia^&Brunszvik Teréz^Brandenburgi Borbála
+=Kik irányították az Eötvös Loránd Tudományegyetem jogelődjének számító egyetemet 1773-ig?^bencések^piaristák^&jezsuiták^ferencesek
+=Minek a tanítására alkalmazható a Berlitz-módszer?^&idegen nyelvek^matematikai alapműveletek^kottaolvasás^siketnéma jelbeszéd
+</oktatás>
+<orvostudomány>
+=Hogy nevezik az emberi bőr két fő rétegét?^alhám és felhám^&felhám és irha^irha és dermisz^felhám és epidermisz
+=Ki volt a gyermekorvostan első tanára hazánkban?^&id. Bókay János^Heim Pál^Schöpf-Mérei Ágoston^Korányi Sándor
+=Melyik fehérje felelős a véralvadásért?^&fibrinogén^lipoprotein^albumin^hemoglobin
+=Melyik íz érzékelhető a nyelv hátsó részén (a nyelvgyökön)?^&keserű^édes^savanyú^sós
+=Melyik szervünk vizsgálatáért kapott orvosi Nobel-díjat Békésy György?^az agy^a szem^&a fül^a szív
+=Melyik városban végezte el Christiaan Barnard professzor az első sikeres emberi szívátültetést?^Montrealban^Melbourne-ben^Párizsban^&Fokvárosban
+=Milyen néven ismert az a gyógyszer, melynek kémiai neve acetil-szalicilsav?^algopirin^&aszpirin^kalmopirin^quarelin
+</orvostudomány>
+<politika>
+=Hány állandó tagja van az ENSZ Biztonsági Tanácsának?^&öt^tíz^tizenöt^húsz
+=Hogy hívták Indira Gandhi fiát, aki később szintén merénylet áldozata lett?^Karamcsand Gandhi^&Radzsiv Gandhi^Csaran Szingh^Dzsavaharlal Nehru
+=Hol rendezték meg az Európai Biztonsági és Együttműködési Értekezletet 1975-ben?^Washington^Párizs^Genf^&Helsinki
+=Ki volt Bill Clinton republikánus ellenfele az 1992-es amerikai elnökválasztáson?^Michael Dukakis^Al Gore^Dick Cheney^&George Bush
+=Ki volt Bill Clinton republikánus ellenlábasa az 1996-os választásokon?^Al Gore^Ross Perot^&Robert Dole^Michael Dukakis
+=Melyik afrikai ország császára volt 1930 és 1974 között "a négus" vagyis Hailé Szelasszié?^Szudán^&Etiópia^Kongó^Nigéria
+=Melyik afrikai ország diktátora volt Idi Amin?^Szudán^Kenya^&Uganda^Közép-afrikai Köztársaság
+=Melyik ázsiai ország elnöke volt többször Norodom Szihanuk?^Malajzia^&Kambodzsa^Vietnam^Indonézia
+=Melyik évben alakult meg a KGST?^&1949^1950^1951^1952
+=Melyik ország köztársasági elnöke volt Corazón Aquino asszony?^Srí Lanka^Banglades^India^&Fülöp-szigetek
+=Melyik ország köztársasági elnöke volt Kafi Ali?^&Algéria^Kenya^Dél-afrikai Köztársaság^Szenegál
+=Melyik országban volt kormányfő Sirimavo Bandaranaike asszony?^Fülöp-szigetek^India^Pakisztán^&Ceylon
+=Melyik szövetségi államból származik Bill Clinton volt amerikai elnök?^Alabama^Oklahoma^&Arkansas^Kentucky
+=Mi Tanzánia államformája?^monarchia^szocialista népköztársaság^&szövetségi köztársaság^államszövetség
+=Mi volt Göncz Árpád köztársasági elnök, író és műfordító eredeti végzettsége?^&agrármérnök^jogász^közgazdász^filozófus
+=Mikor alakult meg a Szovjetunió?^1917^1919^1921^&1922
+=Milyen miniszter volt 1961 és 1964 között Robert Kennedy?^pénzügyminiszter^&igazságügy-miniszter^külügyminiszter^hadügyminiszter
+=Milyen miniszteri posztot töltött be a Thatcher-kormányban a későbbi miniszterelnök, John Major?^hadügy^&pénzügy^belügy^oktatásügy
+=Milyen nemzetiségű államférfi volt Benito Juárez García?^&mexikói^Puerto Ricó-i^argentin^brazil
+=Mit mondott ki a Monroe-elv?^a rabszolgák felszabadítását^a titkosszolgálat ellenőrzését^&be nem avatkozás politikáját^a telepesek földhöz juttatását
+</politika>
+<szórakozás>
+=A vadnyugat melyik legendás alakja járt show-műsorával Magyarországon is?^&Buffalo Bill^Sundance Kölyök^Butch Cassidy^Jesse James
+=Az Amerikai Egyesült Államok mely államában található Walt Disney World?^&Florida^Kalifornia^Georgia^Oregon
+=Hány darabból áll a szabványos dominókészlet?^&28^32^36^42
+=Kinek a képe látható a magyar kártya zöld alsóján?^Rudenz Ulrich^Reding Itell^&Fürst Walter^Harras Rudolf
+=Kit ábrázol a magyar kártyában a piros alsó lap?^Tell Vilmos^Fürst Walter^&Kuoni pásztor^Harras Rudolf
+=Melyik kártyajátékból fejlődött ki a bridzs?^römi^&whist^póker^sikanőz
+=Melyik szerencsejáték fogadási szisztémái a következők: D'Alambert-rendszer, Biarritz-rendszer, Kubati-módszer?^&rulett^lottó^lóverseny^póker
+</szórakozás>
+<üzlet>
+=Hány ország vezette be az eurót 2002. január 1-jén?^8^10^&12^14
+=Hol található a Nemzetközi Valutaalap székhelye?^&Washington^Genf^Párizs^Brüsszel
+=Mekkora űrtartalmú az üzleti életben használt olajhordó?^100 liter^&159 liter^200 liter^235 liter
+=Melyik dátumra esett a New York-i tőzsde összeomlása, a "fekete csütörtök"?^&1929. október 24.^1928. szeptember 9.^1929. december 13.^1928. november 27.
+=Melyik évben bocsátottak ki először bankkártyát Magyarországon?^&1988^1984^1990^1993
+=Melyik évben vezették be a londoni értéktőzsdén a "nagy robbanásnak" nevezett reformokat?^1983^1984^1985^&1986
+=Melyik ország nemzeti pénzneme a pula?^&Botswana^Szomália^Ghána^Lesotho
+=Melyik ország pénzneme a quetzal?^&Guatemala^Salvador^Costa Rica^Nicaragua
+=Mi jön létre, ha független vállalatok megállapodnak a piac elosztásáról, valamint a beszerzési és eladási áraikat közösen állapítják meg?^&kartell^konszern^tröszt^franchise
+=Mikor bocsátották ki az első postabélyeget?^&1840^1880^1890^1870
+=Mióta gyártják a közismert keserű likőrt, az Unicumot?^&1790^1783^1811^1820
+</üzlet>
+<vallás>
+=A Biblia könyvei közül melyik az Apokalipszis?^&Jelenések könyve^Próféták könyve^Bölcsességek könyve^Apostolok cselekedetei
+=Hány évet élt Matuzsálem a legenda szerint?^&969^320^801^644
+=Hány felesége lehet egy hithű muzulmánnak?^egy^kettő^három^&négy
+=Hány stációt járt végig Jézus Krisztus a keresztúton?^7^&14^10^12
+=Hogy hívták Ábrahám és Sára idős korukban született gyermekét?^&Izsák^Izmael^Rebeka^Lót
+=Hogy nevezik a buddhista szerzetesrendet?^hinajána^&szangha^dharma^mahájána
+=Hogy nevezik a római katolikus egyház legfelső bíróságát?^&Rota Romana^Sedes Apostolica^Sacrum Officium^Patres Conscripti
+=Hol történt a "pálfordulás"?^Tarsusban^Jeruzsálemben^&a damaszkuszi úton^a Rómába vezető úton
+=Ki a költők és orgonaépítők védőszentje?^&Cecília^Ágnes^Anna^Margit
+=Ki a rabok, a hajósok és a hidak védőszentje?^&Nepomuki János^Loyolai Ignác^Aquinói Tamás^Nursiai Benedek
+=Ki a vadászok és optikusok védőszentje?^&Hubertus^Sebestyén^Flórián^Albertus Magnus
+=Ki alapította 1875-ben a Teozófiai Társaságot?^&Madame H. P. Blavatsky^Ronald Hubbard^Joseph Smith^Charles Taze Russel
+=Ki az utazók, a vándorok védőszentje?^&Szent Kristóf^Szent Flórián^Szent Bertalan^Szent Márton
+=Ki írta a 'Naphimnusz' című költeményt?^&Szent Ferenc^Szent Antal^Szent György^Pál apostol
+=Ki nem nagypróféta az alábbiak közül?^Ézsaiás^Jeremiás^&Joel^Ezékiel
+=Ki nem volt Noé fia a Biblia szerint?^Sém^Hám^&Lévi^Jáfet
+=Ki volt a jezsuita rend megalapítója?^Róbert apát^Xavéri Ferenc^&Loyolai Szent Ignác^Aquinói Szent Tamás
+=Ki volt az az Árpád-házi szent asszony, akinek kötényében a kenyér rózsává változott?^Margit^&Erzsébet^Gizella^Anna
+=Ki volt Jakab testvére az Újszövetség szerint?^&János^Júdás^Péter^Máté
+=Ki volt Keresztelő János apja a Bibliában?^&Zakariás^Jonatán^Elizeus^Fülöp
+=Kinek volt lázadó fia Absalom a Bibliában?^&Dávid^Salamon^Noé^Ábrahám
+=Melyik az egyetlen magyarországi alapítású szerzetesrend?^ciszterciek^domonkosok^bencések^&pálosok
+=Melyik az iszlám színe?^&zöld^sárga^fehér^fekete
+=Melyik az uralkodó vallás a Fülöp-szigeteken?^hindu^iszlám^buddhista^&katolikus
+=Melyik bibliai nőalak vágta le Holofernész, asszír hadvezér fejét?^Eszter^Sára^&Judit^Zsuzsanna
+=Melyik evangélista szimbóluma a bika?^Máté^János^&Lukács^Márk
+=Melyik evangélista szimbóluma a sas?^Máté^&János^Lukács^Márk
+=Melyik ószövetségi személyhez köti a hagyomány az 'Énekek éneke' című költői iratot?^&Salamon^Dávid^Mózes^Ábrahám
+=Melyik próféta kente fel Sault Izrael első királyává a Biblia szerint?^&Sámuel^Illés^Jeremiás^Ezékiel
+=Melyik szerzetesrend jelszava volt: ad maiorem Dei gloriam?^&jezsuiták^bencések^ferencesek^ciszterciták
+=Melyik szerzetesrend jelszava: "Imádkozzál és dolgozzál!"?^ferencesek^&bencések^pálosok^domonkosok
+=Melyik tárggyal a kezében szokták ábrázolni Szent Pétert a vallásos témájú képeken?^&kulcs^rózsafüzér^esernyő^fáklya
+=Melyik város püspöke volt Szent Miklós, akit a Mikulással azonosítunk?^Hippo^Bizánc^Antiokheia^&Myra
+=Melyik városban végezték ki Pál apostolt a hagyomány szerint?^Jeruzsálem^&Róma^Korinthosz^Damaszkusz
+=Mi a szimbóluma Márk evangélistának?^&oroszlán^sas^bika^galamb
+=Mózes melyik könyvének latin elnevezése az Exodus?^Teremtés könyve^Leviták könyve^&Kivonulás könyve^Számok könyve
+</vallás>

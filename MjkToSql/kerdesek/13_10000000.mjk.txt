@@ -1,0 +1,160 @@
+# MJK
+<film - külföldi>
+=A High Society (Gazdagok és szerelmesek) egy másik film musicalváltozata volt. Hogy szól az eredeti cím?^Éjjel-nappal^The Magnificent Ambersons^&Philadelphiai történet^Így élni jó
+=Az alábbi női nevek közül melyik nem szerepelt Fassbinder-film címében?^Petra von Kant^&Katharina Blum^Effi Briest^Veronika Voss
+=Az alábbi színészek közül ki nem tartozott a United Artists filmstúdió alapítói közé?^Mary Pickford^Charlie Chaplin^Douglas Fairbanks^&Gloria Swanson
+=Az Oscar-díj előtti napon díjat kapnak a legrosszabb filmek és alakítások. Mi a díj neve?^&Aranymálna^Aranycitrom^Aranyhagyma^Aranytörpe
+=Hogy hívják az űrhajó számítógépét 'A nyolcadik utas: a halál' című sci-fiben?^Bishop^&Anya^HAL^Főnök
+=Hogyan utaznak a világ különböző pontjain az 'Éjszaka a Földön' című film hősei?^villamoson^vonaton^&taxival^metrón
+=Ki adta Mikey hangját a 'Nicsak, ki beszél' című filmben?^&Bruce Willis^Robin Williams^Michael J. Fox^Danny DeVito
+=Ki az az ötszörös olimpiai bajnok úszó, aki Tarzanként is ismert lett?^Mark Spitz^Matt Biondi^Mike Burton^&Johnny Weissmüller
+=Ki kapott legjobb női főszereplőnek járó Oscar-díjat az alábbi filmszínésznők közül?^Gina Lollobrigida^&Sophia Loren^Brigitte Bardot^Claudia Cardinale
+=Ki kapta a legtöbb Oscar-díjat az alábbi színésznők közül?^Meryl Streep^&Katherine Hepburn^Glenn Close^Elizabeth Taylor
+=Ki nem kapott egyik alakításáért sem Oscar-díjat az alábbi színésznők közül?^&Greta Garbo^Audrey Hepburn^Olivia de Havilland^Bette Davis
+=Ki nem tartozik a francia új hullám rendezői közé?^François Truffaut^Jean-Luc Godard^Claude Chabrol^&Jean Renoir
+=Melyik fantasztikus film hősei indulnak felderítő útra a tiltott Zónába?^Solaris^&Sztalker^2001: Űrodüsszeia^Szárnyas fejvadász
+=Melyik filmben alakította Elvis Presley egy ananászültetvény örökösét?^&Blue Hawaii^Kid Galahad^Love Me Tender^Loving You
+=Melyik filmben nyújtott alakításáért kapott Oscar-díjat John Wayne?^&A félszemű seriff^Nyomkeresők^Vörös folyó^A pisztolylövész
+=Melyik filmet nem Jacques Tati rendezte?^&Unokatestvérek^A nagybácsim^Kisvárosi ünnep^Hulot úr nyaral
+=Melyik filmfesztiválon osztják az Aranyleopárd díjat?^&Locarnóban^Lipcsében^Lübeckben^Mannheimben
+=Melyik filmjéért kapta Elizabeth Taylor második Oscar-díját?^&Nem félünk a farkastól^Butterfield 88^A kristálytükör meghasadt^Kleopátra
+=Melyik filmrendező született az Amerikai Egyesült Államokban az alábbiak közül?^Billy Wilder^Charlie Chaplin^Alfred Hitchcock^&George Cukor
+=Melyik híres film operatőre volt a magyar származású Zsigmond Vilmos?^Apokalipszis most^A cápa^&Harmadik típusú találkozások^Hair
+=Melyik híres filmet rendezte Claude Lelouch?^Egy asszony meg a lánya^&Egy férfi és egy nő^Az asszony illata^Egy amerikai Párizsban
+=Melyik híres filmszínésznő nem Svédországban született?^Anita Ekberg^Ingrid Bergman^Greta Garbo^&Liv Ullmann
+=Melyik James Bond-film betétdala fűződik Paul McCartney nevéhez?^&Élni és halni hagyni^Sohase mondd, hogy soha^Dr. No^Halálos rémületben
+=Melyik James Bond-filmben játszik Madonna?^Dr. No^A holnap markában^A világ nem elég^&Halj meg máskor!
+=Melyik nem tartozik a Godfrey Reggio rendezte Qatsi-filmtrilógiába?^Naqoyqatsi^Koyaanisqatsi^Powaqqatsi^&Maayoqatsi
+=Melyik pop-art művész filmjei az 'Alvás' és a 'Chelsea-i lányok' ?^&Andy Warhol^Richard Hamilton^Roy Lichtenstein^Claes Oldenburg
+=Melyik rendezéséért kapott Oscar-díjat Carol Reed?^&Olivér^A harmadik ember^Havannai emberünk^Trapéz
+=Mi volt a címe az első amerikai hangos játékfilmnek?^&Jazzénekes^New York fényei^Hiúság vására^Egy nemzet születése
+=Mi volt a neve Stanley Kubrick '2001: Űrodüsszeia' című filmjében szereplő számítógépnek?^&HAL^R2D2^ENIAC^Morpheus
+=Mik voltak az első szavak az első hangosfilmben?^&Várjon egy pillanatra!^Hölgyeim és uraim!^Bocsásson meg!^Akkor Isten áldja!
+</film - külföldi>
+<film - magyar>
+=Kinek a művei alapján készült Sándor Pál 'Szabadíts meg a gonosztól' című filmje?^Örkény István^&Mándy Iván^Kassák Lajos^Ottlik Géza
+=Melyik filmet nem Bán Frigyes rendezte?^&Szerelmi álmok^Felmegyek a miniszterhez^A császár parancsára^Napfény a jégen
+=Melyik filmet nem Zsurzs Éva rendezte?^A törökfejes kopja^Férjhez menni tilos!^Nő a barakkban^&Melyiket a kilenc közül?
+=Melyik magyar film kapott Aranypálma díjat az 1996-os cannes-i filmfesztiválon?^&Iványi Marcell: Szél^Jancsó: Szegénylegények^Mészáros Péter: Eső után^Gothár Péter: A részleg
+=Melyik magyar sportember pályafutását örökítette meg a 'Küldetés' című film?^Papp László^&Balczó András^Kárpáti Rudolf^Grosics Gyula
+=Milyen gyártmányú a 'Meseautó' a régi magyar film újrafeldolgozásában? ^&BMW^Mercedes^Ford^Volvo
+</film - magyar>
+<fizika>
+=Hány nanométer az ibolya szín hullámhossza?^&380-450 nm^530-560 nm^585-595 nm^620-780 nm
+=Melyik egy speciális fényképészeti eljárás neve?^&Kirlian-fényképezés^Kirchhoff-fényképezés^Kastler-fényképezés^Klitzing-fényképezés
+=Melyik fizikai törvény írja le az indukált áram irányát?^&Lenz-törvény^Faraday-törvény^Ohm-törvény^Maxwell-törvény
+=Mennyi a fény terjedési sebessége légüres térben?^300 000 km/h^&300 000 km/s^300 000 m/s^300 000 m/h
+=Mennyi a hang terjedési sebessége 0 °C hőmérsékletű levegőben?^&332 m/s^1200 m/s^5100 m/s^968 m/s
+=Mennyi a víz forráspontja 9000 méter magasságban?^40 °C^&70 °C^100 °C^120 °C
+=Minek a vizsgálatára alkalmazzák az undográfot?^&hanghullámok^elektromágneses sugárzás^elemi részecskék^radioaktív sugárzás
+</fizika>
+<geometria>
+=Hány oldala van a pentagondodekaédernek?^&12^16^20^25
+=Hogy nevezik a matematikában a koordináta-rendszer vízszintes tengelyét?^fixegyenes^ordináta^&abszcissza^premissza
+</geometria>
+<hangszer>
+=Az alábbi hangszerek közül melyik nem tartozik a rézfúvós hangszerek csoportjába?^bombardon^helikon^&angolkürt^postakürt
+=Az alábbi hangszerek közül melyik nem tartozik a rézfúvós hangszerek csoportjába?^&szaxofon^trombita^harsona^kürt
+=Melyik nép ősi hangszere a kantele?^szerb^holland^ukrán^&finn
+</hangszer>
+<kémia>
+=Hány természetes kémiai elem létezik jelenlegi ismereteink szerint?^&93^81^115^104
+=Mekkora hőmérsékleten fagy meg a benzin?^&-150 °C^-45 °C^-210 °C^-115 °C
+=Melyik kémiai elem izotópja a deutérium?^&hidrogén^szén^urán^plutónium
+=Melyik kémiai elem izotópját vizsgálják a radiokarbon-kormeghatározás műveletében?^&szén^kalcium^kálium^lítium
+=Melyik kémiai elem nem tartozik a ritkaföldfémek csoportjába?^&rutherfordium^európium^diszprózium^lantán
+=Melyik kémiai elem nem tartozik a széncsoportba?^ón^ólom^szilícium^&magnézium
+=Melyik kémiai elem nem tartozik az oxigéncsoportba?^kén^szelén^tellúr^&klór
+=Milyen színű lánggal ég a kén?^vörös^sárga^&kék^zöld
+=Milyen színű lánggal ég a magnézium?^sárga^kék^&fehér^vörös
+</kémia>
+<képzőművészet>
+=Az alábbi festők közül ki képviselte a preraffaelita irányzatot?^&Edward Burne-Jones^Marc Chagall^Georges Braque^Jackson Pollock
+=Az alábbiak közül melyik területen alkotott világszínvonalút Ferenczy Noémi?^kerámia^&falikárpit^terrakotta^mozaik
+=Hol működik a Mozarteum Zene- és Képzőművészeti Akadémia?^&Salzburg^Bécs^München^Frankfurt
+=Ki a magyar biedermeier festészet kiemelkedő alakja az alábbiak közül?^&Barabás Miklós^Kondor Béla^Márffy Ödön^Kernstok Károly
+=Ki alapította a weimari Bauhaus művészeti iskolát?^&Walter Gropius^Moholy-Nagy László^Vaszilij Kandinszkij^Paul Klee
+=Ki az a XIX. századi művész, akinek közismertek fivéréhez, Theóhoz írt levelei?^Maupassant^Rimbaud^Wagner^&Van Gogh
+=Ki festette 'A ficsúr története' című festménysorozatot?^Paolo Veronese^&Giovanni Battista Tiepolo^Tintoretto^Tiziano Vecellio
+=Ki készített illusztrációkat Dante Isteni színjátékához?^Caravaggio^&Botticelli^Giorgione^Piombo
+=Ki nem volt tagja az 1909-ben alapított 'Nyolcak' elnevezésű magyarországi művészcsoportnak?^Kernstok Károly^Czóbel Béla^&Uitz Béla^Berény Róbert
+=Ki volt az absztrakt művészet megteremtője az alábbi festők közül?^&Kandinszkij^Cézanne^Munch^Altdorfer
+=Kik találkoznak M.S. mester Visitatio című képén?^Mátyás és Beatrix^&Mária és Erzsébet^Jézus és Mária Magdolna^II. Lajos és Szapolyai János
+=Kinek a festőműhelyében tanult Raffaello?^&Perugino^Masaccio^Bellini^Uccello
+=Kinek a főműve a budapesti Városligetben található Anonymus-szobor?^&Ligeti Miklós^Izsó Miklós^Kisfaludi Strobl Zsigmond^Varga Imre
+=Kinek a nevéhez fűződik a Züzü-sorozat?^&Csók István^Paál László^Pór Bertalan^Szőnyi István
+=Melyik égitest ábrázolása látható a híres bayeux-i falikárpiton?^a Napé^&a Halley-üstökösé^az Esthajnalcsillagé^a Marsé
+=Melyik európai városban halt meg Goya?^Párizs^&Bordeaux^Madrid^Hága
+=Melyik festményével nyert aranyérmet Munkácsy Mihály 1870-ben Párizsban?^Tépéscsinálók^Ásító inas^&Siralomház^Éjjeli csavargók
+=Melyik festő alkotása a 'Szent Márk csodája' című kép?^Leonardo da Vinci^Raffaello^&Tintoretto^Sandro Botticelli
+=Melyik folyó felett ívelt a Csontváry által megfestett mostari híd?^&Neretva^Dráva^Száva^Morava
+=Melyik francia impresszionista festő festette meg Miksa császár kivégzését?^Paul Cézanne^&Edouard Manet^Claude Monet^Pierre-Auguste Renoir
+=Melyik hétköznapi tárgyat állította ki Marcel Duchamp 'Forrás' címmel?^tűzcsap^&WC-csésze^asztali lámpa^kávéspohár
+=Melyik híres festő keresztneve volt Amedeo?^Klimt^Matisse^Chirico^&Modigliani
+=Melyik képzőművész volt az orosz cár udvari festője?^Than Mór^&Zichy Mihály^Székely Bertalan^Kmetty János
+=Melyik korszakában készítette Picasso 'Az akrobata és a fiatal bohóc' című művét?^kék^szürke^&rózsaszín^sárga
+=Melyik művészeti mozgalmat indította útjára Filippo Tommaso Marinetti olasz költő 1909-ben?^&a futurizmust^a kubizmust^a dadaizmust^az expresszionizmust
+</képzőművészet>
+<matematika>
+=Ha összeadjuk a számokat 1-től 100-ig, mit kapunk eredményül?^5000^5500^&5050^5005
+=Melyik matematikus alkotta meg az életjátéknak (Game of Life) nevezett szimulációs modellt?^&John Conway^Neumann János^B. B. Mandelbrot^Alan Turing
+=Melyik matematikus volt a halmazelmélet megalapozója?^&G. Cantor^A. F. Möbius^P. S. Laplace^J. L. Lagrange
+</matematika>
+<mértékegység>
+=Hány Fahrenheit-foknak felel meg a 20 Celsius-fokos hőmérséklet?^&68 °F^45 °F^32 °F^90 °F
+=Hány fok a víz forráspontja a Fahrenheit-skálán?^&212 °F^780 °F^435 °F^132,5 °F
+=Hány köbmétert jelent a tengeri hajók térfogategysége, a regisztertonna?^&2,83^9^15,5^63,16
+=Hány méternek felel meg 1 tengeri mérföld?^&1852 m^940 m^2013 m^1326 m
+=Hány négyzetméternyi területet jelent a katasztrális hold?^&5755 nm^6100 nm^730 nm^1625 nm
+=Hány négyzetméternyi területet jelent az acre?^&4047 nm^1125 nm^7300 nm^108 nm
+=Hány yard egy angol mérföld?^&1760 yd^510 yd^2320 yd^970 yd
+=Melyik mértékegység nem tartozik az SI-rendszerbe?^&Celsius-fok^decibel^volt^radián
+=Milyen mértékegység a dram?^&súlymérték^időmérték^űrmérték^területmérték
+=Milyen mértékegység a feddan?^hosszmérték^&területmérték^űrmérték^időmérték
+=Milyen mértékegység a pud?^&súlymérték^területmérték^hosszmérték^űrmérték
+=Milyen mértékegység a verszt?^&hosszmérték^területmérték^űrmérték^súlymérték
+</mértékegység>
+<pszichológia>
+=Hogy nevezi a pszichológia a hegyekben vagy magas építményekben való tartózkodás során jelentkező szorongást?^&akrofóbia^agorafóbia^anglofóbia^talasszofóbia
+=Ki teremtette meg a behaviorizmusnak nevezett pszichológiai irányzatot?^&J. B. Watson^Jean Piaget^Alfred Kinsey^Bronislaw Malinowski
+=Mit jelent a parapszichológiában az ESP rövidítés?^&érzékszerven túli érzékelés^testen kívüli élmény^hipnotikus tudatállapot^halálközeli élmény
+=Mitől retteg az, aki triszkaidekafóbiában szenved?^&a 13-as számtól^az orvosi műtétektől^a hosszú folyosóktól^a madaraktól
+</pszichológia>
+<rajzfilm>
+=Ki alkotta meg az első híres rajzfilmfigurát Gertie-t, a dinoszauruszt?^Émile Cohl^&Winsor McCay^Walt Disney^Charles Schulz
+=Ki kölcsönözte a hangját Esmeraldának 'A Notre Dame-i toronyőr' című Disney-rajzfilmben?^&Demi Moore^Kim Basinger^Julia Roberts^Nicole Kidman
+</rajzfilm>
+<tánc>
+=Az alább felsorolt táncok közül melyik cseh eredetű?^&polka^mazurka^polonéz^trepák
+=Az alábbi táncok közül melyik 3/4-es ütemű?^tangó^polka^&menüett^kánkán
+=Melyik egy gyors tempójú, hatnyolcados ütemű délfrancia népi tánc neve?^&farandole^fandangó^vaudeville^sarabande
+=Melyik nép tánca a polka?^ukrán^lengyel^&cseh^bolgár
+=Milyen eredetű tánc a hula?^lengyel^spanyol^&hawaii^görög
+=Milyen nemzetiségű tánc a jota?^&spanyol^lengyel^finn^kínai
+=Milyen ritmusú tánc a mazurka?^&3/4^4/8^2/4^4/16
+</tánc>
+<technika>
+=Ki fedezte fel a szupravezetés jelenségét?^&Heike Kamerlingh-Onnes^Henri Becquerel^Niels Bohr^Walther Nernst
+=Ki találta fel az első, széles körben elterjedt polimerszálat, a nejlont?^Carl von Linde^William Shockley^&Wallace H. Carothers^Gideon Sundback
+=Ki tervezte az autógyártásban először alkalmazott futószalagrendszert?^&Galamb József^Henry Ford^Bíró László^Louis Renault
+=Mi a porcelángyártás fő alapanyaga?^kvarc^gyanta^&kaolin^polisztirol
+=Mi volt a foglalkozása eredetileg a feltaláló Samuel Morsénak?^színész^&festő^szobrász^zeneszerző
+=Miket választ el egymástól a Kármán-vonal?^&légi teret és világűrt^sztratoszférát és bioszférát^kontinenseket és tengereket^földköpenyt és földkérget
+=Milyen származású volt James Watt, a feltaláló?^amerikai^kanadai^ír^&skót
+=Mivel foglalkozott idősebb Rubik Ernő?^űrkutatással^&repülőgép-építéssel^játékgyártással^gépkocsigyártással
+</technika>
+<tudomány>
+=Ki dolgozta ki a kvantumelméletet?^Werner Heisenberg^Erwin Schrödinger^&Max Planck^Max Born
+=Ki fedezte fel a Hold ár-apály hatását?^&Isaac Newton^Galileo Galilei^Johannes Kepler^Nicolaus Copernicus
+=Ki fedezte fel, hogy a prizma a rajta áthaladó fényt a szivárvány színeire bontja?^&Isaac Newton^Michael Faraday^Christian Huygens^Robert Bunsen
+=Ki készítette az első lencsés távcsövet?^Johannes Kepler^Nicolaus Copernicus^&Hans Lippershey^Tycho Brahe
+=Ki nem volt orvos az alábbiak közül?^Galenus^Paracelsus^&Comenius^Vesalius
+=Ki találta fel a higanyos hőmérőt?^&Gabriel Fahrenheit^Anders Celsius^Luigi Galvani^Lord Kelvin
+=Ki volt a Magyar Tudományos Akadémia elnöke 1976 és 1985 között?^&Szentágothai János^Berend T. Iván^Kosáry Domokos^Erdey-Grúz Tibor
+=Melyik országból származott Marie Curie?^&Lengyelországból^Franciaországból^Csehországból^Oroszországból
+=Melyik városban született Szent-Györgyi Albert?^&Budapest^Szeged^Pozsony^Kolozsvár
+=Mi volt Lord Kelvin eredeti neve?^&William Thomson^George Thomson^James Thomson^Joseph Thomson
+=Milyen nemzetiségű volt Erwin Schrödinger, a hullámmechanika megalapozója?^&osztrák^német^belga^holland
+=Milyen nemzetiségű volt Hans Christiaan Oersted fizikus?^német^holland^svéd^&dán
+=Milyen nemzetiségű volt Kelvin, a hőmérsékleti SI-egység névadója?^&angol^német^svájci^holland
+</tudomány>

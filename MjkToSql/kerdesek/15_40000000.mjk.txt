@@ -1,0 +1,155 @@
+# MJK
+<élővilág - állatvilág>
+=A földtörténet melyik szakaszában haltak ki a dinoszauruszok?^a triász időszak elején^a karbon időszak elején^&a kréta időszak végén^a harmadidőszak végén
+=Az állatvilágban melyik osztály nem tartozik az ízeltlábúak d. altörzsébe (légcsövesek) ?^&csupalábállatok^villáscsápúak^szövőcsévések^ikerszelvényesek
+</élővilág - állatvilág>
+<élővilág - növényvilág>
+=A felsoroltak közül melyiknek az elfogyasztása okoz veszélyes mérgezést?^tömjén^mirha^&fagyöngy^bazsalikom
+=A növényvilágban melyik osztály nem tartozik a harasztok törzsébe?^korpafüvek^páfrányok^zsurlók^&cikászok
+=Az alábbi növények közül melyik nem mérgező?^gyöngyvirág^nadragulya^fekete hunyor^&fehér üröm
+=Melyik növény nem tartozik a rózsafélék családjába?^&tubarózsa^alma^málna^naspolya
+=Mi a japánok nemzeti virága?^&krizantém^lótusz^jázmin^rododendron
+</élővilág - növényvilág>
+<filozófia>
+=Ki alkotta meg a "teremtő fejlődés" filozófiáját?^Georg W. F. Hegel^&Henri Louis Bergson^Sören Kierkegaard^David Hume
+=Mi jelentett az ókori görögöknél a sztoikus filozófiai irányzatnak nevet adó sztoa?^vásárteret^&nyitott folyosót^hadi taktikát^az istenek lakomáját
+</filozófia>
+<fogalom>
+=Ha valakit oblomovként jellemzünk, mire célzunk?^&tunyaságra^házsártosságra^fukarságra^kisszerűségre
+=Hogy hívták régen az üstfoltozót?^&klampár^bacsó^gölöncsér^soltész
+=Ki a quisling?^balett-táncos^&hazaáruló politikus^szenvedélyes rejtvényfejtő^pénzügyi tisztviselő
+=Ki volt a sztaroszta a régi Csehországban?^&polgármester^lovas katona^gyári munkás^csendőr
+=Ki volt régen az inzsellér?^&földmérő^cselédközvetítő^kalaposlány^könyvvizsgáló
+=Kik voltak a brávók a 17-18. századi Olaszországban?^&bérgyilkosok^hivatalnokok^színészek^főnemesek
+=Mi a kipu?^ázsiai gyümölcs^kínai harcművészeti ág^indiai mérges kígyó^&indián írásmód
+=Mi vagy ki a kurkuma?^török nyalánkság^sárga színű festékanyag^kurd földműves^&fűszernövény
+=Mi volt az ókorban a triremis?^&hadigálya^háromszög alakú templom^diadalmenet^választókerület
+</fogalom>
+<földrajz - egyéb>
+=A földtörténeti óidő időszakai közül melyik a legkorábbi?^&kambrium^devon^ordovícium^szilur
+=Az alábbi áramlások közül melyik hideg?^Agulhas-áramlás^Irminger-áramlás^El Nino^&Kaliforniai-áramlás
+=Ha a közép-európai idő szerint Magyarországon déli 12 óra van, mennyi az idő Japánban?^17.00 óra^18.00 óra^19.00 óra^&20.00 óra
+=Hány karát súlyú volt a Cullinan gyémánt csiszolatlan állapotában?^&3106 k^1986 k^6350 k^4610 k
+=Melyik időszak nem tartozik a földtörténeti óidőbe (paleozoikum) ?^perm^ordovícium^szilur^&jura
+=Mi a zivatarfelhő latin elnevezése?^&kumulonimbusz^cirrokumulusz^sztratokumulusz^nimbosztratusz
+</földrajz - egyéb>
+<földrajz - magyar>
+=Mikor nyilvánították védett területté az Aggteleki Nemzeti Parkot?^&1985^1977^1983^1980
+</földrajz - magyar>
+<földrajz - világ>
+=Melyik a Föld legmagasabb vízesése?^&Angel^Yosemite^Cuquenán^Krimmler
+=Melyik a Föld legnagyobb víztárolója?^&Owen Falls^Atatürk^Nasszer-tó^La Grande-2
+=Melyik a legnagyobb területű gleccser?^&Vatnajökull^Fedcsenko^Muir^Rennick
+=Melyik országban van a Kruger Nemzeti Park?^&a Dél-afrikai Köztársaságban^Svédországban^az USA-ban^Brazíliában
+</földrajz - világ>
+<hangszer>
+=Az alábbi hangszerek közül melyik nem fúvós?^szerpent^olifant^lur^&bandura
+=Melyik egy citeraszerű régi orosz népi hangszer neve?^&guszli^ukulele^vina^jatga
+</hangszer>
+<idegen kifejezés>
+=Minek a rövidítése a bankjegykiadó ATM-automaták neve?^&automatic teller machine^asynchronous transfer mode^available terminal^auto-transaction mechanism
+</idegen kifejezés>
+<irodalom - magyar>
+=Hová valósi Gvadányi József országjáró nótáriusa?^&Peleskére^Zajtára^Csermőre^Pátyodra
+=Ki írt szakdolgozatot 'A vers születése' címmel?^Szabó Lőrinc^Illyés Gyula^&Weöres Sándor^Pilinszky János
+=Ki volt a szerzője a 'Lantvirágok' című kötetnek?^Kazinczy Ferenc^Kisfaludy Károly^Katona József^&Madách Imre
+=Kinek az önéletírása az 'Egy színész elmondja' című könyv?^Kabos Gyuláé^&Jávor Pálé^Csortos Gyuláé^Básti Lajosé
+=Kitől származik a következő idézet: "Kit nem hevít korának érzeménye, / Szakítsa ketté lantja húrjait."^&Eötvös József^Kölcsey Ferenc^Batsányi János^Berzsenyi Dániel
+=Melyik Vajda János-vers kezdődik a következő mondattal: "Mint a Montblanc csúcsán a jég..."?^&Húsz év múlva^A nyugtalan zarándok^Keserű órában^Hosszú éjjel
+=Mi a címe a híres színész, Básti Lajos könyvének? "Mire gondolsz, ...?"^Bánk bán^&Ádám^Hamlet^Oidipusz
+=Petőfi melyik versében örökítette meg kora nagy színésze, Megyeri Károly alakját?^Színészdal^&A tintásüveg^Színházban^Szilveszter éje 1847-ben
+</irodalom - magyar>
+<irodalom - világ>
+=Ki az az angol király, akiről Mark Twain a 'Koldus és királyfi' egyik címszereplőjét alkotta?^III. Richárd^VIII. Henrik^&VI. Edward^II. György
+=Kinek a műve alapján készült Miloš Forman 'Ragtime' című filmje?^&E. L. Doctorow^J. D. Salinger^Kurt Vonnegut^Joseph Heller
+=Kinek a szerelme volt Charlotte von Stein?^Richard Wagner^Johann Sebastian Bach^&Johann Wolfgang Goethe^Thomas Mann
+=Kinek a színműve a 'Két úr szolgája' ?^&Goldoni^Pirandello^Neil Simon^Moliere
+=Kinek az élettörténete jelent meg 'Nem bánok semmit sem' címmel?^Maria Callas^Marilyn Monroe^&Edith Piaf^Lady Diana
+=Kinek az írásai alapján készült Nyikita Mihalkov 'Etűdök gépzongorára' című filmje?^Dosztojevszkij^&Csehov^Gogol^Bulgakov
+=Kitől való a következő idézet? "Soha ne kérdezd tehát, kiért szól a harang: érted szól."^&John Donne^Ernest Hemingway^William Blake^Geoffrey Chaucer
+=Melyik egy Shakespeare-tragédia címe az alábbiak közül?^Romulus Augustulus^Marcus Aurelius^&Titus Andronicus^Julianus Apostata
+=Melyik Hemingway-mű jelent meg csak a szerző halála után?^&Vándorünnep^Fiesta^Búcsú a fegyverektől^A folyón át a fák közé
+=Melyik író regénye szolgáltatta az alaptörténetet G. Donizetti 'Lammermoori Lucia' című operájához?^&Walter Scott^Alexandre Dumas^Alexander Pope^Daniel Defoe
+=Melyik írónő munkája az ezotéria alappillérének tekintett Seth-anyag?^&Jane Roberts^George Eliot^Patience Worth^Katherine Mansfield
+=Melyik költő verse szolgált Claude Debussy 'Egy faun délutánja' című szerzeményének alapjául?^&Stéphane Mallarmé^Paul Verlaine^Arthur Rimbaud^Dante Gabriel Rossetti
+=Melyik Shakespeare-mű alapján készült Greenaway 'Prospero könyvei' című filmje?^Téli rege^&A vihar^Hamlet^Macbeth
+=Melyik spanyol drámaíró írta 'A zalameai bíró' és 'Az élet álom' című műveket?^&Calderón de la Barca^Lope de Vega^Federico García Lorca^Cervantes
+=Mi a neve Dorothy kutyájának az 'Óz, a nagy varázsló' című meseregényben?^&Totó^Spot^Bobby^Csoki
+=Mióta létezik a Guinness rekordok könyve?^&1955^1936^1967^1974
+</irodalom - világ>
+<jog>
+=Mikor született meg az első szerzői jogi törvény?^1643^1793^&1709^1811
+</jog>
+<kémia>
+=Hány szénatomot tartalmaz a glükózmolekula?^&6^12^18^24
+=Melyik fém nem található meg az alpakka nevű ötvözetben?^réz^nikkel^cink^&ón
+=Milyen fémek ötvözete a permalloy?^&vas-nikkel^magnézium-volfrám^platina-ón^króm-higany
+</kémia>
+<képzőművészet>
+=Kinek a temetését festette meg Courbet az 'Ornans-i temetés' című képén?^a bátyjáét^a fiáét^az apjáét^&a nagyapjáét
+=Mi volt a foglalkozása a gyulai születésű Székely Aladárnak?^&fényképész^grafikus^szobrász^építész
+</képzőművészet>
+<közlekedés>
+=Melyik városon nem halad át a Transzszibériai expressz az alábbiak közül?^&Cseljabinszk^Krasznojarszk^Jekatyerinburg^Omszk
+=Mi volt a neve annak a léghajónak, amely 1930 októberében az észak-franciaországi Beauvais mellett lezuhant?^&R 101^Hindenburg^Mary Taylor^Silver Eagle
+=Mi volt a neve George Stephenson első mozdonyának?^George^&Mylord^Whistle^Locomotive
+=Milyen gyártású gőzmozdonyok közlekedtek az első magyar gőzüzemű vasútvonalon?^angol^német^amerikai^&belga
+</közlekedés>
+<nyelv>
+=Ki volt az első magyar országgyűlési gyorsíró?^&Hajnik Károly^Gáti István^Fenyvessy Adolf^Markovits Iván
+</nyelv>
+<történelem - magyar>
+=Hol található II. Rákóczi Ferenc nyughelye?^munkácsi vár^szerencsi vár^egri székesegyház^&kassai székesegyház
+=Ki volt az 1906-ban megalakult Wekerle-kormány belügyminisztere?^&gr. Andrássy Gyula^Hieronymi Károly^gr. Khuen-Héderváry Károly^Kristóffy József
+</történelem - magyar>
+<történelem - világ>
+=Ki alakított huszárezredet 1720-ban Franciaországban?^Hadik András^&Bercsényi László^Sigray Jakab^Guyon Richárd
+=Ki nem volt választófejedelem a Német-római Birodalomban?^a szász herceg^a kölni érsek^a cseh király^&a porosz király
+=Ki volt az első atombombát ledobó Enola Gay repülőgép parancsnoka?^&Paul W. Tibbets^William S. Parsons^Robert A. Lewis^Thomas W. Ferebee
+=Melyik évben kiáltották ki Argentína Spanyolországtól való függetlenségét?^&1816^1819^1823^1825
+=Melyik germán nép hódította meg az Ibériai-félszigetet?^&nyugati gótok^longobárdok^gepidák^frankok
+=Melyik mai ország területén éltek egykoron a tauriscusok?^&Ausztria^Oroszország^Görögország^Norvégia
+=Melyik ország nem volt tagja 1955 és 1979 között az Amerikai Egyesült Államok és Anglia vezette CENTO szövetségnek?^Irán^Pakisztán^Törökország^&Szaúd-Arábia
+=Mi volt annak a hajónak a neve, melynek fedélzetén Nelson tengernagy életét vesztette a trafalgari ütközetben?^&Victory^Conqueror^Britannia^Thunderer
+</történelem - világ>
+<üzlet>
+=Hogy nevezik az egyik devizáról másik devizára való áttérést eredményező áruügyletet?^&switch-ügylet^swap-ügylet^step-ügylet^stand-by ügylet
+=Mennyi volt 1 forint értéke az 1946. augusztus 1-jei bevezetésekor?^&négyszázezer kvadrillió pengő^százmilliárd millpengő^huszonötmillió B-pengő^nyolcezer milliárd pengő
+</üzlet>
+<zene - egyéb>
+=Hány kereszt (#) előjegyzést tartalmaz egy disz-moll hangnemben írott zenemű?^4^5^&6^7
+=Hogy nevezik a zenében egy akkord hangjaira bontott, hárfaszerűen történő megszólaltatását?^&arpeggio^tremolo^glissando^staccato
+=Melyik a leglassúbb tempóra utaló zenei előírás?^andante^&largo^andantino^lento
+=Melyik a leggyorsabb tempóra utaló zenei előírás az alábbiak közül?^&presto^allegro^vivace^agitato
+=Melyik egy középkori vidám, udvarló hangulatú zenei műfaj?^ricercar^&frottola^allemande^toccata
+=Melyik zeneszerző alkotta meg a tizenkét hanggal való komponálás módszerét?^&Arnold Schönberg^Dmitrij Sosztakovics^Olivier Messiaen^Karlheinz Stockhausen
+=Milyen előadásmódot jelöl az 'agevole' zenei előírás?^&könnyedén^szenvedélyesen^csapongóan^nyomatékkal
+=Milyen típusú énekhanggal rendelkezett Kathleen Ferrier énekesnő?^mezzoszoprán^&alt^koloratúrszoprán^lírai szoprán
+=Milyen utasítást ad a zenész számára a kottába beírt 'rinforzando' kifejezés?^hirtelen gyorsítani^fokozatosan lassítani^&fokozatosan erősíteni^azonnal lehalkítani
+</zene - egyéb>
+<zene - komoly>
+=Erkel Ferenc hány fiából lett rangos zenész?^egyből^kettőből^&háromból^egyből sem
+=Ki mutatta be elsőként Ravel 'Zongoraverseny bal kézre' című szerzeményét?^Mogyeszt Muszorgszkij^Szergej Rahmanyinov^Gabriel Fauré^&Paul Wittgenstein
+=Ki szerezte az 'Elfújta a szél' című film zenéjét?^&Max Steiner^Dmitrij Tyomkin^Aaron Copland^William Walton
+=Ki volt az a barokk zeneszerző, aki a velencei Szent Márk-templom karnagyaként dolgozott?^Arcangelo Corelli^&Antonio Vivaldi^Alessandro Scarlatti^Domenico Scarlatti
+=Melyik a szólóhangszer Bach h-moll zenekari szvitjének Badinerie tételében?^&fuvola^cselló^hegedű^angolkürt
+=Melyik balettban szerepel a 'A bolygótűz dala' ?^&M. de Falla: A bűvös szerelem^I. Sztravinszkij: Tűzmadár^A. Adam: Giselle^M. Ravel: Daphnisz és Khloé
+=Melyik nem Haydn-szimfónia?^Katona^Tűz^Mária Terézia^&Haffner
+=Melyik operában nincs olyan szereplő, melynek neve megegyezik egy mai autómárkáéval?^Verdi: Falstaff^Puccini: Pillangókisasszony^Bizet: Carmen^&Mozart: Figaro házassága
+=Melyik orosz zeneszerző nem tartozott az 1862-ben alapított Ötök csoportjába?^&Mihail Glinka^Milij Balakirev^Mogyeszt Muszorgszkij^Rimszkij-Korszakov
+=Melyik városban halt meg Liszt Ferenc?^Bécs^&Bayreuth^Velence^Weimar
+=Melyik városban halt meg Richard Wagner?^Lipcse^Bécs^&Velence^Párizs
+=Melyik zeneművel pályázott Johann Sebastian Bach a lipcsei Tamás-templom kántori állására?^h-moll mise^Magnificat^&János-passió^Máté-passió
+=Melyik zeneművet tekintik a zongorairodalom legnehezebb darabjának?^&Liszt: h-moll szonáta^Chopin: E-dúr etűd^Ravel: G-dúr zongoraverseny^Prokofjev: VII. szonáta
+=Melyik zeneszerző műveit rendszerezte Ludwig Köchel?^Ludwig van Beethoven^J. S. Bach^Franz Schubert^&W. A. Mozart
+=Melyik zeneszerző nem írt D-dúr hegedűversenyt?^Beethoven^Brahms^&Schumann^Mozart
+=Melyik zeneszerző operája 'A felbolydult kert' ?^&Michael Tippett^Ligeti György^Krzysztof Penderecki^Bernd Alois Zimmermann
+=Mi a címe Liszt Ferenc operájának, amelyet 1825-ben mutattak be Párizsban?^Liebesträume^&Don Sanche^Szent Erzsébet^Prométheusz
+</zene - komoly>
+<zene - könnyű>
+=A Beatles sorozatsikere után melyik popegyüttes került elsőnek a toplista élére?^Animals^Beach Boys^Rolling Stones^&T-Rex
+=Az alábbi zenészek közül ki képviselte a 'cool jazz' stílusirányzatot?^Charlie 'Bird' Parker^'Dizzy' Gillespie^Thelonious Monk^&Stan Getz
+=Melyik Beatles-tag adta ki a 'Blackbird Singing' című versantológiát?^&Paul McCartney^John Lennon^George Harrison^Ringo Starr
+=Melyik rockzenész kapta 2000-ben a legtöbb Grammy-díjat?^Phil Collins^Stevie Wonder^&Carlos Santana^Eric Clapton
+=Melyik római császár korában játszódik a 'Sztárcsinálók' című rockopera?^Caligula^&Néró^Augustus^Tiberius
+</zene - könnyű>

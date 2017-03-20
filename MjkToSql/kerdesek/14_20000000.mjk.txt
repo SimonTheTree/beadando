@@ -1,0 +1,159 @@
+# MJK
+<építészet>
+=Hány terem található a magyar parlament épületében?^153^210^499^&691
+=Hogy nevezik az ókori görög építészetben a kör alaprajzú templomot?^&tholosz^ante-templom^peripterosz^naosz
+=Ki tervezte a firenzei Uffizi palotát?^Giacomo Vignola^&Giorgio Vasari^Andrea Palladio^Leon Battista Alberti
+=Ki tervezte a pesti Szép utcában található Almássy-palotát?^&Pollack Mihály^Lechner Ödön^Hauszmann Alajos^Hild József
+=Ki tervezte az esztergomi főszékesegyházat?^Ybl Miklós^&Hild József^Pollack Mihály^Schickedanz Albert
+=Kinek a tervei alapján épült a budapesti Központi Vásárcsarnok?^&Pecz Samu^August Stüler^Hauszmann Alajos^Steindl Imre
+=Megközelítőleg mekkora a kínai nagy fal teljes hossza?^&6400 km^5300 km^4500 km^7200 km
+=Melyik a világ leghosszabb egynyílású kábelhídja?^Golden Gate Bridge^Harbour Bridge^&Humber Bridge^Akasi-Kaiko híd
+=Melyik az a budapesti híd, amelyen 1946-ban a háború után először ment át villamos?^Petőfi híd^&Szabadság híd^Margit híd^Erzsébet híd
+=Melyik az a palota, amelynek közel 2500 ablaka és 1250 ajtaja van?^&az Escorial^a Zwinger^a szentpétervári Téli Palota^a Hofburg
+=Melyik az ókori Egyiptom legnagyobb templomegyüttese?^&karnaki^luxori^thébai^memphiszi
+=Melyik nem része a dór oszloprendnek?^&voluta^triglif^metopé^architráv
+=Melyik országban található a világ legmagasabb földgátja, a Nurek gát?^&Tádzsikisztán^Üzbegisztán^Kazahsztán^Türkmenisztán
+=Melyik pályaudvar csarnokát építette az Eiffel-cég?^Déli pályaudvar^Keleti pályaudvar^Józsefvárosi pályaudvar^&Nyugati pályaudvar
+=Melyik városban tekinthető meg az Atomium?^Párizs^&Brüsszel^Amszterdam^Bern
+=Mi volt a mai Szabadság híd rég elfelejtett, az 1894. évi pályázat szerinti megnevezése?^Ferenc József híd^&Fővámház téri híd^Mátyás híd^Angol híd
+=Mikor épült a washingtoni Capitolium?^1786^&1793^1799^1802
+=Milyen épület állt a budapesti Madách Színház mai helyén?^&mulató^börtön^iskola^irodaház
+</építészet>
+<mitológia>
+=A germán mitológia szerint hány terme és kapuja van a halott hősök palotájának, a Walhallának?^&540^1000^800^99
+=A hindu vallásban ki Visnu isten felesége, a szerencse és a bőség istennője?^&Laksmí^Rudra^Párvati^Káma
+=Az alábbiak közül ki nem múzsa a görög mitológiában?^&Mnémoszüné^Urania^Kalliopé^Erató
+=Hogy nevezik a skandináv mitológiában Thor kalapácsát?^&Mjölnir^Frigg^Asgard^Baldr
+=Hogy nevezik az élet és tudás fáját a skandináv mitológiában?^&Yggdrasell^Vé^Ginnunga gap^Audhumla
+=Hogy nevezték az azték és tolték kultúra tollas kígyó alakjában ábrázolt istenét?^&Quetzalcóatl^Teotihuacán^Montezuma^Tezcatlipoca
+=Ki a táncművészet múzsája a görög mitológiában?^&Terpszikhoré^Polühümnia^Kleió^Euterpé
+=Ki a tragédia múzsája a görög mitológiában?^Thalia^&Melpomené^Euterpé^Terpszikhoré
+=Melyik isten jelenik meg oroszlán képében az ókori egyiptomi vallásban?^&Szechmet^Chepera^Hathor^Keb
+=Minek a múzsája volt Melpomené?^a szerelmi költészeté^az epikus költészeté^&a tragédiaköltészeté^a himnuszköltészeté
+</mitológia>
+<múzeum>
+=Hol látható Magyarországon barokk kőhíd?^Egerben^Kalocsán^Szentendrén^&Vácott
+=Hol található Budapesten tűzoltómúzeum?^&Kőbányán^Soroksáron^Sashalmon^Ferencvárosban
+=Ki alapította a keszthelyi Georgikont?^&Festetics György^Esterházy Móric^Széchényi Ferenc^Savoyai Jenő
+=Melyik múzeumban őrzik Hammurápi törvényoszlopát?^&Louvre^Pergamon Múzeum^British Museum^Tate Gallery
+=Melyik városunkban található a Béri Balogh Ádám Múzeum?^Szentgotthárd^Körmend^Kaposvár^&Szekszárd
+=Melyik városunkban található a Két mór ház?^&Sopron^Pápa^Szombathely^Pécs
+</múzeum>
+<nyelv>
+=Az alábbi nyelvek közül melyik nem tartozik az altaji nyelvek csoportjába?^ujgur^baskír^mandzsu-tunguz^&mordvin
+=Honnan kapta a nevét a Plantagenet angol uralkodócsalád?^&egy cserjenemzetségről^egy agárfajtáról^egy kurtizán nevéről^egy pázsitfűféléről
+=Honnan származik a csimborasszó szavunk?^&egy vulkán nevéből^egy ókori hadvezér nevéből^egy indián törzs nevéből^egy ragadozó állat nevéből
+=Honnan származik a Togliatti városban gyártott Lada autók másik elnevezése, a Zsiguli?^egy orosz feltaláló nevéből^&a város melletti hegyről^a közeli ládagyárból^az orosz 'élni' igéből
+=Ki fejtette meg az egyiptomi hieroglifikus írást?^Jean Yves^&François Champollion^Howard Carter^A. C. Mace
+=Melyik a görög ábécé tizedik betűje?^ióta^&kappa^lambda^omikron
+=Melyik a magyar nyelv legközelebbi rokona?^cseremisz^zürjén^&vogul^finn
+=Melyik cég eredeti neve volt Tokyo Tshushin Kogyo Kabushiki Kaisha?^&Sony^Toyota^Suzuki^Hitachi
+=Melyik magyar város német neve Fünfkirchen?^&Pécs^Sopron^Győr^Eger
+=Melyik nem török nyelv az alábbiak közül?^kirgiz^&tádzsik^türkmén^üzbég
+=Melyik nyelvben áll az ábécé utolsó betűjeként az ö?^&finn^norvég^észt^lett
+=Melyik nyelvből származik a diák szavunk?^latin^cseh^olasz^&görög
+=Mi a szputnyik szó magyar megfelelője?^üstökös^&útitárs^rakéta^gömb
+=Mi az 'A' betű kódja a Morse-ábécében?^&rövid-hosszú^hosszú-rövid^rövid-rövid-hosszú^hosszú-hosszú-rövid
+=Milyen eredetű a brindza szavunk?^&trák-illír^román^szlovák^francia-német
+=Milyen eredetű a drogéria szavunk?^lengyel^latin^német^&francia
+=Milyen eredetű a kanaszta szavunk?^olasz^&spanyol^francia^román
+=Milyen eredetű a komornyik szavunk?^&szlovák^orosz^francia^jiddis
+=Mit jelentett eredeti értelmében a negédes szó?^finom^&büszke^ravasz^gyáva
+=Mit neveznek a Kecskemét környéki nyelvjárásban garabónak?^egy ruhadarabot^&egy füles kosarat^a gólyát^a jól tanuló diákot
+</nyelv>
+<sport>
+=Hány aranyérmet nyert Gerevich Aladár kardvívásban az olimpiákon?^hármat^ötöt^&hetet^kilencet
+=Hány aranyérmet nyert Mark Spitz amerikai úszó a müncheni olimpián?^hatot^&hetet^ötöt^nyolcat
+=Hány bemélyedés van egy szabványos golflabdán?^104^160^&366^420
+=Hol tartották a legelső teniszbajnokságot?^Ausztráliában^az USA-ban^Franciaországban^&Nagy-Britanniában
+=Hol tartottak először autós nagydíjfutamot?^Brands Hatchben^Brooklandsben^&Le Mans-ban^Monacóban
+=Ki a női tornasport legeredményesebb olimpikonja?^Nadia Comaneci^Olga Korbut^Keleti Ágnes^&Larisza Latinyina
+=Ki az egyetlen olyan magyar focista, akinek két olimpiai arany- és egy bronzérme van?^Albert Flórián^Bozsik József^&Novák Dezső^Fazekas László
+=Ki nem volt tagja az 1992-es barcelonai olimpiai aranyérmes női kajak négyesnek?^&Géczi Erika^Kőbán Rita^Dónusz Éva^Czigány Kinga
+=Ki nyert 1980-ban és 1984-ben is olimpiai bajnokságot 1500 m-es síkfutásban?^Steve Ovett^&Sebastian Coe^Steve Cram^Marcus O'Sullivan
+=Ki nyert legfiatalabbként wimbledoni bajnokságot?^Boris Becker^&Martina Hingis^Jennifer Capriati^Venus Williams
+=Ki nyerte meg 1999-ben a párizsi Roland Garros tenisztornát?^Jevgenyij Kafelnyikov^&Andre Agassi^Pete Sampras^Mark Philippoussis
+=Ki rúgott leghamarabb, a kezdéstől számított 27. másodpercben gólt vb-döntőn?^&Bryan Robson^Pelé^Platini^Beckenbauer
+=Ki szerzett aranyérmet a művészeti versenyekben az 1928-as amszterdami olimpián?^&Mező Ferenc dr.^Komjádi Béla^Hajós Alfréd^Bay Béla
+=Ki vitte a magyar zászlót az atlantai olimpián?^Benedek Tibor^Gyulai Zsolt^Kovács István^&Szabó Bence
+=Ki volt a férfi sakkvilágbajnok 1975 és 1985 között?^Borisz Szpasszkij^Robert Fischer^Gari Kaszparov^&Anatolij Karpov
+=Melyik atlétának állítottak még életében szobrot hazájában?^Al Oerter^&Paavo Nurmi^Emil Zátopek^Jesse Owens
+=Melyik atlétikai dobószám világcsúcstartója volt Paragi Ferenc?^&gerelyhajítás^súlylökés^kalapácsvetés^diszkoszvetés
+=Melyik híres sportolónőnk írt könyvet 'Sírni csak a győztesnek szabad' címmel?^Egerszegi Krisztina^Elek Ilona^&Székely Éva^Gyarmati Andrea
+=Melyik labdarúgó Európa-bajnokságon ért el Magyarország 3. helyezést?^az 1968-as olaszországi^&az 1964-es spanyolországi^az 1972-es belgiumi^az 1960-as franciaországi
+=Melyik labdarúgó klubcsapat nyerte a legtöbb nemzeti bajnoki címet?^Real Madrid^Juventus^Anderlecht^&Glasgow Rangers
+=Melyik olimpiai bajnok birkózónk lett kétszeres Európa-bajnok súlyos autóbalesete után?^Kozma István^Farkas Péter^Hódos Imre^&Hegedűs Csaba
+=Melyik olimpián lett újra versenyszám az íjászat?^Tokióban^Mexikóban^Montrealban^&Münchenben
+=Melyik olimpián nem szerzett aranyérmet ökölvívásban Papp László?^&1960-ban Rómában^1952-ben Helsinkiben^1956-ban Melbourne-ben^1948-ban Londonban
+=Melyik ország labdarúgó-válogatottjának volt szövetségi kapitánya César Luis Menotti?^&Argentína^Brazília^Olaszország^Spanyolország
+=Melyik ország válogatottjában futballozott Johannes Cruyff?^Anglia^Dánia^&Hollandia^Németország
+=Melyik ország válogatottjának legendás kapusa José Luis Chilavert?^&Paraguay^Uruguay^Argentína^Mexikó
+=Melyik ökölvívónk nyert ezüstérmet az 1972-es müncheni olimpián váltósúlyban?^&Kajdi János^Gedó György^Botos András^Orbán László
+=Melyik római császár tiltotta be Kr. u. 393-ban az olimpiai játékokat?^&I. Theodosius^II. Valentinianus^II. Constantinus^Gratianus
+=Melyik sportág kiemelkedő alakja volt Jackie Robinson?^&baseball^kosárlabda^amerikai futball^jégkorong
+=Melyik sportág kiválósága volt Varjú Vilmos?^ökölvívó^&súlylökés^súlyemelés^birkózás
+=Melyik sportág többszörös olimpiai bajnoka Alberto Tomba?^&sízés^műkorcsolyázás^úszás^tenisz
+=Melyik sportágban nem nyertünk még eddig olimpiai aranyérmet?^súlyemelés^&evezés^cselgáncs^sportlövészet
+=Melyik sportágban született a magyar sporttörténet első olimpiai ezüstérme?^&atlétika^úszás^vívás^céllövészet
+=Melyik sportoló nem atlétikában szerzett olimpiai aranyérmet?^Németh Angéla^Németh Imre^Németh Miklós^&Németh Ferenc
+=Melyik sportoló nem az 1976-os montreali olimpián nyert aranyérmet?^Magyar Zoltán^&Kulcsár Győző^Tordasi Ildikó^Németh Miklós
+=Melyik stadionban következett be a 39 áldozatot követelő tragédia 1985-ben, a BEK-döntőn?^&brüsszeli Heysel-stadion^müncheni Olimpiai Stadion^amszterdami Ajax-stadion^a bécsi Práter
+=Melyik városban rendezik meg az Egyesült Államok nyílt teniszbajnokságát?^&New York^Los Angeles^Chicago^Boston
+=Melyik városban rendezték az 1956-os melbourne-i olimpia lovasversenyeit?^&Stockholm^Sydney^London^Wellington
+=Melyik városban rendeztek kétszer téli olimpiát?^Oslo^&Innsbruck^Grenoble^Calgary
+=Mi volt a keresztneve annak a legendás magasugrónak, akiről a Fosbury-stílust nevezték el?^Tom^&Dick^Harry^Robert
+=Mikor rendezték az első olimpiai játékokat?^&Kr. e. 776^Kr. e. 552^Kr. e. 608^Kr. e. 1012
+=Mikor rendeztek rendkívüli olimpiai játékokat?^1926-ban^1922-ben^1910-ben^&1906-ban
+=Milyen futószámokat nyert meg Emil Zátopek a helsinki olimpián?^5000 és 10000 m^1500 és 5000 m^5000 m és maratoni^&5000, 10000 m és maratoni
+=Mivel volt megtöltve a golflabda 1850 előtt?^olajjal^&tollal^homokkal^babszemekkel
+=Spencer Gore nyerte meg az első - mit?^&wimbledoni teniszbajnokságot^Forma-1 nagydíjat^olimpiai maratont^nehézsúlyú boksz-vb-t
+</sport>
+<számítástechnika>
+=Mi volt a neve az 1955-ben megépített, első tranzisztoros számítógépnek?^&TRADIC^ENIAC^Mark II^PDP-10
+</számítástechnika>
+<színház>
+=Az alábbiak közül melyik egy japán színpadi műfaj?^kaliban^&kabuki^nori^nippon
+=Hol áll az első dunántúli magyar kőszínház, amely Kisfaludy Sándornak köszönhetően jött létre?^&Balatonfüred^Győr^Kaposvár^Zalaegerszeg
+=Ki alapította a Pécsi Balett társulatát?^&Eck Imre^Markó Iván^Harangozó Gyula^Róna Viktor
+=Ki alapította meg 1989-ben Szegeden a Független Színpadot?^&Ruszt József^Babarczy László^Bereményi Géza^Csányi János
+=Ki játszotta János vitézt Kacsóh Pongrác daljátékának bemutatóján?^Sárdy János^&Fedák Sári^Blaha Lujza^Ujházi Ede
+=Ki játszotta Lucifer szerepét az Ember tragédiája ősbemutatóján?^Csortos Gyula^&Gyenes László^Pethes Imre^Ódry Árpád
+=Kiről kapta nevét a nyíregyházi színház?^Kölcsey Ferenc^Móra Ferenc^&Móricz Zsigmond^Katona József
+=Melyik budapesti színházunk mutatta be A padlás című musicalt?^&a Vígszínház^a Madách Színház^a Thália Színház^az Operett Színház
+=Melyik darabbal nyitották meg a Nemzeti Színház elődjének számító Pesti Magyar Színházat?^Csongor és Tünde^Az ember tragédiája^&Árpád ébredése^Bánk bán
+=Melyik évben mutatták be először Az ember tragédiáját?^&1883^1872^1896^1902
+=Melyik évben volt a Bánk bán ősbemutatója?^&1833^1848^1868^1872
+=Melyik híres szerző színtársulatát foglalta magába a XIV. Lajos által alapított Comédie Française?^&Moliere^Jean Racine^Edmond Rostand^Pierre Corneille
+=Melyik városunkban áll a Szigligeti Edéről elnevezett színház?^Kaposvár^Veszprém^&Szolnok^Gyula
+=Milyen néven nyílt meg 1837-ben Pest első magyar színháza?^Nemzeti Színház^Pesti Víg Színház^&Pesti Magyar Színház^Pesti Thália Színház
+</színház>
+<történelem - magyar>
+=Hol halt meg Bercsényi Miklós, a Rákóczi-szabadságharc tábornoka?^Párizsban^&Rodostóban^Torinóban^Londonban
+=Hová emigrált a magyar szabadságharc után Bem József?^Franciaországba^&Törökországba^Piemontba^Lengyelországba
+=Ki temettette el a mohácsi csatamezőn elesett katonákat?^Szapolyai János^Török Bálint^Mária királyné^&Kanizsai Dorottya
+=Ki verte meg Attilát Catalaunumnál?^&Aetius^Nagy Konstantin^Nagy Theodorik^Marcus Aurelius
+=Ki volt Árpád-házi Szent Margit édesanyja?^Anjou Izabella^Capet Margit^Kun Erzsébet^&Laszkarisz Mária
+=Ki volt az utolsó Székesfehérváron megkoronázott király?^&Szapolyai János^II. Lajos^I. Ferenc József^Mátyás
+=Kije volt Kossuth Lajosnak a szabadságharc alatt főápolónőként dolgozó Kossuth Zsuzsanna?^anyja^&húga^lánya^unokahúga
+=Melyik neves történelmi személy szülőhelye Borsi?^Hunyadi János^&II. Rákóczi Ferenc^Széchenyi István^Kossuth Lajos
+=Melyik történelmi személyiség született Dálnokon?^&Dózsa György^Bethlen Gábor^Eötvös József^Bakócz Tamás
+</történelem - magyar>
+<történelem - világ>
+=Honnan származott Pürrosz, a pirruszi győzelem névadója?^&Épeirosz^Epheszosz^Eleuszisz^Elea
+=Ki fedezte fel Trója állítólagos romjait?^Champollion^Homérosz^&Schliemann^Evans
+=Ki volt az utolsó longobárd király, akit a frankok fosztottak meg trónjától?^&Desiderius^Rothari^Liutprand^Aistulf
+=Kinek a nevéhez fűződik a Magna Charta Liberatum kiadása?^Hódító Vilmos^Szép Fülöp^Navarrai Henrik^&Földnélküli János
+=Melyik csata nem kötődik Nagy Sándor nevéhez?^Gaugaméla^&Szalamisz^Granikosz^Isszosz
+=Melyik dátum a Bastille bevételének időpontja?^1788. június 24.^1789. június 14.^1789. július 24.^&1789. július 14.
+=Melyik évben lett Fidel Castro Kuba miniszterelnöke?^1957^&1959^1961^1960
+=Melyik évben lett II. Fülöp Portugália királya?^&1580^1556^1554^1588
+=Melyik évben vásárolta meg az USA Alaszkát Oroszországtól?^&1867^1854^1879^1891
+=Mettől meddig tartott az amerikai függetlenségi háború?^&1775-1783^1773-1785^1773-1783^1775-1785
+=Mettől meddig uralkodott VIII. Henrik angol király?^1426-1457^&1509-1547^1489-1532^1502-1523
+=Mikor jött létre Anglia és Skócia uniója, Nagy-Britannia?^1689^1701^&1707^1720
+=Mikor került trónra Nagy Péter, az egyik legjelentősebb orosz uralkodó?^&1682^1710^1701^1672
+=Mikor koronázták német-római császárrá Nagy Károlyt?^880-ban^&800-ban^734-ben^568-ban
+=Mikor uralkodott Nagy Sándor, Makedónia királya?^&Kr. e. 336-323^Kr. e. 323-312^Kr. e. 346-336^Kr. e. 357-345
+=Mikor uralkodott Tutanhamon egyiptomi fáraó?^&Kr. e. 1347-1337^Kr. e. 1453-1437^Kr. e. 1367-1357^Kr. e. 1342-1325
+=Mikor volt Spartacus sikertelen rabszolgafelkelése?^Kr. e. 76-70^&Kr. e. 74-71^Kr. e. 67-64^Kr. e. 70-75
+</történelem - világ>
