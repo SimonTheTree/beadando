@@ -5,6 +5,6 @@ package Model;
  * @author ganter
  *
  */
-public class DAO {
-
+public interface DAO {
+	Question getQuestion();
 }
