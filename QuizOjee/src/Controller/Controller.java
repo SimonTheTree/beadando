@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.User;
+
 public class Controller {
 	boolean signIn(User u);
     boolean register(User u);
