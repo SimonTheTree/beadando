@@ -1,8 +1,8 @@
-package Model;
+package model;
 
 public class User {
 
-	private String username;
+	private String username; //userID
     private String pw;
     private String MD5;
     private long points;

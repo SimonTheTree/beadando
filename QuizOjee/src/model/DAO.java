@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * DAO = Data Access Object

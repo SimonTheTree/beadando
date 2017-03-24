@@ -1,7 +1,7 @@
-package Model;
+package model;
 
 public class Statistics {
-	private int id;
+	private String uname;
 	private int points;
     private int wins;
     private int defeats;
