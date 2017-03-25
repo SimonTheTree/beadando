@@ -1,5 +1,8 @@
 package model;
 
+/** 
+ * Egy {@link User} vagy egy csoport atlag statisztikajanak tarolasara valo objektum.
+ * */
 public class Statistics {
 	private String uname;
 	private int points;
@@ -9,11 +12,16 @@ public class Statistics {
     private int wrongAnswers;
     private int rightTips;
     private int wrongTips;
-
-    public int getPoints() {
+    
+    public String getUname() {
+		return uname;
+	}
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+	public int getPoints() {
         return points;
     }
-
     public void setPoints(int points) {
         this.points = points;
     }

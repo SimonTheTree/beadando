@@ -1,13 +1,31 @@
 package controller;
 
 import java.util.List;
+import java.util.Random;
+
 import model.Statistics;
+import model.DAO;
+import model.DAOImp;
 import model.Question;
 
 import model.User;
 import model.exceptions.UserAlreadyExistsException;
 
 public class Controller {
+	
+	
+	private DAO db = new DAOImp();
+	private int maxDifficulty;
+	private int maxTopicId;
+	private int actualDiff = -1;
+	private int actualTopic = -1;
+	private List<Question> questions;
+	
+	public Controller() {
+		maxDifficulty = db.getMax("difficulty");
+		maxTopicId = db.getMax("TOPIC_ID");
+	}
+	
 	/**
 	 * Bejelentkezik (user-pw check)
 	 * @param uname
@@ -16,10 +34,10 @@ public class Controller {
 	 */
 	boolean signIn(String uname, String pw){
 		return false;
-	};
+	}
 	/**
-	 * Létrehoz egy usert a user táblában, ha 
-	 * lehetséges, ha nem akkor hiba van
+	 * Letrehoz egy  {@link User}-t a user tablaban, ha 
+	 * lehetseges, ha nem akkor hiba van
 	 * @param u
 	 * @param pw
 	 * @throws UserAlreadyExistsException if the username is taken 
@@ -27,30 +45,30 @@ public class Controller {
 	 */
     boolean register(User u, String pw) throws UserAlreadyExistsException{
     	return false;
-    };
+    }
     
     /**
-     * Felülírja a user jelszavát
+     * Felulirja a  {@link User} jelszavat
      * @param uname
      * @param pw
-     * @return false ha vmi nem működött
+     * @return false ha vmi nem mukodott
      */
     boolean setPassword(String uname, String pw){
     	return false;
-    };
+    }
     
     /**
-     * A paraméterben kapott User adatait frissíti az adatbázisban.
-     * A user username-jét ki kell tölteni. 
+     * A parameterben kapott  {@link User} adatait frissiti az adatbazisban.
+     * A user username-jet ki kell tolteni. 
      * @param u
      * @return
      */
     boolean modifyUser(User u){
     	return false;
-    };
+    }
     /**
-     * uname azonosítójú user User objektumával tér vissza, 
-     * mely tartalmazza a user összes adatát
+     * uname azonositoja user  {@link User} objektumaval ter vissza, 
+     * mely tartalmazza a user osszes adatat
      * @param uname
      * @return
      */
@@ -58,31 +76,68 @@ public class Controller {
     	return null;
     }
     /**
-     * highscore-t konstruál. A User objektumokban 
+     * Highscore-t konstrual. A  {@link User} objektumokban 
      * van username, realname, points  
-     * @param compare itt adjuk meg a rendezési logikát
+     * @param compare itt adjuk meg a rendezesi logikat
      * @param limit hány fős statisztikát szeretnénk
      * @return
      */
     List<Statistics> getHighScore(Comparable<Statistics> compare, int limit){
     	return null;
-    };
+    }
     
     Statistics getUserStatistics(String uname){
     	return null;
-    };
+    }
     
     Statistics getAverageStatistics(){
     	return null;
-    };
+    }
     /**
-     * Átlagos statisztikát készít az ageMax és 
-     * ageMin évesek között (ageMax-t, ageMin-t beszámítva)
+     * Atlagos {@link Statistics}-t keszit az ageMax es 
+     * ageMin evesek kozott (ageMax-t, ageMin-t beszamitva)
      * @param ageMax
      * @param ageMin
-     * @return
+     * @return teljesen kitoltott {@link Statistics} objektum.
      */
     Statistics getAgeStatistics(int ageMax, int ageMin){
     	return null;
-    };
+    }
+    
+    /**
+     * Visszaad teljesen kitoltott {@link Question}-t megadott nehezseggel es topic-kal <br>
+     * - Ha a parameterek nem voltak megfelelok, akkor null-t.<br>
+     * - Ha az adott kategoriaban (diff & topic) nincs kerdes, akkor is null-t.
+     * @param diff - nehezsegi fokozat
+     * @param topic - az adott topic id-ja.
+     * @return {@link Question} or null
+     */
+    public Question getQuestion(int diff, int topic) {
+		if(diff == actualDiff && topic == actualTopic && actualTopic != -1 && actualDiff != -1) {
+			System.out.println("load question from memory");
+			int random;
+			if(questions.size() == 1) {
+				random = 0;
+				actualDiff = -1;
+				actualTopic = -1;
+			} else {
+				random = new Random().nextInt(questions.size());
+			}
+			Question re = questions.get(random);
+			questions.remove(random);
+			return re;
+		}
+		
+		questions = db.getQuestions(diff, topic);
+		if(questions == null) {
+			actualDiff = -1;
+			actualTopic = -1;
+			return null;
+		} else {
+			actualDiff = diff;
+			actualTopic = topic;
+		}
+		
+		return getQuestion(diff,topic);
+    }
 }

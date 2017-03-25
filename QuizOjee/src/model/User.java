@@ -1,5 +1,8 @@
 package model;
 
+/** 
+ * Ez az alap objektum, felhasznalok tarolasara valo.
+ * */
 public class User {
 
 	private String username; //userID
