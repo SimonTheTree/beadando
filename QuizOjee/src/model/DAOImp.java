@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.jcraft.jsch.*;
+// így oldottam meg, hogy ne legyen benne direkt a kódban a jelszavam, nem szeretném közzétenni...
+// kérlek ne törd fel :D
+import ssh.SshCredentials; 
 
 public class DAOImp implements DAO {
 
@@ -51,8 +54,8 @@ public class DAOImp implements DAO {
 	
 	
 	        JSch jsch=new JSch();
-	        Session session=jsch.getSession(user, host, port);
-	        session.setPassword(password);
+	        Session session=jsch.getSession(SshCredentials.getUser(), host, port);
+	        session.setPassword(SshCredentials.getPassword());
 	        session.setConfig("StrictHostKeyChecking", "no");
 	        // create port from 1521 on local system to port 1521 on tunnelRemoteHost
 	        session.setPortForwardingL(1521, tunnelRemoteHost, 1521);
