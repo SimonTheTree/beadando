@@ -1,3 +1,12 @@
+----------------------------------------------------
+----------------------------------------------------
+-- 
+--   EZ CSAK AZ OLVASHATÓSÁG KEDVÉÉRT VAN. NE EZT 
+--   ADJUK BE, VAN EGY MÁSIK A MINDENT LÉTREHOZ. (DBexport.sql)
+--
+----------------------------------------------------
+----------------------------------------------------
+
 INSERT INTO QUESTION_TOPICS (topic_ID, name) VALUES (0, 'élővilág - állatvilág');
 INSERT INTO QUESTION_TOPICS (topic_ID, name) VALUES (1, 'élővilág - növényvilág');
 INSERT INTO QUESTION_TOPICS (topic_ID, name) VALUES (2, 'építészet');
