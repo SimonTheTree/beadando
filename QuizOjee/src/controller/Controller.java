@@ -2,19 +2,18 @@ package controller;
 
 import java.util.List;
 import java.util.Random;
-
 import model.Statistics;
 import model.DAO;
 import model.DAOImp;
 import model.Question;
-
 import model.User;
 import model.exceptions.UserAlreadyExistsException;
-
+import view.MainWindow;
 public class Controller {
 	
 	
 	private DAO db = new DAOImp();
+	private MainWindow gui = new MainWindow(this);;
 	private int maxDifficulty;
 	private int maxTopicId;
 	private int actualDiff = -1;
@@ -32,7 +31,7 @@ public class Controller {
 	 * @param pw
 	 * @return true=OK
 	 */
-	boolean signIn(String uname, String pw){
+	public boolean signIn(String uname, String pw){
 		return false;
 	}
 	/**
@@ -43,7 +42,7 @@ public class Controller {
 	 * @throws UserAlreadyExistsException if the username is taken 
 	 * @return
 	 */
-    boolean register(User u, String pw) throws UserAlreadyExistsException{
+	public boolean register(User u, String pw) throws UserAlreadyExistsException{
     	return false;
     }
     
@@ -53,7 +52,7 @@ public class Controller {
      * @param pw
      * @return false ha vmi nem mukodott
      */
-    boolean setPassword(String uname, String pw){
+    public boolean setPassword(String uname, String pw){
     	return false;
     }
     
@@ -63,7 +62,7 @@ public class Controller {
      * @param u
      * @return
      */
-    boolean modifyUser(User u){
+    public boolean modifyUser(User u){
     	return false;
     }
     /**
@@ -72,7 +71,7 @@ public class Controller {
      * @param uname
      * @return
      */
-    User getUser(String uname){
+    public User getUser(String uname){
     	return null;
     }
     /**
@@ -86,11 +85,11 @@ public class Controller {
     	return null;
     }
     
-    Statistics getUserStatistics(String uname){
+    public Statistics getUserStatistics(String uname){
     	return null;
     }
     
-    Statistics getAverageStatistics(){
+    public Statistics getAverageStatistics(){
     	return null;
     }
     /**
@@ -100,7 +99,7 @@ public class Controller {
      * @param ageMin
      * @return teljesen kitoltott {@link Statistics} objektum.
      */
-    Statistics getAgeStatistics(int ageMax, int ageMin){
+    public Statistics getAgeStatistics(int ageMax, int ageMin){
     	return null;
     }
     
@@ -139,5 +138,9 @@ public class Controller {
 		}
 		
 		return getQuestion(diff,topic);
+    }
+
+    public Question getQuestion(int topic){
+    	return null;
     }
 }
