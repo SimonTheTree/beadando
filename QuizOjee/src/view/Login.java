@@ -50,8 +50,8 @@ public class Login extends JDialog {
 		txtfPassword = new JTextField();
 		txtfPassword.setColumns(10);
 		
-		btnLogin = new JButton(Labels.LOGIN);
-		btnRegister = new JButton(Labels.LOGIN);
+		btnLogin = new JButton(Labels.BTN_LOGIN);
+		btnRegister = new JButton(Labels.BTN_REGISTER);
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
