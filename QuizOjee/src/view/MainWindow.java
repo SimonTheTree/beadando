@@ -11,6 +11,8 @@ public class MainWindow extends JFrame{
 	// STATE ID-s
 	//--------------------------------------------------------------//
 	public static final String STATE_MAIN = "0";
+	public static final String STATE_LOGIN = "0.1";
+	public static final String STATE_REGISTER = "0.2";
 	public static final String STATE_QUIZ_SETTINGS = "1";
 	public static final String STATE_QUIZ = "1.1";
 	public static final String STATE_GAME_SETTINGS = "2";
@@ -18,7 +20,7 @@ public class MainWindow extends JFrame{
 	public static final String STATE_STAISTICS = "4";
 	public static final String STATE_FORUM = "5";
 	public static final String STATE_FORUM_TOPIC = "5.1";
-	public static final String STATE_PROFILE = "";
+	public static final String STATE_PROFILE = "6";
 	
 	
     private StateManager sm = new StateManager(this);
@@ -33,6 +35,8 @@ public class MainWindow extends JFrame{
     private State forum = new view.states.ForumState(this);
     private State forumTopic = new view.states.ForumTopicState(this);
     private State profile = new view.states.ProfileState(this);
+    private State login = new view.states.LoginState(this);
+    private State registration = new view.states.RegistrationState(this);
 // forum    
     
     public MainWindow(Controller c){
@@ -52,6 +56,8 @@ public class MainWindow extends JFrame{
         sm.addState(forum);
         sm.addState(forumTopic);
         sm.addState(profile);
+        sm.addState(login);
+        sm.addState(registration);
         
         sm.setCurrentState(STATE_MAIN);
         sm.startCurrentState();

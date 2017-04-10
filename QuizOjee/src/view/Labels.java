@@ -21,6 +21,18 @@ public final class Labels {
 	public static final String LBL_LAST_ONE_STANDING = "Last one standing"; 
 	public static final String LBL_30_ROUNDS = "30 rounds"; 
 	public static final String LBL_BLITZKIREG = "Blitzkrieg"; 
+	public static final String LBL_REFERENCED_COMMENT = "Referenced comment: "; 	
+	public static final String LBL_USER_UNAME = "Username: "; 	
+	public static final String LBL_USER_RNAME = "Real name: "; 	
+	public static final String LBL_USER_AGE = "Age: "; 	
+	public static final String LBL_USER_POINTS = "Points: "; 	
+	public static final String LBL_USER_N_WINS = "Number of victories: "; 	
+	public static final String LBL_USER_N_DEFEATS = "Number of losses: "; 	
+	public static final String LBL_USER_N_RIGHT_ANS = "Right answers: "; 	
+	public static final String LBL_USER_N_WRONG_ANS = "Wrong answers: "; 	
+	public static final String LBL_USER_N_RIGHT_TIPS = "Right tips: "; 	
+	public static final String LBL_USER_N_WRONG_TIPS = "Wrong tips: "; 	
+ 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
 	//--------------------------------------------------------------//
@@ -50,6 +62,7 @@ public final class Labels {
 	public static final String BTN_ADD_MAP = "Add new map";  
 	public static final String BTN_ADD_QUESTION = "Add new question"; 
 	public static final String BTN_ADD_TOPIC = "Add topic"; 
+	public static final String BTN_ADD_COMMENT = "Comment"; 
 
 	
 	//--------------------------------------------------------------//

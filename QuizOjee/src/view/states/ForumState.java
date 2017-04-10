@@ -22,18 +22,28 @@ public class ForumState extends State {
 	
 	public ForumState(MainWindow r) {
 		super(MainWindow.STATE_FORUM, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
+		
+		JPanel panel = new JPanel();
+		JScrollPane scrollPane;
+		
 		topics = new ArrayList<>();
 		topics.add(new JButton("demoTopic1"));
 		topics.add(new JButton("demoTopic2"));
 		topics.add(new JButton("demoTopic3"));
-		JPanel panel = new JPanel();
-		JScrollPane scrollPane = new JScrollPane();
+		
+		panel.setLayout(null);
 			for(int i = 0; i < topics.size(); i++){
 				JButton btn = topics.get(i);
-				btn.setBounds(5, i*40, Settings.MAIN_WINDOW_WIDTH-150, 35);
+				//tudom h nem szép, de úgy sincs átméretezés
+				btn.setBounds(5, i*40+5, Settings.MAIN_WINDOW_WIDTH-95, 35); 
 				panel.add(btn);
+				//set forumtopic states topic
+				btn.addActionListener((e) -> {
+					root.setState(MainWindow.STATE_FORUM_TOPIC);
+				});
 			}
-			scrollPane.add(panel);
+		scrollPane = new JScrollPane(panel);
+		
 		JLabel lblForumTitle = new JLabel(Labels.LBL_TITLE_FORUM);
 			lblForumTitle.setFont(Settings.FONT_TITLE);
 		JLabel lblTopics = new JLabel(Labels.LBL_TOPICS);
@@ -43,7 +53,6 @@ public class ForumState extends State {
 			btnBack.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});
-		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)

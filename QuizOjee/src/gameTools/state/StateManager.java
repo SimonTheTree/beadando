@@ -38,7 +38,6 @@ public class StateManager {
         try{
             gameFrame.add(states.get(currentState));
             gameFrame.pack();
-            gameFrame.setLocationRelativeTo(null);
             states.get(currentState).start();
             states.get(currentState).requestFocus();
         } catch(IndexOutOfBoundsException e){
