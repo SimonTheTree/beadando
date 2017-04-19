@@ -30,6 +30,11 @@ public class GameMessage {
 		}
 	}
 	
+	public GameMessage(String message, String... params) {
+		this.message = message;
+		this.params = params;
+	}
+	
 	public String toString() {
 		String re = "";
 		re+=automatic+SPLIT;

@@ -7,14 +7,17 @@ public final class Labels {
 	//--------------------------------------------------------------//
 	public static final String USERNAME = "username"; 
 	public static final String PASSWORD = "password"; 
+	public static final String PASSWORD_AGAIN = "password again"; 
 	public static final String LBL_TITLE_QUIZ_CREATOR = "Quiz Settings"; 
 	public static final String LBL_TITLE_GAME_CREATOR = "Game Settings"; 
 	public static final String LBL_TITLE_STATS = "Statistics"; 
 	public static final String LBL_TITLE_FORUM = "Forum"; 
 	public static final String LBL_TITLE_FORUM_TOPIC = "<Topic name load failed>"; 
 	public static final String LBL_TITLE_PROFILE = "Profile"; 
+	public static final String LBL_TITLE_LOGIN = "Login"; 
+	public static final String LBL_TITLE_REGISTER = "Register"; 
 	public static final String LBL_DIFFICULITY = "Difficulity"; 
-	public static final String LBL_NUMBER_OF_QUESTIONS = "Numbre of questions:"; 
+	public static final String LBL_NUMBER_OF_QUESTIONS = "Number of questions:"; 
 	public static final String LBL_MAP = "Map"; 
 	public static final String LBL_TYPE = "Type:"; 
 	public static final String LBL_TOPICS = "Topics"; 
@@ -31,8 +34,23 @@ public final class Labels {
 	public static final String LBL_USER_N_RIGHT_ANS = "Right answers: "; 	
 	public static final String LBL_USER_N_WRONG_ANS = "Wrong answers: "; 	
 	public static final String LBL_USER_N_RIGHT_TIPS = "Right tips: "; 	
-	public static final String LBL_USER_N_WRONG_TIPS = "Wrong tips: "; 	
- 	
+	public static final String LBL_USER_N_WRONG_TIPS = "Wrong tips: ";
+	public static final String LBL_NO_ACCOUNT_YET = "Don't have an account yet?";
+	
+	
+	public static final String MSG_FIELD_EMPTY = " field is was empty.";
+	public static final String MSG_UNAME_FIELD_EMPTY = "No username was given";
+	public static final String MSG_PASSWD_FIELD_EMPTY = "No password was given";
+	public static final String MSG_PASSWD2_FIELD_EMPTY = "Password was not repeated";
+	public static final String MSG_AGE_FIELD_EMPTY = "No age was given";
+	public static final String MSG_LOGIN_FAILED= "Login failed. Check your credentials";
+	public static final String MSG_REGISTRATION_FAILED= "Registration failed.";
+	public static final String MSG_USER_EXISTS= "Username is taken";
+	public static final String MSG_PASSWORDS_DONT_MATCH= "The passwords don't match";
+	public static final String MSG_YOURE_TOO_YOUNG= "You need to be older than 12";
+	public static final String MSG_SERVER_ERROR= "Server error";
+	
+	 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
 	//--------------------------------------------------------------//
@@ -69,7 +87,7 @@ public final class Labels {
 	// WINDOW TITLES
 	//--------------------------------------------------------------//
 	public static final String MAIN_WINDOW_TITLE = "Quiz! Ojee!!";
-	public static final String LOGIN_WINDOW_TITLE = "Quiz! Ojee!!";
+	public static final String LOGIN_WINDOW_TITLE = "Login";
 
 		
 

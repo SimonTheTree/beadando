@@ -32,7 +32,7 @@ public class Controller {
 	 * @return true=OK
 	 */
 	public boolean signIn(String uname, String pw){
-		return false;
+		return true;
 	}
 	/**
 	 * Letrehoz egy  {@link User}-t a user tablaban, ha 
@@ -42,7 +42,7 @@ public class Controller {
 	 * @throws UserAlreadyExistsException if the username is taken 
 	 * @return
 	 */
-	public boolean register(User u, String pw) throws UserAlreadyExistsException{
+	public boolean register(User u) throws UserAlreadyExistsException{
     	return false;
     }
     
@@ -52,13 +52,15 @@ public class Controller {
      * @param pw
      * @return false ha vmi nem mukodott
      */
-    public boolean setPassword(String uname, String pw){
-    	return false;
-    }
+	//szerintem ezt is bízzuk a modifyUser-re
+//    public boolean setPassword(String uname, String pw){
+//    	return false;
+//    }
     
     /**
      * A parameterben kapott  {@link User} adatait frissiti az adatbazisban.
-     * A user username-jet ki kell tolteni. 
+     * A user username-jet ki kell tolteni. ami nincs beállítva set[valami]-vel 
+     * a {@link User}-ben, azt nem piszkálja az adatbázisban, az marad, ami volt
      * @param u
      * @return
      */
@@ -75,23 +77,32 @@ public class Controller {
     	return null;
     }
     /**
+     * Há logikus :D
+     * @param uname
+     * @return
+     */
+    public boolean deleteUser(String uname){
+    	return false;
+    }
+    
+    /**
      * Highscore-t konstrual. A  {@link User} objektumokban 
      * van username, realname, points  
      * @param compare itt adjuk meg a rendezesi logikat
      * @param limit hány fős statisztikát szeretnénk
      * @return
      */
-    List<Statistics> getHighScore(Comparable<Statistics> compare, int limit){
-    	return null;
-    }
-    
-    public Statistics getUserStatistics(String uname){
-    	return null;
-    }
-    
-    public Statistics getAverageStatistics(){
-    	return null;
-    }
+//    List<Statistics> getHighScore(Comparable<Statistics> compare, int limit){
+//    	return null;
+//    }
+//    
+//    public Statistics getUserStatistics(String uname){
+//    	return null;
+//    }
+//    
+//    public Statistics getAverageStatistics(){
+//    	return null;
+//    }
     /**
      * Atlagos {@link Statistics}-t keszit az ageMax es 
      * ageMin evesek kozott (ageMax-t, ageMin-t beszamitva)
@@ -100,6 +111,24 @@ public class Controller {
      * @return teljesen kitoltott {@link Statistics} objektum.
      */
     public Statistics getAgeStatistics(int ageMax, int ageMin){
+    	return null;
+    }
+    
+    /**
+     * random kérdés adott topikkal
+     * @param topicID
+     * @return
+     */
+    public Question getRandomQuestionOfTopic(int topicID){
+    	return null;
+    }
+    
+    /**
+     * random kérdés adott nehézségi szinttel
+     * @param topicID
+     * @return
+     */
+    public Question getRandomQuestionOfDifficulity(int topicID){
     	return null;
     }
     

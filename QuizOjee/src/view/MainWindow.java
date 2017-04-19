@@ -24,7 +24,7 @@ public class MainWindow extends JFrame{
 	
 	
     private StateManager sm = new StateManager(this);
-    private Controller controller;
+    public Controller controller;
     
     private State main = new view.states.MainState(this);
     private State gameCreator = new view.states.GameCreatorState(this);
@@ -59,10 +59,10 @@ public class MainWindow extends JFrame{
         sm.addState(login);
         sm.addState(registration);
         
-        sm.setCurrentState(STATE_MAIN);
+        sm.setCurrentState(STATE_LOGIN);
         sm.startCurrentState();
-        this.setVisible(true);
         
+        this.setVisible(true);
     }
     
     public void setState(String s){
