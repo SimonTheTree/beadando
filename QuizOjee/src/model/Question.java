@@ -1,8 +1,10 @@
 package model;
 
 /** 
- *  Egy feleletvalasztos kerdes tarolasara valo. <br>
- *  Adattagjai: <br>
+ * <b>Question</b><br>
+ *  Egy feleletvalasztos kerdes tarolasara valo. <p>
+ *  
+ *  <b>Adattagjai:</b><br>
  *   - questionId - int<br>
  *   - question - String<br>
  *   - rightAnswer - String<br>
@@ -24,7 +26,6 @@ public class Question {
 	private int topicId;
 	private int difficulty;
 	private String userName;
-	
 	
 	public long getQuestionId() {
 		return questionId;

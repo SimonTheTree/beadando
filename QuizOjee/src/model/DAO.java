@@ -2,6 +2,9 @@ package model;
 
 import java.util.List;
 
+import model.exceptions.UserAlreadyExistsException;
+import model.exceptions.UserNotFoundException;
+
 /**
  * DAO = Data Access Object
  * @author ganter
@@ -15,9 +18,10 @@ public interface DAO {
      * - Ha az adott kategoriaban (diff & topic) nincs kerdes, akkor is null-t.
      * @param diff - nehezsegi fokozat
      * @param topic - az adott topic id-ja.
+     * @param topicList 
      * @return {@link List}<{@link Question}> or null
      */
-	List<Question> getQuestions(int diff,int topic);
+	List<Question> getQuestions(int minDiff,int maxDiff, List<Integer> topicList);
 	
 	/**
 	 * Visszaadja az adott oszlopban tarolt ertekek kozul a legnagyobbat.
@@ -25,5 +29,20 @@ public interface DAO {
 	 * @return max(column)
 	 */
 	int getMax(String column);
+
+	/**Bejelentkezesnel nezzuk meg hogy stimmel-e a felhasznalonev meg a jelszo. */
+	boolean checkUser(String uname, String pw);
 	
+	/**Ellenorzi, hogy van-e mar ilyen user, ha nincs akkor addol.
+	 * @param user : egy {@link User}
+	 * @return sikerult-e*/
+	boolean addUser(User user) throws UserAlreadyExistsException;
+	
+	boolean modifyUser(User user) throws UserNotFoundException;
+	
+	User getUser(String uname);
+	
+	boolean deleteUser(String uname);
+
+	List<Statistics> getAgeStatistics(int ageMin, int ageMax);
 }

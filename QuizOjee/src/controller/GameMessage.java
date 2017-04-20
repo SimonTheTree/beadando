@@ -14,7 +14,7 @@ public class GameMessage {
 	private boolean automatic;
 	
 	/**A konstruktor es toString metodusok e menten vagja szet az uzeneteket. */
-	private static final String SPLIT = "\t";
+	public static final String SPLIT = "\t";
 
 	/** 
 	 * {@link GameMessage} konstruktor.
