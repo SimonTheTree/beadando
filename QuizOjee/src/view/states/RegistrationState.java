@@ -2,6 +2,8 @@ package view.states;
 
 import gameTools.state.State;
 import model.User;
+import controller.PasswordCoder;
+import model.exceptions.BadUsernameFormatException;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
@@ -56,8 +58,8 @@ public class RegistrationState extends State {
 			btnRegister.addActionListener((e) -> {
 				msg.clear();
 				String uname = txtUname.getText();                         
-				String password = cryptWithMD5(String.valueOf(txtPw.getPassword()));     
-				String password2 = cryptWithMD5(String.valueOf(txtPwAgain.getPassword()));     	           
+				String password = PasswordCoder.cryptWithMD5(String.valueOf(txtPw.getPassword()));     
+				String password2 = PasswordCoder.cryptWithMD5(String.valueOf(txtPwAgain.getPassword()));     	           
 				int age = (Integer) txtAge.getValue();
 				
 				boolean ok = true;
@@ -91,12 +93,17 @@ public class RegistrationState extends State {
 					msg.add(new JLabel(Labels.MSG_REGISTRATION_FAILED));
 				}
 				if(ok){
-					User u = new User();
-					u.setUsername(uname);
-					u.setPw(password);
-					u.setAge(age);
-					ok = root.controller.register(u);
-					System.out.println(ok);
+					try{
+						User u = new User();
+						u.setUsername(uname);
+						u.setCodedPassword(password);
+						u.setAge(age);
+						ok = root.controller.register(u);
+						System.out.println(ok);
+					}catch(BadUsernameFormatException ex){
+						msg.add(new JLabel(Labels.MSG_BAD_USERNAME_FORMAT));
+						ok = false;
+					}
 				}
 				if(!ok){
 					msg.add(new JLabel(Labels.MSG_SERVER_ERROR));
@@ -195,23 +202,5 @@ public class RegistrationState extends State {
 		}
 		panelMsg.repaint();
 	}
-	
-	public static String cryptWithMD5(String pass){
-	    MessageDigest md;
-		try {
-	        md = MessageDigest.getInstance("MD5");
-	        byte[] passBytes = pass.getBytes();
-	        md.reset();
-	        byte[] digested = md.digest(passBytes);
-	        StringBuffer sb = new StringBuffer();
-	        for(int i=0;i<digested.length;i++){
-	            sb.append(Integer.toHexString(0xff & digested[i]));
-	        }
-	        return sb.toString();
-	    } catch (NoSuchAlgorithmException ex) {
-	        ex.printStackTrace();
-	    }
-        return null;
 
-	   }
 }

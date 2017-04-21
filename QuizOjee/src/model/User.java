@@ -31,7 +31,7 @@ public class User {
 	public void codePassword() {
 		if(passwordCoded == true) return; 
 		passwordCoded = true;
-		password = PasswordCoder.code(password);
+		password = PasswordCoder.cryptWithMD5(password);
 	}
     public String getRealName() {
 		return realName;

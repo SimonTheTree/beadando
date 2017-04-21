@@ -1,6 +1,6 @@
 package model.exceptions;
 
-public class BadUsernameFormat extends Exception {
+public class BadUsernameFormatException extends Exception {
 
 	/**
 	 * 

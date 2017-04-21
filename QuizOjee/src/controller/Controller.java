@@ -8,7 +8,7 @@ import model.DAO;
 import model.DAOImp;
 import model.Question;
 import model.User;
-import model.exceptions.BadUsernameFormat;
+import model.exceptions.BadUsernameFormatException;
 import model.exceptions.UserAlreadyExistsException;
 import model.exceptions.UserNotFoundException;
 import view.MainWindow;
@@ -41,18 +41,18 @@ public class Controller {
 	 * @return true=OK
 	 */
 	public boolean signIn(String uname, String uncodedPassword) {
-		return db.checkUser(uname,PasswordCoder.code(uncodedPassword));
+		return db.checkUser(uname,PasswordCoder.cryptWithMD5(uncodedPassword));
 	}
 	/**
 	 * Letrehoz egy  {@link User}-t a user tablaban.<br>
 	 * Kodolja a jelszot! tehat nem kotelezo megtenned.
 	 * @param u : A letrehozando {@link User}.
 	 * @throws UserAlreadyExistsException ha mar letezik.
-	 * @throws BadUsernameFormat ha nem jo a felhasznalonev formatuma. 
+	 * @throws BadUsernameFormatException ha nem jo a felhasznalonev formatuma. 
 	 * @return sikerult-e.
 	 */
-	public boolean register(User u) throws UserAlreadyExistsException, BadUsernameFormat {
-		if(u.getUsername().contains(GameMessage.SPLIT) || u.getUsername().contains("@")) throw new BadUsernameFormat();
+	public boolean register(User u) throws UserAlreadyExistsException, BadUsernameFormatException {
+		if(u.getUsername().contains(GameMessage.SPLIT) || u.getUsername().contains("@")) throw new BadUsernameFormatException();
 		User codedUser = new User(u);
 		codedUser.codePassword();
     	return db.addUser(codedUser);

@@ -19,16 +19,16 @@ public class Main {
 	public static void main (String[] args){
 		System.out.println("hello");
 		
-		//Controller c = new Controller();
+		Controller c = new Controller();
 		
 		//DEMO kapcsolat a host-kliens kozott.
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
 		//Megertesehez ajanlom a GameHost es GameClient osztaly leirasanak olvasgatasat :P
 		
-		hostThread().start();
-		clientThread("asd",false).start();
-		clientThread("asd2",false).start();
-		clientThread("Mr.Troll",true).start();
+//		hostThread().start();
+//		clientThread("asd",false).start();
+//		clientThread("asd2",false).start();
+//		clientThread("Mr.Troll",true).start();
 	}
 	
 	public static Thread hostThread() {

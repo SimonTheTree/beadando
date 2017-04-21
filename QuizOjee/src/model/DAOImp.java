@@ -80,7 +80,7 @@ public class DAOImp implements DAO {
 	        Session session=jsch.getSession(SshCredentials.getUser(), host, port);
 	        session.setPassword(SshCredentials.getPassword());
 	        session.setConfig("StrictHostKeyChecking", "no");
-	        // create port from 1521 on local system to port 1521 on tunnelRemoteHost
+	        // create port forward from 1521 on local system to port 1521 on tunnelRemoteHost
 	        session.setPortForwardingL(1521, tunnelRemoteHost, 1521);
 	        session.connect();
 	        session.openChannel("direct-tcpip");

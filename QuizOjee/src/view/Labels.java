@@ -1,5 +1,7 @@
 package view;
 
+import controller.GameMessage;
+
 public final class Labels {
 
 	//--------------------------------------------------------------//
@@ -43,6 +45,7 @@ public final class Labels {
 	public static final String MSG_PASSWD_FIELD_EMPTY = "No password was given";
 	public static final String MSG_PASSWD2_FIELD_EMPTY = "Password was not repeated";
 	public static final String MSG_AGE_FIELD_EMPTY = "No age was given";
+	public static final String MSG_BAD_USERNAME_FORMAT = "Username must not contain @ or something else thats special";
 	public static final String MSG_LOGIN_FAILED= "Login failed. Check your credentials";
 	public static final String MSG_REGISTRATION_FAILED= "Registration failed.";
 	public static final String MSG_USER_EXISTS= "Username is taken";
