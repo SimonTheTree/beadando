@@ -8,28 +8,39 @@ import java.util.List;
  * 
  * <b>Adattagjai:</b><br>
  * - uname<br>
+ * - age<br>
  * - points<br>
  * - wins<br>
  * - defeats<br>
  * - rightAnswers<br>
  * - wrongAnswers<br>
  * - rightTips<br>
- * - wrongTips<br>
+ * - wrongTips<p>
+ * 
+ * <b>Ha resetelni akarsz, mindent allits be 0-ra!</b>
  */
 public class Statistics {
 	private String uname;
-	private int points;
-    private int wins;
-    private int defeats;
-    private int rightAnswers;
-    private int wrongAnswers;
-    private int rightTips;
-    private int wrongTips;
+    private int age = 0;
+    private int points = -1;
+    private int wins = -1;
+    private int defeats = -1;
+    private int rightAnswers = -1;
+    private int wrongAnswers = -1;
+    private int rightTips = -1;
+    private int wrongTips = -1;
     
     /**Az atlagos {@link Statistics} megkulonbozteto egyedi {@link #uname}-je */
     public static final String avg = "@avg@";
     
-    public String getUname() {
+    
+    public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getUname() {
 		return uname;
 	}
 	public void setUname(String uname) {
@@ -96,6 +107,7 @@ public class Statistics {
     	re.setUname(avg);
     	for(int i=0;i<stats.size();++i) {
 	    	Statistics stat = stats.get(i);
+	    	re.age += stat.age;
 			re.points += stat.points;
 	    	re.wins += stat.wins;
 	    	re.defeats += stat.defeats;
@@ -105,6 +117,7 @@ public class Statistics {
 	    	re.wrongTips += stat.wrongTips;
     	}
 		re.points /= stats.size();
+		re.age /= stats.size();
     	re.wins /= stats.size();
     	re.defeats /= stats.size();
     	re.rightAnswers /= stats.size();
@@ -115,6 +128,6 @@ public class Statistics {
     }
     
     public String toString() {
-    	return "[("+uname+") "+points+" "+wins+" "+defeats+" "+rightAnswers+" "+wrongAnswers+" "+rightTips+" "+wrongTips+"]";
+    	return "[("+uname+") "+age+" "+points+" "+wins+" "+defeats+" "+rightAnswers+" "+wrongAnswers+" "+rightTips+" "+wrongTips+"]";
     }
 }

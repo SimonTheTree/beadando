@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 
 import model.exceptions.UserAlreadyExistsException;
 import model.exceptions.UserNotFoundException;
@@ -19,9 +20,10 @@ public interface DAO {
      * @param diff - nehezsegi fokozat
      * @param topic - az adott topic id-ja.
      * @param topicList 
+     * @param n kerdesek szama
      * @return {@link List}<{@link Question}> or null
      */
-	List<Question> getQuestions(int minDiff,int maxDiff, List<Integer> topicList);
+	List<Question> getQuestions(int minDiff,int maxDiff, List<Integer> topicList, int n);
 	
 	/**
 	 * Visszaadja az adott oszlopban tarolt ertekek kozul a legnagyobbat.
@@ -45,4 +47,16 @@ public interface DAO {
 	boolean deleteUser(String uname);
 
 	List<Statistics> getAgeStatistics(int ageMin, int ageMax);
+
+	Map<String,Integer> getQuestionQuantityByCategory();
+
+	List<Statistics> getTopTenPlayersStatistics();
+
+	Map<String, Integer> getUserQuestionQuantity();
+
+	Statistics getUserStatistics(String username);
+
+	boolean updateStatistics(Statistics stat) throws UserNotFoundException;
+
+	List<RaceQuestion> getRaceQuestions(List<Integer> topicList, int n);
 }

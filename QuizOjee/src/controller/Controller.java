@@ -2,11 +2,16 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import model.Statistics;
 import model.DAO;
 import model.DAOImp;
 import model.Question;
+import model.RaceQuestion;
 import model.User;
 import model.exceptions.BadUsernameFormatException;
 import model.exceptions.UserAlreadyExistsException;
@@ -23,13 +28,20 @@ public class Controller {
 	private int actualMaxDiff = -1;
 	private List<Integer> actualTopicList = null;
 	private List<Question> questions;
+	private List<Integer> actualRaceTopicList = null;
+	private List<RaceQuestion> raceQuestions;
+	private Map<String,Integer> questionQuantityByCategory = null;
+	private List<Statistics> topTenPlayers = null;
+	private Map<String,Integer> userQuestionQuantity = null;
 	
 	public Controller() {
 		db = new DAOImp();
-		gui = new MainWindow(this);
+		//gui = new MainWindow(this);
 		maxDifficulty = db.getMax("difficulty");
 		maxTopicId = db.getMax("TOPIC_ID");
 		System.out.println("maxDifficulty "+maxDifficulty);
+		setThemNummThread();
+		
 	}
 	
 	/**
@@ -122,6 +134,19 @@ public class Controller {
 //    public Statistics getAverageStatistics(){
 //    	return null;
 //    }
+    
+    public Statistics getUserStatistics(User u) {
+    	return getUserStatistics(u.getUsername());
+    }
+    
+    public Statistics getUserStatistics(String username) {
+    	return db.getUserStatistics(username);
+    }
+    
+	public boolean updateStatistics(Statistics stat) throws UserNotFoundException {
+		return db.updateStatistics(stat);
+	}
+    
     /**
      * Atlagos {@link Statistics}-t keszit az ageMax es 
      * ageMin evesek kozott (ageMax-t, ageMin-t beszamitva)
@@ -140,9 +165,10 @@ public class Controller {
      * @param minDiff a legkisebb nehezsegi szint, beleertve. (0-nal kisebb nem szamit)
      * @param maxDiff a legnagyobb nehezsegi szint, beleerve. ({@link #getMaxDifficulty()}-nal nagyobb nem szamit.)
      * @param topicList - a topic id-k listaja. Ha ures vagy null, akkor nincs megkotes.
+     * @param n mennyi kerdest toltson be. 
      * @return {@link Question} or null
      */
-    public Question getQuestion(int minDiff, int maxDiff, List<Integer> topicList) {
+    public Question getQuestion(int minDiff, int maxDiff, List<Integer> topicList, int n) {
     	if(minDiff >  maxDiff) return null;
     	if(maxDiff < 0) return null;
     	if(minDiff < 0) minDiff = 0;
@@ -164,7 +190,7 @@ public class Controller {
 			return re;
 		}
 		
-		questions = db.getQuestions(minDiff, maxDiff, topicList);
+		questions = db.getQuestions(minDiff, maxDiff, topicList, n);
 		if(questions == null) {
 			actualMinDiff = -1;
 			actualMaxDiff = -1;
@@ -176,12 +202,36 @@ public class Controller {
 			actualTopicList = topicList==null?null:new ArrayList<Integer>(topicList);
 		}
 		
-		return getQuestion(minDiff, maxDiff, actualTopicList);
+		return getQuestion(minDiff, maxDiff, actualTopicList, n);
     }
 
-    public Question getQuestion(int topic){
-    	return null;
+    public RaceQuestion getRaceQuestion(List<Integer> topicList, int n) {
+    	//---------Ha min es max is megegyezik------------------ES-----------(--------Ha nem nullok akkor a topicListek megegyeznek--------------VAGY--------------mindketto null---------)-------ES--------A jelenlegi nehezsegek nem -1 ek---
+		if(raceQuestions != null && ((topicList != null && actualRaceTopicList != null && topicList.equals(actualTopicList)) || (topicList == null && actualTopicList == null))) {
+			System.out.println("load raceQuestion from memory");
+			int random;
+			if(raceQuestions.size() == 1) {
+				random = 0;
+				actualRaceTopicList = null;
+			} else {
+				random = new Random().nextInt(raceQuestions.size());
+			}
+			RaceQuestion re = raceQuestions.get(random);
+			raceQuestions.remove(random);
+			return re;
+		}
+		
+		raceQuestions = db.getRaceQuestions(topicList, n);
+		if(raceQuestions == null) {
+			actualRaceTopicList = null;
+			return null;
+		} else {
+			actualRaceTopicList = topicList==null?null:new ArrayList<Integer>(topicList);
+		}
+		
+		return getRaceQuestion(actualTopicList, n);
     }
+
     
     public int getMaxDifficulty() {
     	return maxDifficulty;
@@ -190,4 +240,57 @@ public class Controller {
     public int getMaxTopicId() {
     	return maxTopicId;
     }
+
+	private void setThemNummThread() {
+		Thread t = new Thread(() -> {
+			while(true) {
+				try {
+					Thread.sleep(5000*60);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				questionQuantityByCategory = null;
+				topTenPlayers = null;
+				userQuestionQuantity = null;
+			}
+		});
+		t.setDaemon(true);
+		t.start();
+	}
+	
+    /** 
+     * 1. lekerdezes<p>
+     * @param category : Milyen kategoriaban.
+     * @return Hany kerdes van. (normal+race)
+     */
+    public int getQuestionQuantityByCategory(String category) {
+    	if(questionQuantityByCategory == null) {
+    		questionQuantityByCategory = db.getQuestionQuantityByCategory();
+    	}
+    	return questionQuantityByCategory.get(category)==null?0:questionQuantityByCategory.get(category);
+    }
+    
+    /** 
+     * 2. lekerdezes<p>
+     * @return Top 10 jatekos statisztikaja.
+     */
+    public List<Statistics> getTopTenPlayersStatistics() {
+    	if(topTenPlayers == null) {
+    		topTenPlayers = db.getTopTenPlayersStatistics();
+    	}
+    	return topTenPlayers;
+    }
+    
+    /** 
+     * 3. lekerdezes.<p>
+     * @param uname : Melyik jatekos.
+     * @return Hany kerdessel jarult hozza a jatekhoz. (normal+race)
+     */
+    public int getUserQuestionQuantity(String uname) {
+    	if(userQuestionQuantity == null) {
+    		userQuestionQuantity = db.getUserQuestionQuantity();
+    	}
+    	return userQuestionQuantity.get(uname)==null?0:userQuestionQuantity.get(uname);    	
+    }
+
 }

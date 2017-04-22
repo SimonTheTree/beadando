@@ -13,7 +13,7 @@ package model;
  *   - answer3 - String<br>
  *   - topicId - int<br>
  *   - difficulty - int<br>
- *   - userName - String<br>
+ *   - author - String<br>
  */
 public class Question {
 
@@ -25,7 +25,7 @@ public class Question {
 	private String answer3;
 	private int topicId;
 	private int difficulty;
-	private String userName;
+	private String author;
 	
 	public long getQuestionId() {
 		return questionId;
@@ -75,11 +75,11 @@ public class Question {
 	public void setDifficulty(int difficulty) {
 		this.difficulty = difficulty;
 	}
-	public String getUserName() {
-		return userName;
+	public String getAuthor() {
+		return author;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 	
 	public String toString() {
