@@ -4,39 +4,42 @@ import gameTools.state.State;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
-import javax.swing.JLabel;
+import view.components.GLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
-import javax.swing.JButton;
+import view.components.GButton;
 
-public class QuizCreatorState extends State {
+public class QuizCreatorState extends DefaultState {
 	MainWindow root;
 	public QuizCreatorState(MainWindow r) {
 		super(MainWindow.STATE_QUIZ_SETTINGS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
 		
-		JLabel lblTitle = new JLabel(Labels.LBL_TITLE_QUIZ_CREATOR);
+		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_QUIZ_CREATOR);
 			lblTitle.setFont(Settings.FONT_TITLE);
-		JLabel lblDiff = new JLabel(Labels.LBL_DIFFICULITY);
-		JLabel lblTopics = new JLabel(Labels.LBL_TOPICS);
-		JLabel lblQuestionN = new JLabel(Labels.LBL_NUMBER_OF_QUESTIONS);
+		GLabel lblDiff = new GLabel(Labels.LBL_DIFFICULITY);
+		GLabel lblTopics = new GLabel(Labels.LBL_TOPICS);
+		GLabel lblQuestionN = new GLabel(Labels.LBL_NUMBER_OF_QUESTIONS);
 
 		JScrollPane scrollPane = new JScrollPane();
 		
 		JSpinner spinQuestionN = new JSpinner();
+			spinQuestionN.setValue(20);
 		
 		String[] diffs = {"Easy", "Medium", "Hard"};
 		JComboBox<String> cboxDifficulity = new JComboBox<String>(diffs);
 		
-		JButton btnStart = new JButton(Labels.BTN_START);
+		GButton btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
+				Settings.quiz_numOfQuestions = (Integer) spinQuestionN.getValue();
+				Settings.quiz_difficulity = (cboxDifficulity.getSelectedIndex() ==-1)? 0 : cboxDifficulity.getSelectedIndex();
 				root.setState(MainWindow.STATE_QUIZ);
 			});
-		JButton btnCancel = new JButton(Labels.BTN_CANCEL);
+		GButton btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});

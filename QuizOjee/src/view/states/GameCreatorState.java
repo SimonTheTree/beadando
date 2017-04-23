@@ -6,17 +6,17 @@ import view.MainWindow;
 import view.Settings;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
+import view.components.GLabel;
 import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
+import view.components.GButton;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 
-public class GameCreatorState extends State {
+public class GameCreatorState extends DefaultState {
 	MainWindow root;
 	
 	public GameCreatorState(MainWindow r) {
@@ -26,19 +26,19 @@ public class GameCreatorState extends State {
 		JPanel paneMapDisplay = new JPanel();
 		JScrollPane scrollPane = new JScrollPane();
 		
-		JLabel lblTitle = new JLabel(Labels.LBL_TITLE_GAME_CREATOR);
+		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_GAME_CREATOR);
 			lblTitle.setFont(Settings.FONT_TITLE);
-		JLabel lblTopics = new JLabel(Labels.LBL_TOPICS);
-		JLabel lblMap = new JLabel(Labels.LBL_MAP);
-		JLabel lblType = new JLabel(Labels.LBL_TYPE);	
+		GLabel lblTopics = new GLabel(Labels.LBL_TOPICS);
+		GLabel lblMap = new GLabel(Labels.LBL_MAP);
+		GLabel lblType = new GLabel(Labels.LBL_TYPE);	
 		
-		JButton btnPrevMap = new JButton("<");
-		JButton btnNextMap = new JButton(">");
-		JButton btnStart = new JButton(Labels.BTN_START);
+		GButton btnPrevMap = new GButton("<");
+		GButton btnNextMap = new GButton(">");
+		GButton btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_GAME);
 			});
-		JButton btnCancel = new JButton(Labels.BTN_CANCEL);
+		GButton btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});

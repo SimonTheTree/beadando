@@ -1,7 +1,9 @@
 package resources;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
@@ -16,20 +18,43 @@ public class ResourceLoader {
     
     public static URL getURL(String fileName){
         URL url = rl.getClass().getResource(fileName);
-        if (url == null) System.out.println("resource "+fileName+" not found");
+        if (url == null){
+        	System.out.println("resource "+fileName+" not found");
+        };
         return url;
+    }
+    
+    /**
+     * Loads an image file from resources folder and creates a {@link File} 
+     * with its url, and returns with that File instance.
+     * @param fileName
+     * @return the file, when file not found, null
+     */
+    public static File getFile(String fileName){
+    	try {
+    		System.out.print("loading resource "+fileName +"... ");
+    		File f = new File(getURL(fileName).toURI());
+            System.out.println("OK");
+    		return f;
+        } catch (NullPointerException | URISyntaxException ex) {
+            System.out.println("exception when loading file "+fileName);
+        }
+        return null;
     }
     
     /**
      * Loads an image file from resources folder into a {@link BufferedImage}
      * @param fileName (resources/) path/to/img
-     * @return
+     * @return the image, when file not found, null
      */
     public static BufferedImage getImage(String fileName){
         try {
-            return ImageIO.read(getURL(fileName));
+        	System.out.print("loading resource "+fileName +"... ");
+        	BufferedImage i =ImageIO.read(getURL(fileName)); 
+        	System.out.println("OK");            
+        	return i;
         } catch (IOException | NullPointerException ex) {
-            System.out.println("image "+fileName+" not found");
+            System.out.println("exception when loading image "+fileName);
         }
         return null;
     }

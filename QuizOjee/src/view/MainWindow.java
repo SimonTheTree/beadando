@@ -5,6 +5,8 @@ import controller.Controller;
 
 import gameTools.state.State;
 import gameTools.state.StateManager;
+import model.User;
+import resources.Resources;
 
 public class MainWindow extends JFrame{
 	//--------------------------------------------------------------//
@@ -25,6 +27,7 @@ public class MainWindow extends JFrame{
 	
     private StateManager sm = new StateManager(this);
     public Controller controller;
+    private User user = null;
     
     private State main = new view.states.MainState(this);
     private State gameCreator = new view.states.GameCreatorState(this);
@@ -41,6 +44,10 @@ public class MainWindow extends JFrame{
     
     public MainWindow(Controller c){
     	controller = c;
+    	Thread loader = new Thread(() -> {
+    		Resources.load();
+    		Settings.init();
+    	});
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
         this.setTitle(Labels.MAIN_WINDOW_TITLE);
@@ -59,10 +66,11 @@ public class MainWindow extends JFrame{
         sm.addState(login);
         sm.addState(registration);
         
+        
         sm.setCurrentState(STATE_LOGIN);
         sm.startCurrentState();
         
-        this.setVisible(true);
+        loader.start();
     }
     
     public void setState(String s){
@@ -70,6 +78,20 @@ public class MainWindow extends JFrame{
         sm.setCurrentState(s);
         sm.startCurrentState();
     }
+
+	public User getUser() {
+		if(user != null){
+			return user;
+		} else {
+			User u = new User();
+			u.setUsername("nobody logged in!");
+			return u;
+		}
+	}
+	
+	public void setUser(User u) {
+		user = u;
+	}
     
     
 }

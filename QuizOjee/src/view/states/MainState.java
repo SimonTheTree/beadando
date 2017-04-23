@@ -2,7 +2,7 @@ package view.states;
 
 import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
+import view.components.GButton;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import gameTools.state.State;
@@ -11,47 +11,62 @@ import view.Labels;
 import view.MainWindow;
 import view.Settings;
 
-public class MainState extends State {
+public class MainState extends DefaultState {
 	MainWindow root;
 	
 	public MainState(MainWindow r) {
 		super(MainWindow.STATE_MAIN, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
 		
-		JButton btnStartQuiz = new JButton(Labels.BTN_START_QUIZ);
+		GButton btnStartQuiz = new GButton(Labels.BTN_START_QUIZ);
+			btnStartQuiz.setFont(Settings.FONT_BUTTON_MAIN);
 			btnStartQuiz.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_QUIZ_SETTINGS);
 			});
-		JButton btnCreateGame = new JButton(Labels.BTN_CREATE_GAME);
+		GButton btnCreateGame = new GButton(Labels.BTN_CREATE_GAME);
+			btnCreateGame.setFont(Settings.FONT_BUTTON_MAIN);
 			btnCreateGame.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_GAME_SETTINGS);
 			});
-		JButton btnQuit = new JButton(Labels.BTN_QUIT);
+		GButton btnQuit = new GButton(Labels.BTN_QUIT);
+			btnQuit.setFont(Settings.FONT_BUTTON_MAIN);
 			btnQuit.addActionListener((e) -> {
 				root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
 			});
-		JButton btnJoin = new JButton(Labels.BTN_JOIN_GAME);
+		GButton btnJoin = new GButton(Labels.BTN_JOIN_GAME);
+			btnJoin.setFont(Settings.FONT_BUTTON_MAIN);
 			btnJoin.addActionListener((e) -> {
 				
 			});
-		JButton btnStats = new JButton(Labels.BTN_STATS);
+		GButton btnStats = new GButton(Labels.BTN_STATS);
+			btnStats.setFont(Settings.FONT_BUTTON_MAIN);
 			btnStats.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_STAISTICS);				
 			});
-		JButton btnForum = new JButton(Labels.BTN_FORUM);
+		GButton btnForum = new GButton(Labels.BTN_FORUM);
+			btnForum.setFont(Settings.FONT_BUTTON_MAIN);
 			btnForum.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_FORUM);								
 			});
-		JButton btnProfile = new JButton(Labels.BTN_PROFILE);
+		GButton btnProfile = new GButton(Labels.BTN_PROFILE);
+			btnProfile.setFont(Settings.FONT_BUTTON_MAIN);
 			btnProfile.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_PROFILE);								
 			});
+		GButton btnLogOut = new GButton(Labels.BTN_LOGOUT);
+			btnLogOut.setFont(Settings.FONT_BUTTON_MAIN);
+			btnLogOut.addActionListener((e) -> {
+				root.setUser(null);
+				root.setState(MainWindow.STATE_LOGIN);								
+			});
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(127)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnLogOut, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnProfile, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnForum, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnStats, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
@@ -77,7 +92,9 @@ public class MainState extends State {
 					.addComponent(btnForum, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnProfile, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-					.addGap(143)
+					.addGap(98)
+					.addComponent(btnLogOut, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnQuit, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(114, Short.MAX_VALUE))
 		);
@@ -90,9 +107,4 @@ public class MainState extends State {
 
 	}
 
-	@Override
-	public void render() {
-		g.drawImage(Resources.MAIN_WINDOW_BACKGROUND, 0, 0, getWidth(), getHeight(), this);
-
-	}
 }

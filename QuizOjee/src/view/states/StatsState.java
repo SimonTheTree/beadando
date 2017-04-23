@@ -6,59 +6,59 @@ import view.MainWindow;
 import view.Settings;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JButton;
+import view.components.GLabel;
+import view.components.GButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class StatsState extends State {
+public class StatsState extends DefaultState {
 	MainWindow root;
 	public StatsState(MainWindow r) {
 		super(MainWindow.STATE_STAISTICS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		
-		JLabel lblStatistics = new JLabel(Labels.LBL_TITLE_STATS);
+		GLabel lblStatistics = new GLabel(Labels.LBL_TITLE_STATS);
 			lblStatistics.setFont(Settings.FONT_TITLE);
 		
-		JButton btnListQuestions = new JButton(Labels.BTN_LIST_QUESTIONS);
+		GButton btnListQuestions = new GButton(Labels.BTN_LIST_QUESTIONS);
 			btnListQuestions.addActionListener((e) -> {
 				
 			});
-		JButton btnListMyQuestions = new JButton(Labels.BTN_LIST_MY_QUESTIONS);
+		GButton btnListMyQuestions = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
 			btnListMyQuestions.addActionListener((e) -> {
 				
 			});
-		JButton btnListMaps = new JButton(Labels.BTN_LIST_MAPS);
+		GButton btnListMaps = new GButton(Labels.BTN_LIST_MAPS);
 			btnListMaps.addActionListener((e) -> {
 				
 			});
-		JButton btnListGlobalFavoriteMaps = new JButton(Labels.BTN_LIST_GLOB_FAV_MAPS);
+		GButton btnListGlobalFavoriteMaps = new GButton(Labels.BTN_LIST_GLOB_FAV_MAPS);
 			btnListGlobalFavoriteMaps.addActionListener((e) -> {
 				
 			});
-		JButton btnListMyFavoriteMaps = new JButton(Labels.BTN_LIST_MY_FAV_MAPS);
+		GButton btnListMyFavoriteMaps = new GButton(Labels.BTN_LIST_MY_FAV_MAPS);
 			btnListMyFavoriteMaps.addActionListener((e) -> {
 				
 			});
-		JButton btnListMapWinners = new JButton(Labels.BTN_LIST_MAP_WINNERS);
+		GButton btnListMapWinners = new GButton(Labels.BTN_LIST_MAP_WINNERS);
 			btnListMapWinners.addActionListener((e) -> {
 				
 			});
-		JButton btnListTopics = new JButton(Labels.BTN_LIST_TOPICS);
+		GButton btnListTopics = new GButton(Labels.BTN_LIST_TOPICS);
 			btnListTopics.addActionListener((e) -> {
 				
 			});
-		JButton btnTopTen = new JButton(Labels.BTN_LIST_TOP_TEN);
+		GButton btnTopTen = new GButton(Labels.BTN_LIST_TOP_TEN);
 			btnTopTen.addActionListener((e) -> {
 				
 			});
-		JButton btnAddQuestion = new JButton(Labels.BTN_ADD_QUESTION);
+		GButton btnAddQuestion = new GButton(Labels.BTN_ADD_QUESTION);
 			btnAddQuestion.addActionListener((e) -> {
 				
 			});
-		JButton btnAddMap = new JButton(Labels.BTN_ADD_MAP);
+		GButton btnAddMap = new GButton(Labels.BTN_ADD_MAP);
 			btnAddMap.addActionListener((e) -> {
 				
 			});
-		JButton btnBack = new JButton(Labels.BTN_BACK);
+		GButton btnBack = new GButton(Labels.BTN_BACK);
 			btnBack.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});

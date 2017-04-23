@@ -4,3 +4,10 @@
 - -> remove something
 )
 * néha bénán indul és lefagy minden
+
+GUI
+
+CONTROLLER
+
+MODEL
++ összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean

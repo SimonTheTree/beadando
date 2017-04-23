@@ -36,7 +36,7 @@ public class Controller {
 	
 	public Controller() {
 		db = new DAOImp();
-		//gui = new MainWindow(this);
+		gui = new MainWindow(this);
 		maxDifficulty = db.getMax("difficulty");
 		maxTopicId = db.getMax("TOPIC_ID");
 		System.out.println("maxDifficulty "+maxDifficulty);
@@ -52,8 +52,8 @@ public class Controller {
 	 * @param uncodedPassword : kodolatlan jelszo
 	 * @return true=OK
 	 */
-	public boolean signIn(String uname, String uncodedPassword) {
-		return db.checkUser(uname,PasswordCoder.cryptWithMD5(uncodedPassword));
+	public boolean signIn(String uname, String codedPassword) {
+		return db.checkUser(uname,codedPassword);
 	}
 	/**
 	 * Letrehoz egy  {@link User}-t a user tablaban.<br>
@@ -92,7 +92,6 @@ public class Controller {
      */
     public boolean modifyUser(User u) throws UserNotFoundException {
     	User codedUser = new User(u);
-    	codedUser.codePassword();
     	return db.modifyUser(codedUser);
     }
     /**

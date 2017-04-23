@@ -31,12 +31,13 @@ public class LoginState extends State {
 	}
 	
 	@Override
+	protected void onStart() {
+		root.setVisible(false);			
+		loginDialog.setVisible(true);
+	}
+	
+	@Override
 	public void update() {
-		if (root.isShowing()) {
-			loginDialog.setVisible(true);
-			root.setVisible(false);			
-			System.out.println("invisibling");
-		}
 	}
 
 }

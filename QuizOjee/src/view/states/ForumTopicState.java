@@ -6,14 +6,14 @@ import view.MainWindow;
 import view.Settings;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
+import view.components.GLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
-import javax.swing.JButton;
+import view.components.GButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class ForumTopicState extends State {
+public class ForumTopicState extends DefaultState {
 	MainWindow root;
 	private JTextField txtfRefComment;
 	public ForumTopicState(MainWindow r) {
@@ -25,9 +25,9 @@ public class ForumTopicState extends State {
 		JScrollPane scrNewComment = new JScrollPane(txtpnCommentInput);
 		txtpnCommentInput.setLineWrap(true);
 		
-		JLabel lblTitle = new JLabel(Labels.LBL_TITLE_FORUM_TOPIC);
+		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_FORUM_TOPIC);
 			lblTitle.setFont(Settings.FONT_TITLE);
-		JLabel lblReferencedComment = new JLabel(Labels.LBL_REFERENCED_COMMENT);
+		GLabel lblReferencedComment = new GLabel(Labels.LBL_REFERENCED_COMMENT);
 		
 		
 		txtfRefComment = new JTextField();
@@ -36,8 +36,8 @@ public class ForumTopicState extends State {
 			txtfRefComment.setColumns(10);
 		
 		
-		JButton btnAddComment = new JButton(Labels.BTN_ADD_COMMENT);
-		JButton btnBack = new JButton(Labels.BTN_BACK);
+		GButton btnAddComment = new GButton(Labels.BTN_ADD_COMMENT);
+		GButton btnBack = new GButton(Labels.BTN_BACK);
 			btnBack.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_FORUM);
 			});

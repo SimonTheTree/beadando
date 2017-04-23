@@ -104,6 +104,10 @@ public abstract class State extends JPanel{
         return height;
     }
     
+    public State(){
+    	this("unnamed");
+    }
+    
     public State(String s){
         this(s, 500, 500);
     }
@@ -127,7 +131,7 @@ public abstract class State extends JPanel{
     }
     
     public void start(){
-        
+    	onStart();
         if(!running){
             running = true;
             updateThread = new Thread(updateRunnable);
@@ -141,7 +145,17 @@ public abstract class State extends JPanel{
     public void stop(){
         running = false;
         soundManager.stopAllSounds();
+        onStop();
     }
+    
+    /**
+     * This method will be called every time before the State gets started
+     */
+    protected void onStart(){}
+    /**
+     * This method will be called every time after the State was stopped
+     */
+    protected void onStop(){}
     
     public Graphics2D getGraphics2D(){
         return g;

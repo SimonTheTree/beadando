@@ -4,10 +4,11 @@ import gameTools.state.State;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
+import view.components.GButton;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JButton;
+import view.components.GLabel;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPanel;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.CardLayout;
 
-public class ForumState extends State {
+public class ForumState extends DefaultState {
 	MainWindow root;
-	List<JButton> topics;
+	List<GButton> topics;
 	
 	public ForumState(MainWindow r) {
 		super(MainWindow.STATE_FORUM, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
@@ -27,13 +28,13 @@ public class ForumState extends State {
 		JScrollPane scrollPane;
 		
 		topics = new ArrayList<>();
-		topics.add(new JButton("demoTopic1"));
-		topics.add(new JButton("demoTopic2"));
-		topics.add(new JButton("demoTopic3"));
+		topics.add(new GButton("demoTopic1"));
+		topics.add(new GButton("demoTopic2"));
+		topics.add(new GButton("demoTopic3"));
 		
 		panel.setLayout(null);
 			for(int i = 0; i < topics.size(); i++){
-				JButton btn = topics.get(i);
+				GButton btn = topics.get(i);
 				//tudom h nem szép, de úgy sincs átméretezés
 				btn.setBounds(5, i*40+5, Settings.MAIN_WINDOW_WIDTH-95, 35); 
 				panel.add(btn);
@@ -44,12 +45,12 @@ public class ForumState extends State {
 			}
 		scrollPane = new JScrollPane(panel);
 		
-		JLabel lblForumTitle = new JLabel(Labels.LBL_TITLE_FORUM);
+		GLabel lblForumTitle = new GLabel(Labels.LBL_TITLE_FORUM);
 			lblForumTitle.setFont(Settings.FONT_TITLE);
-		JLabel lblTopics = new JLabel(Labels.LBL_TOPICS);
+		GLabel lblTopics = new GLabel(Labels.LBL_TOPICS);
 		
-		JButton btnNewTopic = new JButton(Labels.BTN_ADD_TOPIC);
-		JButton btnBack = new JButton(Labels.BTN_BACK);		
+		GButton btnNewTopic = new GButton(Labels.BTN_ADD_TOPIC);
+		GButton btnBack = new GButton(Labels.BTN_BACK);		
 			btnBack.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});

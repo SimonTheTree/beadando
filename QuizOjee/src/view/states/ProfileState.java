@@ -1,62 +1,82 @@
 package view.states;
 
-import gameTools.state.State;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
+import view.components.GLabel;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
+import view.components.GButton;
 import javax.swing.JTextField;
 
-public class ProfileState extends State {
+public class ProfileState extends DefaultState {
 	MainWindow root;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField txtfUsername;
+	private JTextField txtfRealName;
 	public ProfileState(MainWindow r) {
 		super(MainWindow.STATE_PROFILE, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
 		
-		JLabel lblTitle = new JLabel(Labels.LBL_TITLE_PROFILE);
+		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_PROFILE);
 			lblTitle.setFont(Settings.FONT_TITLE);
-		JLabel lblUsername = new JLabel(Labels.LBL_USER_UNAME);
-		JLabel lblRealName = new JLabel(Labels.LBL_USER_RNAME);
-		JLabel lblAge = new JLabel(Labels.LBL_USER_AGE);
-		JLabel lblWins = new JLabel(Labels.LBL_USER_N_WINS);
-		JLabel lblDefeats = new JLabel(Labels.LBL_USER_N_DEFEATS);
-		JLabel lblPoints = new JLabel(Labels.LBL_USER_POINTS);
-		JLabel lblRightAns = new JLabel(Labels.LBL_USER_N_RIGHT_ANS);
-		JLabel lblWrongAns = new JLabel(Labels.LBL_USER_N_WRONG_ANS);
-		JLabel lblRightTips = new JLabel(Labels.LBL_USER_N_RIGHT_TIPS);
-		JLabel lblWrongTips = new JLabel(Labels.LBL_USER_N_WRONG_TIPS);
+		GLabel lblUsername = new GLabel(Labels.LBL_USER_UNAME);
+		GLabel lblRealName = new GLabel(Labels.LBL_USER_RNAME);
+		GLabel lblAge = new GLabel(Labels.LBL_USER_AGE);
+		GLabel lblWins = new GLabel(Labels.LBL_USER_N_WINS);
+		GLabel lblDefeats = new GLabel(Labels.LBL_USER_N_DEFEATS);
+		GLabel lblPoints = new GLabel(Labels.LBL_USER_POINTS);
+		GLabel lblRightAns = new GLabel(Labels.LBL_USER_N_RIGHT_ANS);
+		GLabel lblWrongAns = new GLabel(Labels.LBL_USER_N_WRONG_ANS);
+		GLabel lblRightTips = new GLabel(Labels.LBL_USER_N_RIGHT_TIPS);
+		GLabel lblWrongTips = new GLabel(Labels.LBL_USER_N_WRONG_TIPS);
 		
-		JLabel lblDataPoints = new JLabel("?");
-		JLabel lblDataWins = new JLabel("?");
-		JLabel lblDataDefeats = new JLabel("?");
-		JLabel lblDataRightAns = new JLabel("?");
-		JLabel lblDataWrongAns = new JLabel("?");
-		JLabel lblDataRightTips = new JLabel("?");
-		JLabel lblDataWrongTips = new JLabel("?");
+		GLabel lblDataAge = new GLabel("?");
+		GLabel lblDataPoints = new GLabel("?");
+		GLabel lblDataWins = new GLabel("?");
+		GLabel lblDataDefeats = new GLabel("?");
+		GLabel lblDataRightAns = new GLabel("?");
+		GLabel lblDataWrongAns = new GLabel("?");
+		GLabel lblDataRightTips = new GLabel("?");
+		GLabel lblDataWrongTips = new GLabel("?");
 		
-		JButton btnDeleteUser = new JButton(Labels.BTN_DELETE);
-		JButton btnAddQuestions = new JButton(Labels.BTN_ADD_QUESTION);
-		JButton btnListMyQuestion = new JButton(Labels.BTN_LIST_MY_QUESTIONS);
-		JButton btnBack = new JButton(Labels.BTN_BACK);
+		GButton btnDeleteUser = new GButton(Labels.BTN_DELETE);
+			btnDeleteUser.addActionListener((e) -> {
+				int option = JOptionPane.showConfirmDialog(
+						root,
+						Labels.MSG_CONFIRM_DELETE_USER,
+						Labels.MSG_TITLE_CONFIRM,
+				        JOptionPane.OK_CANCEL_OPTION
+				        );						
+						
+				if(option == 0){
+					root.controller.deleteUser(root.getUser().getUsername());
+					root.setUser(null);
+					root.setState(MainWindow.STATE_LOGIN);
+				}
+			});
+		GButton btnAddQuestions = new GButton(Labels.BTN_ADD_QUESTION);
+			btnAddQuestions.addActionListener((e) -> {
+				
+			});
+		GButton btnListMyQuestion = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
+			btnListMyQuestion.addActionListener((e) -> {
+				
+			});
+		GButton btnBack = new GButton(Labels.BTN_BACK);
 			btnBack.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});
 		
-		textField = new JTextField();
-		textField.setEnabled(false);
-		textField.setEditable(false);
-		textField.setColumns(10);
+		txtfUsername = new JTextField();
+		txtfUsername.setEnabled(false);
+		txtfUsername.setEditable(false);
+		txtfUsername.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
+		txtfRealName = new JTextField(root.getUser().getRealName());
+		txtfRealName.setColumns(10);
 		
-		JLabel lblDataAge = new JLabel("?");
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -65,17 +85,17 @@ public class ProfileState extends State {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(64)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblWins)
-								.addComponent(lblRightAns)
-								.addComponent(lblWrongAns)
-								.addComponent(lblRightTips)
-								.addComponent(lblWrongTips)
-								.addComponent(lblPoints)
-								.addComponent(lblUsername)
-								.addComponent(lblRealName, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblDefeats)
-								.addComponent(lblAge))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(lblRealName, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblAge, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblPoints, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblWins, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblDefeats, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblRightAns, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblWrongAns, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblRightTips, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblWrongTips, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblUsername, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(lblDataAge)
@@ -86,8 +106,8 @@ public class ProfileState extends State {
 								.addComponent(lblDataRightAns)
 								.addComponent(lblDataDefeats)
 								.addComponent(lblDataWins)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
-								.addComponent(textField_1)))
+								.addComponent(txtfUsername, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+								.addComponent(txtfRealName)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
@@ -112,11 +132,11 @@ public class ProfileState extends State {
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblUsername)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtfUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblRealName)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtfRealName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblAge)
@@ -162,6 +182,12 @@ public class ProfileState extends State {
 					.addGap(26))
 		);
 		setLayout(groupLayout);
+	}
+	
+	@Override
+	protected void onStart() {
+		txtfUsername.setText(root.getUser().getUsername());
+		txtfRealName.setText(root.getUser().getRealName());
 	}
 	
 	@Override

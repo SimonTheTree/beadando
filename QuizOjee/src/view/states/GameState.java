@@ -10,7 +10,7 @@ public class GameState extends State {
 	public GameState(MainWindow r) {
 		super(MainWindow.STATE_GAME, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override

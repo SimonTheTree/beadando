@@ -38,6 +38,7 @@ public final class Labels {
 	public static final String LBL_USER_N_RIGHT_TIPS = "Right tips: "; 	
 	public static final String LBL_USER_N_WRONG_TIPS = "Wrong tips: ";
 	public static final String LBL_NO_ACCOUNT_YET = "Don't have an account yet?";
+	public static final String LBL_QUIZ_QUESTION_INDEX = "Question @ of @";
 	
 	
 	public static final String MSG_FIELD_EMPTY = " field is was empty.";
@@ -46,13 +47,14 @@ public final class Labels {
 	public static final String MSG_PASSWD2_FIELD_EMPTY = "Password was not repeated";
 	public static final String MSG_AGE_FIELD_EMPTY = "No age was given";
 	public static final String MSG_BAD_USERNAME_FORMAT = "Username must not contain @ or something else thats special";
-	public static final String MSG_LOGIN_FAILED= "Login failed. Check your credentials";
-	public static final String MSG_REGISTRATION_FAILED= "Registration failed.";
-	public static final String MSG_USER_EXISTS= "Username is taken";
-	public static final String MSG_PASSWORDS_DONT_MATCH= "The passwords don't match";
-	public static final String MSG_YOURE_TOO_YOUNG= "You need to be older than 12";
-	public static final String MSG_SERVER_ERROR= "Server error";
-	
+	public static final String MSG_LOGIN_FAILED = "Login failed. Check your credentials";
+	public static final String MSG_REGISTRATION_FAILED = "Registration failed.";
+	public static final String MSG_USER_EXISTS = "Username is taken";
+	public static final String MSG_PASSWORDS_DONT_MATCH = "The passwords don't match";
+	public static final String MSG_YOURE_TOO_YOUNG = "You need to be older than 12";
+	public static final String MSG_SERVER_ERROR = "Server error";
+	public static final String MSG_CONFIRM_DELETE_USER = "<html><body style='text-align: center'> Are you shure you want to delete yourself? <br> This will erase all your stats forever. (Thats a very long time...). <br>You will be logged out immediatly after this operation.";
+	public static final String MSG_TITLE_CONFIRM = "Are you sure?";
 	 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
@@ -63,6 +65,7 @@ public final class Labels {
 	public static final String BTN_BACK = "Back"; 
 	public static final String BTN_DELETE = "Delete"; 
 	public static final String BTN_LOGIN = "Login"; 
+	public static final String BTN_LOGOUT = "Logout"; 
 	public static final String BTN_REGISTER = "Register"; 
 	public static final String BTN_START_QUIZ = "Start Quiz"; 
 	public static final String BTN_CREATE_GAME = "Create Game"; 

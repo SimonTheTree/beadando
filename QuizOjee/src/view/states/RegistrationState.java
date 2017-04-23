@@ -7,8 +7,9 @@ import model.exceptions.BadUsernameFormatException;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
-import javax.swing.JLabel;
+import view.components.GLabel;
 
+import java.awt.Color;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -18,18 +19,18 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
+import view.components.GButton;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JPasswordField;
 
-public class RegistrationState extends State {
+public class RegistrationState extends DefaultState {
 	MainWindow root;
 	private JTextField txtUname;
 	private JPasswordField txtPw;
 	private JSpinner txtAge;
 	private JPasswordField txtPwAgain;
-	private List<JLabel> msg = new ArrayList<>();
+	private List<GLabel> msg = new ArrayList<>();
 	private JPanel panelMsg;
 	public RegistrationState(MainWindow r) {
 		super(MainWindow.STATE_REGISTER, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
@@ -37,11 +38,12 @@ public class RegistrationState extends State {
 		
 		panelMsg = new JPanel();
 		
-		JLabel lblRegisterTitle = new JLabel(Labels.LBL_TITLE_REGISTER);
-		JLabel lblUsername = new JLabel(Labels.USERNAME);
-		JLabel lblPassword = new JLabel(Labels.PASSWORD);
-		JLabel lblAge = new JLabel(Labels.LBL_USER_AGE);
-		JLabel lblPasswordAgain = new JLabel(Labels.PASSWORD_AGAIN);
+		GLabel lblRegisterTitle = new GLabel(Labels.LBL_TITLE_REGISTER);
+			lblRegisterTitle.setFont(Settings.FONT_TITLE);
+		GLabel lblUsername = new GLabel(Labels.USERNAME);
+		GLabel lblPassword = new GLabel(Labels.PASSWORD);
+		GLabel lblAge = new GLabel(Labels.LBL_USER_AGE);
+		GLabel lblPasswordAgain = new GLabel(Labels.PASSWORD_AGAIN);
 		
 		txtUname = new JTextField();
 			txtUname.setColumns(10);
@@ -54,7 +56,7 @@ public class RegistrationState extends State {
 		txtPwAgain = new JPasswordField();
 			txtPwAgain.setColumns(10);
 			
-		JButton btnRegister = new JButton(Labels.BTN_OK);
+		GButton btnRegister = new GButton(Labels.BTN_OK);
 			btnRegister.addActionListener((e) -> {
 				msg.clear();
 				String uname = txtUname.getText();                         
@@ -64,33 +66,33 @@ public class RegistrationState extends State {
 				
 				boolean ok = true;
 				if("".equals(uname)){
-					msg.add(new JLabel(Labels.MSG_UNAME_FIELD_EMPTY));
+					msg.add(new GLabel(Labels.MSG_UNAME_FIELD_EMPTY));
 					ok=false;
 				} else if(root.controller.getUser(uname) != null) {
-					msg.add(new JLabel(Labels.MSG_USER_EXISTS));
+					msg.add(new GLabel(Labels.MSG_USER_EXISTS));
 					ok=false;
 				}
 				if(txtPw.getPassword().length == 0){
-					msg.add(new JLabel(Labels.MSG_PASSWD_FIELD_EMPTY));
+					msg.add(new GLabel(Labels.MSG_PASSWD_FIELD_EMPTY));
 					ok=false;
 				}
 				if(txtPwAgain.getPassword().length == 0){
-					msg.add(new JLabel(Labels.MSG_PASSWD2_FIELD_EMPTY));
+					msg.add(new GLabel(Labels.MSG_PASSWD2_FIELD_EMPTY));
 					ok=false;
 				}
 				if(age <= 12){
-					msg.add(new JLabel(Labels.MSG_YOURE_TOO_YOUNG));
+					msg.add(new GLabel(Labels.MSG_YOURE_TOO_YOUNG));
 					ok=false;
 				}
 				//finally check passwords match
 				if( (txtPw.getPassword().length > 0) && (txtPwAgain.getPassword().length > 0) ){
 					if(!password.equals(password2)){						
-						msg.add(new JLabel(Labels.MSG_PASSWORDS_DONT_MATCH));
+						msg.add(new GLabel(Labels.MSG_PASSWORDS_DONT_MATCH));
 						ok = false;
 					}
 				}
 				if(!ok){
-					msg.add(new JLabel(Labels.MSG_REGISTRATION_FAILED));
+					msg.add(new GLabel(Labels.MSG_REGISTRATION_FAILED));
 				}
 				if(ok){
 					try{
@@ -101,13 +103,13 @@ public class RegistrationState extends State {
 						ok = root.controller.register(u);
 						System.out.println(ok);
 					}catch(BadUsernameFormatException ex){
-						msg.add(new JLabel(Labels.MSG_BAD_USERNAME_FORMAT));
+						msg.add(new GLabel(Labels.MSG_BAD_USERNAME_FORMAT));
 						ok = false;
 					}
 				}
 				if(!ok){
-					msg.add(new JLabel(Labels.MSG_SERVER_ERROR));
-					msg.add(new JLabel(Labels.MSG_REGISTRATION_FAILED));
+					msg.add(new GLabel(Labels.MSG_SERVER_ERROR));
+					msg.add(new GLabel(Labels.MSG_REGISTRATION_FAILED));
 				}
 				printMsg();
 				if(ok){
@@ -115,7 +117,7 @@ public class RegistrationState extends State {
 				}
 			});
 		
-		JButton btnCancel = new JButton(Labels.BTN_CANCEL);
+		GButton btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_LOGIN);
 			});
@@ -194,10 +196,12 @@ public class RegistrationState extends State {
 	private void printMsg(){
 		panelMsg.removeAll();
 		for(int i = 0; i < msg.size(); i++){
-			JLabel btn = msg.get(i);
+			GLabel btn = msg.get(i);
 			System.out.println(msg.get(i).getText());
 			//tudom h nem szép, de úgy sincs átméretezés
 			btn.setBounds(5, i*20+5, 300-10, 20); 
+			btn.setForeground(Color.RED);
+			btn.setFont(Settings.FONT_ERROR_MSG);
 			panelMsg.add(btn);
 		}
 		panelMsg.repaint();
