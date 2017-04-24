@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="src/libraries/jsch-0.1.54.jar"/>
 	<classpathentry kind="lib" path="src/libraries/ojdbc8.jar"/>
 	<classpathentry kind="lib" path="src/externalClasses"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GameTools"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,12 +1,16 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.UIManager;
+
+import com.jcraft.jsch.jce.Random;
+
+import game.Cell;
+import game.players.Player;
+import gameTools.map.Tile;
 
 public class Settings {
 
@@ -32,7 +36,6 @@ public class Settings {
 	public static int quiz_numOfQuestions;
 //	public static List<Topic> quiz_topicList;
 	public static int quiz_difficulity;
-	
 	
 	public static void init(){
 		setUIFont(new javax.swing.plaf.FontUIResource(FONT_ARCHIVE,Font.PLAIN,12));

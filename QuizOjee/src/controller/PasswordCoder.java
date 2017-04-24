@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class PasswordCoder {
-
+	//change to be better...(add salt)
 	public static String cryptWithMD5(String pass) {
 		MessageDigest md;
 		try {
