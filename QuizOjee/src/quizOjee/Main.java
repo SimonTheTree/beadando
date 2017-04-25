@@ -12,6 +12,7 @@ import controller.GameInputListener;
 import controller.GameMessage;
 import controller.exceptions.GameIsStartedException;
 import controller.exceptions.HostDoesNotExistException;
+import model.Topic;
 
 
 public class Main {
@@ -20,6 +21,16 @@ public class Main {
 		System.out.println("hello");
 		
 		Controller c = new Controller();
+		
+		List<Topic> topics = c.getTopics(); 
+		System.out.println(topics.size());
+		for(Topic topic : topics) {
+			System.out.println(topic);
+		}
+		
+		List<Integer> topicIdList = new ArrayList<Integer>();
+		topicIdList.add(2);
+		System.out.println(c.getNumOfQuestions(0, 10, topicIdList));
 		
 		//DEMO kapcsolat a host-kliens kozott.
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
