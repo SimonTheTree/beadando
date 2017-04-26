@@ -1,8 +1,10 @@
 package quizOjee;
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import controller.Commands;
 import controller.Controller;
@@ -12,6 +14,13 @@ import controller.GameInputListener;
 import controller.GameMessage;
 import controller.exceptions.GameIsStartedException;
 import controller.exceptions.HostDoesNotExistException;
+import game.Cell;
+import game.GameBoard;
+import game.Territory;
+import gameTools.map.Layout;
+import gameTools.map.Orientation;
+import gameTools.map.generators.MapGeneratorHexRectangleFlat;
+import view.Labels;
 
 
 public class Main {
@@ -25,6 +34,21 @@ public class Main {
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
 		//Megertesehez ajanlom a GameHost es GameClient osztaly leirasanak olvasgatasat :P
 		
+		//serializer teszt
+//		Layout layout = new Layout(
+//				Orientation.LAYOUT_FLAT, 
+//				new Point(10,10), 
+//				new Point(100,100)
+//			);
+//			MapGeneratorHexRectangleFlat<Cell> gen = new MapGeneratorHexRectangleFlat<Cell>("", new Cell(0,0), 10, 10);
+//			GameBoard cl = new GameBoard(gen, layout);
+//			Cell c = new Cell(1,0);
+//			Territory t = new Territory();
+//			c.setOwner(t);
+//			
+//			String s = game.StringSerializer.serialize(cl);
+//			System.out.println(s);
+
 //		hostThread().start();
 //		clientThread("asd",false).start();
 //		clientThread("asd2",false).start();
@@ -48,6 +72,7 @@ public class Main {
 					}
 					host.broadCast(new GameMessage(Commands.ATTACK,userNames[0],"0"));
 					host.sendMessage(userNames[0],new GameMessage(Commands.WHO_ARE_YOU,userNames[0]));
+					
 					Thread.sleep(3000);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -71,6 +96,11 @@ public class Main {
 					System.out.println("host: " + msg.getParams()[0]+ " egy kocsog es kilepett...");
 				} else if(msg.getMessage().equals(Commands.CHOOSE)) {
 					System.out.println("host: " + msg.getParams()[0]+" kivalasztotta a "+ msg.getParams()[1]+" blockot!");
+				} else if(msg.getMessage().equals(Commands.SEND_OBJ)) {
+					Cell b = (Cell) game.StringSerializer.deSerialize(msg.getParams()[0]);
+					System.out.println(
+						b.getOwner()
+					);
 				} else if(msg.getMessage().equals(Commands.RETURNED)) {
 					System.out.println("host: " + msg.getParams()[0]+ " RETURNED");
 					//FONTOS a varakozasi ido
@@ -107,7 +137,7 @@ public class Main {
 		};
 	}
 	
-	public static Thread clientThread(String uname,boolean trollkodik) {
+	public static Thread clientThread(String uname, boolean trollkodik) {
 		return new Thread() {
 			public void run() {
 				GameClient client = null;
@@ -124,6 +154,18 @@ public class Main {
 						while(!client.isStarted()) {Thread.sleep(100);}
 						client.sendMessage(new GameMessage(Commands.CHOOSE,uname,"1"));
 					}
+					Layout layout = new Layout(
+						Orientation.LAYOUT_FLAT, 
+						new Point(10,10), 
+						new Point(100,100)
+					);
+					Cell c = new Cell(1,0);
+					Territory t = new Territory();
+					c.setOwner(t);
+					
+					String s = game.StringSerializer.serialize(c);
+					client.sendMessage(new GameMessage(Commands.SEND_OBJ, s));
+					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} catch (GameIsStartedException e) {

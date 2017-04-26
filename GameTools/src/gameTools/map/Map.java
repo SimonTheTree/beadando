@@ -1,21 +1,14 @@
 package gameTools.map;
 
-
 import gameTools.map.generators.MapGenerator;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.util.List;
 
 /**
  *  grid of cells
@@ -23,7 +16,7 @@ import java.util.Iterator;
  * @param <T>
  */
 public class Map<T extends Tile>
-        extends HashMap<ArrayList<Integer>, T>
+        extends HashMap<List<Integer>, T>
         implements gameTools.Graphical{
     
     public Layout layout;
@@ -31,7 +24,7 @@ public class Map<T extends Tile>
     
     public Map(MapGenerator<T> g, Layout l){
         super();
-        ArrayList<T> tiles = g.generate();
+        List<T> tiles = g.generate();
         int i;
         for(i = 0; i<tiles.size(); i++){
             addTile(tiles.get(i));
@@ -41,7 +34,7 @@ public class Map<T extends Tile>
     }
     
     public final int addTile(T c){
-        ArrayList<Integer> a = new ArrayList<>();
+        List<Integer> a = new ArrayList<>();
         a.add(c.x);
         a.add(c.y);
         this.put(a, c);
@@ -50,7 +43,7 @@ public class Map<T extends Tile>
     
     public final T getTile(int... i){
         if (i.length != 2) return null; //throw new NullPointerException("The map does not contain the requested Tile");
-        ArrayList<Integer> a = new ArrayList<>();
+        List<Integer> a = new ArrayList<>();
         a.add(i[0]);
         a.add(i[1]);
         return this.get(a);
@@ -108,8 +101,8 @@ public class Map<T extends Tile>
         return new Dimension(xOffset, yOffset);
     }
     
-    public final ArrayList<T> getNeighborTiles(int... i){
-        ArrayList<int[]> coordinates;
+    public final List<T> getNeighborTiles(int... i){
+        List<int[]> coordinates;
         try{
             coordinates = getTile(i).getNeighbors();
         }catch(NullPointerException e){
@@ -117,7 +110,7 @@ public class Map<T extends Tile>
             return new ArrayList<>();
         }
         
-        ArrayList<T> neighbors = new ArrayList();
+        List<T> neighbors = new ArrayList();
         for(int[] coordinate : coordinates){
             T t = getTile(coordinate);
             if(t != null) neighbors.add(t);
@@ -125,8 +118,8 @@ public class Map<T extends Tile>
         return neighbors;
     }
     
-    public final ArrayList<T> getSpecNeighborTiles(Tester<T> cc, int... i){
-        ArrayList<T> validNeighbors = getNeighborTiles(i);
+    public final List<T> getSpecNeighborTiles(Tester<T> cc, int... i){
+        List<T> validNeighbors = getNeighborTiles(i);
         for (Iterator<T> iterator = validNeighbors.iterator(); iterator.hasNext();) {
             T t = iterator.next();
             if(!cc.test(t)) iterator.remove();
@@ -139,12 +132,12 @@ public class Map<T extends Tile>
         
     }
     
-    public ArrayList<T> getTileArray(){
+    public List<T> getTileArray(){
         return new ArrayList<>(this.values());
     }
     
-    public ArrayList<T> getSpecTiles(Tester<T> cc){
-        ArrayList<T> tiles = getTileArray();
+    public List<T> getSpecTiles(Tester<T> cc){
+        List<T> tiles = getTileArray();
         for (Iterator<T> iterator = tiles.iterator(); iterator.hasNext();) {
             T t = iterator.next();
             if(!cc.test(t)) iterator.remove();

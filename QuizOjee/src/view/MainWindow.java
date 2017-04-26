@@ -23,26 +23,41 @@ public class MainWindow extends JFrame{
 	public static final String STATE_FORUM = "5";
 	public static final String STATE_FORUM_TOPIC = "5.1";
 	public static final String STATE_PROFILE = "6";
+	public static final String STATE_REPORT = "7";
 	
 	
     private StateManager sm = new StateManager(this);
     public Controller controller;
     private User user = null;
     
-    private State main = new view.states.MainState(this);
-    private State gameCreator = new view.states.GameCreatorState(this);
-    private State game = new view.states.GameState(this);
-    private State quizCreator = new view.states.QuizCreatorState(this);
-    private State quiz = new view.states.QuizState(this);
-    private State stats = new view.states.StatsState(this);
-    private State forum = new view.states.ForumState(this);
-    private State forumTopic = new view.states.ForumTopicState(this);
-    private State profile = new view.states.ProfileState(this);
-    private State login = new view.states.LoginState(this);
-    private State registration = new view.states.RegistrationState(this);
+    public State main = new view.states.MainState(this);
+    public State gameCreator = new view.states.GameCreatorState(this);
+    public State game = new view.states.GameState(this);
+    public State quizCreator = new view.states.QuizCreatorState(this);
+    public State quiz = new view.states.QuizState(this);
+    public State stats = new view.states.StatsState(this);
+    public State forum = new view.states.ForumState(this);
+    public State forumTopic = new view.states.ForumTopicState(this);
+    public State profile = new view.states.ProfileState(this);
+    public State login = new view.states.LoginState(this);
+    public State registration = new view.states.RegistrationState(this);
+    public State report = new view.states.ReportState();
 // forum    
     
-    public MainWindow(Controller c){
+    private static MainWindow self = null;
+    
+    public static MainWindow getInstance(Controller c){
+    	if (self == null){
+    		self = new MainWindow(c);
+    	}
+    	return self;
+    }
+    
+    public static MainWindow getInstance(){
+    	return self;
+    }
+    
+    private MainWindow(Controller c){
     	controller = c;
     	Thread loader = new Thread(() -> {
     		Resources.load();
@@ -65,6 +80,7 @@ public class MainWindow extends JFrame{
         sm.addState(profile);
         sm.addState(login);
         sm.addState(registration);
+        sm.addState(report);
         
         
         sm.setCurrentState(STATE_LOGIN);
@@ -79,7 +95,7 @@ public class MainWindow extends JFrame{
         sm.startCurrentState();
     }
 
-	public User getUser() {
+	public User getLoggedUser() {
 		if(user != null){
 			return user;
 		} else {

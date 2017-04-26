@@ -1,5 +1,32 @@
 package view.states;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.print.DocFlavor.STRING;
+
+import controller.Commands;
+import controller.GameClient;
+import controller.GameInputListener;
+import controller.GameMessage;
+import controller.exceptions.GameIsStartedException;
+import controller.exceptions.HostDoesNotExistException;
+import game.Territory;
+import game.Cell;
+import game.GameBoard;
+import game.GameSettings;
+import game.MyClientListener;
+import game.StringSerializer;
+import game.players.Player;
+import gameTools.map.Layout;
+import gameTools.map.Orientation;
 import gameTools.state.State;
 import view.MainWindow;
 import view.Settings;
@@ -13,10 +40,15 @@ import view.Settings;
 public class GameState extends State {
 	MainWindow root;
 	private GameState THIS = this;
+	private boolean gameStarted;
 	public boolean gameOver;
 	GameBoard gameboard;
 	Thread playerThread;
+	GameSettings settings;
 
+	MyClientListener clientListener;
+	Thread clientThread;
+	
 	public GameState(MainWindow r) {
 		super(MainWindow.STATE_GAME, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
@@ -27,57 +59,12 @@ public class GameState extends State {
 
 		inputManager.addClickMapping("ButtonLeft", MouseEvent.BUTTON1);
 
-		Settings.setMapGenerator("Rectangular Hexmap");
-		// Settings.setMapGenerator("Paralelloid Hexmap Pointy");
-		// Settings.setMapGenerator("Hexshaped Hexmap Pointy");
-		// Settings.setMapGenerator("Paralelloid Hexmap Flat");
-		// Settings.setMapGenerator("Hexshaped Hexmap Flat");
-		// Settings.setMapGenerator("Linear Hexmap Pointy");
-		// Settings.setMapGenerator("Linear Hexmap Flat");
-
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g.setRenderingHints(rh);
 	}
 
-	public void create() {
-		Settings.layout.size = new Point(6, 3);
-		Settings.layout.origin = new Point(0, 0);
-		Settings.mapTileN = new Dimension(1, 1);
-		gameboard = new GameBoard(Settings.getMapGenerator(), Settings.layout);
-		gameboard.generateTerritories(Settings.TerrPerPlayer);
-		Settings.mapTileN = gameboard.getDimensionInTiles();
-		Settings.calcLayoutSize();
-		Settings.mapWidth = gameboard.getDimensions().width - 2 * gameboard.getZeroPointOffset().width;
-		Settings.mapHeight = gameboard.getDimensions().height - 2 * gameboard.getZeroPointOffset().height;
-		Settings.centerLayout();
-
-		for (Player p : Settings.PLAYERS) {
-			p.reincarnate();
-		}
-		playerThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!THIS.gameOver) {
-					THIS.gameOver = true;
-					int teamAlive = -1;
-					for (Player p : Settings.PLAYERS) {
-						if (p.isAlive()) {
-							p.play(gameboard, inputManager);
-							if (teamAlive == -1) {
-								teamAlive = p.getTeam();
-							} else if (teamAlive != p.getTeam()) {
-								THIS.gameOver = false;
-							}
-						}
-					}
-				}
-				gameOver();
-			}
-		});
-		playerThread.start();
-		repaint();
-	}
+	
 
 	private void gameOver() {
 		System.out.println("GAME OVER!");
@@ -85,8 +72,49 @@ public class GameState extends State {
 
 	@Override
 	public void start() {
+		System.out.println("starting gamestate ");
 		gameOver = false;
-		create();
+		gameStarted = false;
+		
+		clientThread =  new Thread() {
+			public void run() {
+				GameClient client = null;
+				try {
+					System.out.println("client booting...");
+					String uname = MainWindow.getInstance().getLoggedUser().getUsername();
+					clientListener = new MyClientListener(this);
+					System.out.println(uname +"connecting to" + Settings.gameServer);
+					client = new GameClient(Settings.gameServer, uname);
+					client.addInputListener(clientListener);
+					while (!client.isStarted()) {
+						System.out.println(uname + ": waiting for others...");
+						Thread.sleep(3000);
+					};
+					System.out.println(uname + "done waiting");
+					String s = clientListener.waitForMsg(Commands.SETTINGS).getParams()[0];
+					settings = (GameSettings) StringSerializer.deSerialize(s);
+					System.out.println("recieved settings");
+					s = clientListener.waitForMsg(Commands.GAMEBOARD).getParams()[0];
+					gameboard= (GameBoard) StringSerializer.deSerialize(s);
+					System.out.println("recieved gameboard");
+					System.out.println("territories: " + gameboard.territories.length);
+					int c = 0;
+					for(Territory t : gameboard.territories){
+						c += t.getCells().size();
+					}
+					System.out.println("cells: " +c);
+					gameStarted = true;
+
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (GameIsStartedException e) {
+					e.printStackTrace();
+				} catch (HostDoesNotExistException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		clientThread.start();
 		super.start();
 	}
 
@@ -98,11 +126,12 @@ public class GameState extends State {
 
 	@Override
 	public void render() {
+		if(!gameStarted) return;
 		if (ticks % 15 == 1)
 			redraw();
 		gameboard.render(g);
 
-		if (Settings.dbg) {
+		if (settings.dbg) {
 			// fps
 			g.setColor(new Color(230, 230, 230));
 			g.fillRect(width - 80, height - 15, width, height);
@@ -116,32 +145,33 @@ public class GameState extends State {
 			g.setColor(Color.WHITE);
 			g.drawString(s, x, height - 3);
 		}
+
 	}
 
 	private void redraw() {
 		// clear screen
 		g.setColor(new Color(230, 230, 230));
-		g.fillRect(0, 0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
+		g.fillRect(0, 0, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		g.setColor(new Color(210, 210, 210));
-		g.fillRect(0, 0, Settings.GAME_WIDTH, Settings.GAME_HEIGHT);
+		g.fillRect(0, 0, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		// mark all cells to be repaired
 		for (Territory t : gameboard.territories) {
 			t.touch();
 		}
 		// for(int i = 0; i < COLORS.length+1; i++){
-		// g.drawImage(ATTACK_ICON[i], i*50, Settings.GAME_HEIGHT,45,45,this);
+		// g.drawImage(ATTACK_ICON[i], i*50, GameSettings.GAME_HEIGHT,45,45,this);
 		// }
-		gameboard.updated = true;
+		gameboard.needsRender = true;
 	}
 
 	@Override
-	public void update(State s) {
+	public void update() {
 		if (inputManager.isKeyTyped("ESC")) {
-			Main1.getInstance().setState("MenuState");
+			MainWindow.getInstance().setState(MainWindow.STATE_MAIN);
 		}
 		if (inputManager.isKeyTyped("debug")) {
-			Settings.dbg = !Settings.dbg;
-			if (Settings.dbg) {
+			settings.dbg = !settings.dbg;
+			if (settings.dbg) {
 				System.out.println("Debugging On...");
 			} else {
 				System.out.println("Debugging Off...");

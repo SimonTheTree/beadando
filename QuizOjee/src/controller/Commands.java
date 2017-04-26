@@ -19,9 +19,9 @@ public class Commands {
 	public static String JOINED = "[joined]";
 	/**A szerver kuldi minden kliensnek, aki csatlakozik. <br> Nincs parametere.*/
 	public static String WHO_ARE_YOU = "[who-are-you]";
-	/**A szerver kuldheti annak a kliensnek, akinek nem valaszolnia kell a kerdesre.<br>Parametere egy RACE VAGY NORMAL_QUESTION -t �s annak a parameterei is.*/
+	/**A szerver kuldheti annak a kliensnek, akinek nem valaszolnia kell a kerdesre.<br>Parametere egy RACE VAGY NORMAL_QUESTION -t �s annak a parameterei is.*/
 	public static String NOT_YOUR_QUESTION = "[not-your-question]";
-	/**A szerver kuldheti annak a kliensnek, akinek valaszolnia kell a kerdesre. <br>Parametere egy RACE VAGY NORMAL_QUESTION -t �s annak a parameterei is.*/
+	/**A szerver kuldheti annak a kliensnek, akinek valaszolnia kell a kerdesre. <br>Parametere egy RACE VAGY NORMAL_QUESTION -t �s annak a parameterei is.*/
 	public static String YOUR_QUESTION = "[your-question]";
 	/**A kliens kuldi bejelentkezesnel. <br>1 parametere van, a userName. */
 	public static String LOG_IN = "[log-in]";
@@ -41,5 +41,10 @@ public class Commands {
 	public static String CHOOSE = "[choose]";
 	/**A szerver kuldheti ki a jatek teljes informaciojat. <br> 2 parametere van: A {@link model.Game Game} toString-je es az hogy melyik terulet kie.*/
 	public static String GAME = "[game]";
+	
+	/** Egyetlen paramétere egy serializált gameboard */
+	public static String GAMEBOARD = "[gameboard]";
+	/** Egyetlen paramétere a serializált GameSettings */
+	public static String SETTINGS = "[settings]";
 
 }

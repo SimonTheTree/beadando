@@ -27,12 +27,12 @@ import javax.swing.SwingUtilities;
  * @see StateManager
  */
 public abstract class State extends JPanel{
-    private final Semaphore mutex = new Semaphore(1); //for rendering
+//    private final Semaphore mutex = new Semaphore(1); //for rendering
     
     private volatile boolean running = false;
     protected long ticks = 0;
     
-    private BufferedImage screen;
+    protected BufferedImage screen;
     protected Graphics2D g;
     
     private Thread renderThread, updateThread;
@@ -42,13 +42,7 @@ public abstract class State extends JPanel{
         @Override
         public void run() {
             do{
-                try{
-                    mutex.acquire();
-                    update();
-                } catch (InterruptedException ex) {
-                } finally {
-                  mutex.release();
-                }
+                update(); 
                 ticks++;
                 tpsCounter.interrupt();
                 
@@ -63,18 +57,11 @@ public abstract class State extends JPanel{
         @Override
         public void run() {
             do{
-                try{
-                    mutex.acquire();
-                    render();
-                } catch (InterruptedException ex) {
-                } finally {
-                  mutex.release();
-                }
-                SwingUtilities.invokeLater(() -> {
-                        paintImmediately(0, 0, width, height);
-                    }
-                );
-                fpsCounter.interrupt();
+                synchronized (screen) {
+                	render();					
+				}
+                paintImmediately(0, 0, width, height);
+                fpsCounter.interrupt(); 
                 
                 //handle max fps
                 if (fpsCounter.fps() > maxFps){
@@ -135,7 +122,9 @@ public abstract class State extends JPanel{
         if(!running){
             running = true;
             updateThread = new Thread(updateRunnable);
+            updateThread.setName(this.name+"-update-cycle");
             renderThread = new Thread(renderRunnable);
+            renderThread.setName(this.name+"-render-cycle");
             updateThread.start();
             renderThread.start();
         }
@@ -190,13 +179,10 @@ public abstract class State extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-    	try{
-            mutex.acquire();
-            g.drawImage(screen, 0, 0, width, height, this);
-        } catch (InterruptedException ex) {
-        } finally {
-          mutex.release();
-        }
+        synchronized (screen) {
+        	g.drawImage(screen, 0, 0, width, height, this);				
+		};
+        
     }
       
 }

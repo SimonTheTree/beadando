@@ -42,7 +42,7 @@ public class RegistrationState extends DefaultState {
 			lblRegisterTitle.setFont(Settings.FONT_TITLE);
 		GLabel lblUsername = new GLabel(Labels.USERNAME);
 		GLabel lblPassword = new GLabel(Labels.PASSWORD);
-		GLabel lblAge = new GLabel(Labels.LBL_USER_AGE);
+		GLabel lblAge = new GLabel(Labels.LBL_AGE);
 		GLabel lblPasswordAgain = new GLabel(Labels.PASSWORD_AGAIN);
 		
 		txtUname = new JTextField();

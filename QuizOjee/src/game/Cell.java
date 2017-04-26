@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.io.Serializable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,7 +19,7 @@ import java.awt.Point;
  *  Hexagon cella melyet ki lehet rajzolni, és "tudja" melyik országhoz tartozik
  * @author ganter
  */
-public class Cell extends TileHex{
+public class Cell extends TileHex<Cell> {
     
     public static final Tester<Cell> CELL_SELECTED = new Tester<Cell>(){
         @Override
@@ -40,16 +41,18 @@ public class Cell extends TileHex{
     
     private Territory owner;
     private boolean highlighted;
-    
     private boolean updated = true;
-
+    private final int id; 
+    private static int CURRENT_ID = 0;
+    
+    public Cell( int q, int r) {
+    	this(q, r, -q-r);
+    }
+    
     public Cell( int q, int r, int s) {
         super(q, r, s);
         highlighted = false;
-    }
-    
-    public Cell( int q, int r) {
-        super(q, r, -q-r);
+        id = CURRENT_ID++;
     }
     
     public void touch(){
@@ -84,26 +87,27 @@ public class Cell extends TileHex{
     
     @Override
     public void render(Graphics2D g, Layout layout) {
-        if(!updated && !GameSettings.dbg){
+        if(!updated && !GameSettings.getInstance().dbg){
             return;
         } else {
             updated=false;
         }
         
-        if(GameSettings.dbg){
+        if(GameSettings.getInstance().dbg){
             g.setColor(getOwner().getOwner().getColor());
         }
         if (highlighted){
             g.setColor(new Color(255, 255, 255, 200));
         }
+        System.out.println("cell rendering");
         g.fill(polygonCorners(layout));
         
             
         
         //draw info - Debug
-        if(GameSettings.dbg){
+        if(GameSettings.getInstance().dbg){
             g.setColor(Color.WHITE);
-            g.setFont(new Font("Courier New", Font.PLAIN, (int) (GameSettings.getCellHeight())));
+            g.setFont(new Font("Courier New", Font.PLAIN, (int) (GameSettings.getInstance().getCellHeight())));
             Point p = toPixel(layout).toPoint();
             double angle = 2.0 * Math.PI * (3 + layout.orientation.START_ANGLE) / 6.0;
             int X = (int) (layout.size.x * Math.cos(angle)) + p.x +10;

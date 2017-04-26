@@ -44,7 +44,7 @@ public class GameHost {
 	private Map<String,PrintWriter> outs = new HashMap<String,PrintWriter>();
 	private Map<String,BufferedReader> ins = new HashMap<String,BufferedReader>();
 	private Map<String,Boolean> alive = new HashMap<String,Boolean>();
-	private final int maxPlayers = 3;
+	private final int maxPlayers = 1;
 	private static final String host = "@host@";
 	private boolean started = false;
 	private boolean someoneExited = false;
@@ -212,7 +212,7 @@ public class GameHost {
 		GameMessage msg = new GameMessage(in.readLine(),true);
 		//System.out.println(msg.isAutomatic());
 		String userName = msg.getSender();
-		//System.out.println("Host: Ö: "+userName);
+		//System.out.println("Host: ï¿½: "+userName);
 		if(msg.getMessage().equals(Commands.LOG_IN) && alive.containsKey(userName) && !alive.get(userName)) {
 			broadCast(new GameMessage(Commands.RETURNED,userName));
 			clients.put(userName,potentialClient);
@@ -339,7 +339,7 @@ public class GameHost {
 				out.flush();
 				while(!in.ready());
 				GameMessage msg = new GameMessage(in.readLine(),true);
-				//System.out.println("Host: Ö: "+msg.getSender());
+				//System.out.println("Host: ï¿½: "+msg.getSender());
 				if(msg.getMessage().equals(Commands.LOG_IN)) {
 					clients.put(msg.getSender(),client);
 					ins.put(msg.getSender(),in);

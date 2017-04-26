@@ -3,33 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dicewars;
+package game;
 
-import dicewars.players.Player;
+import game.players.Player;
 import gameTools.map.Layout;
 import gameTools.map.Map;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  Egy ország a térképen, cellák összessége
  * @author ganter
  */
-public class Territory {
+public class Territory implements Serializable{
         private static int numOfTerritories=0;
-        private static final int maxStrength = 8;
         public final int id=++numOfTerritories;
         private Player owner;
-        public int strength;
-        public final ArrayList<Cell> cells; //inside
+        public final List<Cell> cells; //inside
         private boolean highlighted;
-        private boolean updated = true;
+        private boolean needsRender = true;
 
         public Territory() {
-            strength = 0;
             cells = new ArrayList<>();
         }
         
@@ -47,9 +46,9 @@ public class Territory {
             return this.owner;
         }
         
-        public ArrayList<Territory> getNeighborTerritories(Map map){
-            ArrayList<Cell> neighborsOfCell;
-            ArrayList<Territory> neighborsOfTerritory = new ArrayList<>(); //unowned neighboring cells of the territory
+        public List<Territory> getNeighborTerritories(Map map){
+            List<Cell> neighborsOfCell;
+            List<Territory> neighborsOfTerritory = new ArrayList<>(); //unowned neighboring cells of the territory
             
             //collect the territories
             for(Cell cell: cells){
@@ -65,12 +64,12 @@ public class Territory {
             
         }
         
-        public ArrayList<Cell> getCells(){
+        public List<Cell> getCells(){
             return cells;
         }
         
         public boolean isNeighbor(Territory t, Map map){
-            ArrayList<Cell> unownedNeighborsOfCell;
+            List<Cell> unownedNeighborsOfCell;
             
             //check each neighbor cell (of any cell in this) if its owner is t
             for(Cell cell: cells){
@@ -85,24 +84,8 @@ public class Territory {
             return false;
         }
         
-        /**
-         * adds the amount of strength(dices). The strength cannot get higher than the maximum(def.: 8).
-         * @param i the amount of strength to add.
-         * @return the amount of strength used up of i.
-         */
-        public int addDices(int i){
-            strength+=i;
-            if(strength > 8){
-                int ret = 8-(strength-i);
-                strength = 8;
-                return ret;
-            } else {
-                return i;
-            }
-        }
-        
         public void touch(){
-            this.updated = true;
+            this.needsRender = true;
             for(Cell c : cells){
                 c.touch();
             }
@@ -116,17 +99,6 @@ public class Territory {
                 sumY += c.y / cellN; 
             }
             return new Point((int)sumX,(int)sumY);
-        }
-        
-        public int getStrength(){
-            return this.strength;
-        }
-        public void setStrength(int i){
-            if(i<=8){
-                this.strength = i;
-            }else{
-                this.strength = 8;
-            }
         }
 
         public void highlight() {
@@ -148,12 +120,11 @@ public class Territory {
         }
         
         public void render(Graphics2D g, Layout layout){
-            if(!updated){
+            if(!needsRender){
                 return;
             } else {
-                updated=false;
+                needsRender=false;
             }
-
             if(owner != null ){
                 g.setColor(owner.getColor());
             } else {
@@ -170,9 +141,9 @@ public class Territory {
             Point p = c.toPixel(layout).toPoint();
             int X = p.x;
             int Y = p.y+15;
-            String s = String.format("%d", strength);
-            g.setFont(new Font("Courier New", Font.PLAIN, 20));
-            g.drawString(s, X, Y);
+//            String s = String.format("%d", strength);
+//            g.setFont(new Font("Courier New", Font.PLAIN, 20));
+//            g.drawString(s, X, Y);
         }
         
         @Override

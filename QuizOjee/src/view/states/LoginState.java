@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import gameTools.state.State;
 import view.MainWindow;
 import view.Settings;
+import view.components.Login;
 
 public class LoginState extends State {
 	MainWindow root;
@@ -20,7 +21,7 @@ public class LoginState extends State {
 	public LoginState(MainWindow r) {
 		super(MainWindow.STATE_LOGIN, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
-		loginDialog = new Login(root);
+		loginDialog = new Login();
 		loginDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		loginDialog.addWindowListener(new WindowAdapter() {
             @Override

@@ -6,10 +6,14 @@
 package game.players;
 
 import game.GameBoard;
-import view.Settings;
+import game.GameSettings;
 import game.Territory;
 import gameTools.state.InputManager;
+import model.RaceQuestion;
+import model.Question;
+
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +21,7 @@ import java.util.ArrayList;
  * fontos, hogy legyen.
  * @author ganter
  */
-public abstract class Player {
+public abstract class Player implements Serializable{
     
     protected int team;
     protected int color;
@@ -35,18 +39,18 @@ public abstract class Player {
         this.color = color;
         this.team = team;
         territories = new ArrayList<>();
-        Settings.game_players.add(this);
+        GameSettings.getInstance().PLAYERS.add(this);
     }
 
     public Color getColor() {
-        return Settings.COLORS[color];
+        return GameSettings.getInstance().COLORS[color];
     }
     public int getColorID() {
         return color;
     }
 
     public int getId() {
-        return Settings.PLAYERS.indexOf(this);
+        return GameSettings.getInstance().PLAYERS.indexOf(this);
     }
     
     public int getTerritoryNum(){
@@ -77,7 +81,7 @@ public abstract class Player {
     }
     
     public void dispose(){
-        Settings.PLAYERS.remove(this);
+        GameSettings.getInstance().PLAYERS.remove(this);
     }
 
     public void setTeam(int team) {
@@ -100,22 +104,17 @@ public abstract class Player {
         this.isAlive = true;
     }
     
-    public abstract void selectBase(GameBoard board, InputManager input)  throws EndOfTurnException;
+    public abstract void selectTarget(GameBoard board, InputManager input);
     
-    public abstract void selectTarget(GameBoard board, InputManager input)  throws EndOfTurnException;
+    public abstract String askQuestion(Question quest);
+    
+    public abstract double askRaceQuestion(RaceQuestion quest);
     
     public void play(GameBoard board, InputManager input){
         board.setCurrentPlayer(this);
-        boolean endOfTurn=false;
-        while(!endOfTurn){
-            try{
-                selectBase(board, input);
-                selectTarget(board, input);
-                board.evaluateMove();
-            }catch(EndOfTurnException e){
-                endOfTurn=true;
-            }
-        }
+        selectTarget(board, input);
+        board.evaluateMove();
+
         board.finishRound(this);
     }
     

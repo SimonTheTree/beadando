@@ -1,4 +1,4 @@
-package view.states;
+package view.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.components.GButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -22,7 +21,6 @@ import view.Settings;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import view.components.GLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
@@ -34,14 +32,11 @@ public class Login extends JDialog {
 	private GButton btnRegister;
 	private JPanel panelMsg;
 	private List<GLabel> msg = new ArrayList<>();
-	private MainWindow root;
 
 	/**
 	 * Create the dialog.
 	 */
-	public Login(MainWindow r) {
-		root = r;
-
+	public Login() {
 		panelMsg = new JPanel();
 		panelMsg.setOpaque(false);
 		getContentPane().setBackground(new Color(80, 40, 0));
@@ -75,12 +70,12 @@ public class Login extends JDialog {
 				if(!ok){
 					return;
 				}
-				if (root.controller.signIn(uname, psw)) {
+				if (MainWindow.getInstance().controller.signIn(uname, psw)) {
 					System.out.println("login!");
-					root.setState(MainWindow.STATE_MAIN);
+					MainWindow.getInstance().setState(MainWindow.STATE_MAIN);
 					this.setVisible(false);
-					root.setUser(root.controller.getUser(uname));
-					root.setVisible(true);
+					MainWindow.getInstance().setUser(MainWindow.getInstance().controller.getUser(uname));
+					MainWindow.getInstance().setVisible(true);
 				} else {
 					msg.add(new GLabel(Labels.MSG_LOGIN_FAILED));
 					ok=false;
@@ -89,9 +84,9 @@ public class Login extends JDialog {
 			});
 		btnRegister = new GButton(Labels.BTN_REGISTER);
 			btnRegister.addActionListener((e) -> {
-				root.setState(MainWindow.STATE_REGISTER);
+				MainWindow.getInstance().setState(MainWindow.STATE_REGISTER);
 				setVisible(false);
-				root.setVisible(true);
+				MainWindow.getInstance().setVisible(true);
 			});
 		
 		

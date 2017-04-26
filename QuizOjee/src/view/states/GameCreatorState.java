@@ -11,6 +11,8 @@ import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import game.GameServer;
 import view.components.GButton;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -36,6 +38,11 @@ public class GameCreatorState extends DefaultState {
 		GButton btnNextMap = new GButton(">");
 		GButton btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
+				GameServer gs = new GameServer();
+				gs.createGame();
+//				gs.createGame();
+				System.out.println("game created switching to gamestate");
+				Settings.gameServer = "localhost";
 				root.setState(MainWindow.STATE_GAME);
 			});
 		GButton btnCancel = new GButton(Labels.BTN_CANCEL);

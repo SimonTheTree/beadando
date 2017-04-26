@@ -3,11 +3,44 @@
 + -> addition feature
 - -> remove something
 )
-* néha bénán indul és lefagy minden
 
 GUI
++ quiz végén eredmények mutatása, majd kilépés
++ quiz pontszámítás
++ quiz fancy villogás csillogás amikor bejelölnek egy választ és jó/roszz
++ bejelölni zölddel a jó választ, villogjon, ha nem találta el és várni egy kicsit
++ profile state befejezése
+* GameSettings state néha indokolatlanul lefagy amikor átváltunk rá
+* van amikor a cliens-server kapcsolat nem jön létre:
+java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at java.net.Socket.<init>(Socket.java:434)
+	at java.net.Socket.<init>(Socket.java:211)
+	at controller.GameClient.buildConnection(GameClient.java:88)
+	at controller.GameClient.lambda$0(GameClient.java:58)
+	at java.lang.Thread.run(Thread.java:745)
+Exception in thread "Thread-57" java.lang.NullPointerException
+	at controller.GameClient.buildConnection(GameClient.java:134)
+	at controller.GameClient.lambda$0(GameClient.java:58)
+	at java.lang.Thread.run(Thread.java:745)
+* volt h a cliens csatlakozott, => istarted()==true. ?: a csomagok kézbesítése 100%ig biztosított? van újraküldés ha nem jött meg?
+*System.out.println("starting up server....");
+	host = new GameHost();
+	serverListener = new MyServerListener(this);
+	host.addInputListener(serverListener);
+	System.out.println("server launched...");
+	==> with this code "starting up server...." is printed, but "server launched..." is not, yet the client recieved isStarted() == true. Of course this caused a malfunction 
 
 CONTROLLER
++ összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean
 
 MODEL
-+ összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean
+
+DONE
+* vmiért fagy a rajzolása amióta megpróbáltam okossá tenni
