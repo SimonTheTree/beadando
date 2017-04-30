@@ -200,7 +200,11 @@ public class GameClient {
 			}
 		}
 		if(message.getMessage().equals(Commands.END)) end = true;
-		if(message.getMessage().equals(Commands.START)) started = true;
+		if(message.getMessage().equals(Commands.START)) {
+			sendMessage(new GameMessage(true, userName, Commands.IM_LISTENING) );
+			System.out.println("OH NO THE SERVER IS STARTED");
+			started = true;
+		}
 		if(!message.isAutomatic()) {
 			for(GameInputListener listener : inputListeners) {
 				listener.gotMessage(message);

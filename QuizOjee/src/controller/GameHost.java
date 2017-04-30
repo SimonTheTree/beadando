@@ -52,7 +52,8 @@ public class GameHost {
 	private boolean triedToOpenServer = false;
 	private boolean end = false;
 	private boolean joinedSuccessfully = false;
-
+	private int joinedClients = 0;
+	
 	/**
 	 * Elindit egy uj szalat.<br> 
 	 * Letrehoz egy szervert amihez {@link #maxPlayers} szamu jatekos csatlakozhat.<br>
@@ -61,11 +62,12 @@ public class GameHost {
 	 */
 	public GameHost() throws IOException {
 		////System.err.println("GameHost");
-		Thread t = new Thread(() -> {
-			////System.err.println("GameHost-Thread");
-			startHost();
-			////System.err.println("GameHost-Thread END");
-		}); 
+		Thread t = new Thread(){			
+			@Override
+			public void run() {
+				startHost(this);
+			}
+		}; 
 		t.start();
 		while(!triedToOpenServer);
 		if(failedToStartServer) throw new IOException();
@@ -79,7 +81,7 @@ public class GameHost {
 	 * Var, amig az end be nem all.
 	 * 
 	 */
-	private void startHost() {
+	private void startHost(Thread t) {
 		////System.err.println("StartHost");
 		try {
 			server = new ServerSocket(19969);
@@ -95,10 +97,16 @@ public class GameHost {
 					while(!joinedSuccessfully && !end) {Thread.sleep(100);};
 					//Thread.sleep(1000);
 				}
-				started = true;
+				broadCast(new GameMessage(true,host,Commands.START));
+				try {
+					waitForEveryone(t);
+					Thread.sleep(20000);
+					abort();
+				} catch(InterruptedException e) {
+					started = true;
+				}
 				//Thread.sleep(1000);
 			}
-			broadCast(new GameMessage(true,host,Commands.START));
 			//System.out.println("Host: Let's freaking do this!!");
 			////System.err.println("Ping");
 			new Timer().schedule(new TimerTask() {
@@ -145,6 +153,19 @@ public class GameHost {
 		}
 		//System.out.println("StartHost vege");
 		////System.err.println("StartHost END");
+	}
+	
+	private void waitForEveryone(Thread t) {
+		new Thread(() -> {
+			while(!end && joinedClients < maxPlayers) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			t.interrupt();
+		}).start();
 	}
 	
 	/**
@@ -308,11 +329,12 @@ public class GameHost {
 			return;
 		}
 		GameMessage msg = new GameMessage(message,true);
-		//System.out.print("Host: "+ msg.getSender() + " said: " + msg.getMessage());
-		String[] params = msg.getParams();
-		for(int i=0;i<params.length;++i) {
-			//System.out.print(params[i]+" ");
+	//System.out.print("Host: "+ msg.getSender() + " said: " + msg.getMessage());
+		if(Commands.IM_LISTENING.equals(msg.getMessage()) && msg.isAutomatic()) {
+			joinedClients++;
+			System.out.println("vettem vettem");
 		}
+		
 		//System.out.println();
 		if(!msg.isAutomatic()) {
 			for(int i=0;i<inputListeners.size();++i) {

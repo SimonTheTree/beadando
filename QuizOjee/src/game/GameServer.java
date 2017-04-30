@@ -36,15 +36,15 @@ public class GameServer  {
 		// settings.setMapGenerator("Linear Hexmap Pointy");
 		// settings.setMapGenerator("Linear Hexmap Flat");
 		
-		settings.layout.size = new Point(6, 3);
+		settings.layout.size = new Point(12, 8);
 		settings.layout.origin = new Point(0, 0);
 		settings.mapTileN = new Dimension(1, 1);
-		MapGeneratorHexRectangleFlat<Cell> gen = new MapGeneratorHexRectangleFlat<Cell>("name", new Cell(0,0), new int[]{50, 50});
+		MapGeneratorHexRectangleFlat<Cell> gen = new MapGeneratorHexRectangleFlat<Cell>("name", new Cell(0,0), new int[]{25, 25});
 		List<Cell> l = gen.generate();
 		board = new GameBoard(gen, settings.layout);
 		settings.PLAYERS.add(new PlayerHuman(0));
-		settings.PLAYERS.add(new PlayerHuman(1));
-		settings.PLAYERS.add(new PlayerHuman(2));
+//		settings.PLAYERS.add(new PlayerHuman(1));
+//		settings.PLAYERS.add(new PlayerHuman(2));
 		board.generateTerritories(settings.TerrPerPlayer);
 		settings.mapTileN = board.getDimensionInTiles();
 		settings.calcLayoutSize();
@@ -63,23 +63,19 @@ public class GameServer  {
 					System.out.println("starting up server....");
 					host = new GameHost();
 					serverListener = new MyServerListener(this);
-					host.addInputListener(serverListener);
 					System.out.println("server launched...");
+					host.addInputListener(serverListener);
+					System.out.println("server ready...");
 					while (!host.isStarted()) {
 						System.out.println("server waiting for players...");
-						Thread.sleep(3000);
+						Thread.sleep(100);
 					}
-					System.out.println("waited for long enough...");
+					System.out.println("	[GO]   server");
 
+					System.out.println("sending settings");
 					host.broadCast(new GameMessage(Commands.SETTINGS, StringSerializer.serialize(settings)));
+
 					System.out.println("sending gameboard");
-					System.out.println("territories: " + board.territories.length);
-					int c = 0;
-					for(Territory t : board.territories){
-						c += t.getCells().size();
-					}
-					System.out.println("cells: " +c);
-					
 					host.broadCast(new GameMessage(Commands.GAMEBOARD, StringSerializer.serialize(board)));
 					
 					while(!gameFinished) {Thread.sleep(1000);}

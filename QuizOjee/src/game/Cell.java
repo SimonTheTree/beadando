@@ -3,11 +3,15 @@ package game;
 import gameTools.map.TileHex;
 import gameTools.map.Layout;
 import gameTools.map.Tester;
+
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
+
+import javax.swing.border.StrokeBorder;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -97,10 +101,11 @@ public class Cell extends TileHex<Cell> {
             g.setColor(getOwner().getOwner().getColor());
         }
         if (highlighted){
-            g.setColor(new Color(255, 255, 255, 200));
+            g.setColor(new Color(255, 255, 255, 180));
         }
-        System.out.println("cell rendering");
         g.fill(polygonCorners(layout));
+        g.setStroke(new BasicStroke(2));
+        g.draw(polygonCorners(layout));
         
             
         

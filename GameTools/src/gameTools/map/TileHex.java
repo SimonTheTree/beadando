@@ -144,12 +144,12 @@ public abstract class TileHex<H extends TileHex> extends Tile<H>{
         return String.format("[%d,%d,%d]", x,y,z);
     }
     
-    PointHD hexCornerOffset(Layout layout, int corner)
+    public PointHD hexCornerOffset(Layout layout, int corner)
     {
         Orientation M = layout.orientation;
         Point size = layout.size;
         double angle = 2.0 * Math.PI/6.0 * (corner + M.START_ANGLE);
-        double X = (size.x+1) * Math.cos(angle);
+        double X = (size.x) * Math.cos(angle);
         double Y = (size.y) * Math.sin(angle);
         return new PointHD(X, Y);
     }
@@ -194,4 +194,5 @@ public abstract class TileHex<H extends TileHex> extends Tile<H>{
         for(int i=0; i<6; i++) h.add(getNeighbor(i));
         return h;
     }
+
 }

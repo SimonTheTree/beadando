@@ -71,11 +71,15 @@ public class GameState extends State {
 	}
 
 	@Override
-	public void start() {
+	public void onStart() {
 		System.out.println("starting gamestate ");
 		gameOver = false;
 		gameStarted = false;
-		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		clientThread =  new Thread() {
 			public void run() {
 				GameClient client = null;
@@ -88,21 +92,18 @@ public class GameState extends State {
 					client.addInputListener(clientListener);
 					while (!client.isStarted()) {
 						System.out.println(uname + ": waiting for others...");
-						Thread.sleep(3000);
+						Thread.sleep(100);
 					};
-					System.out.println(uname + "done waiting");
+					System.out.println("	[GO]   "+uname + "done waiting");
+					
 					String s = clientListener.waitForMsg(Commands.SETTINGS).getParams()[0];
 					settings = (GameSettings) StringSerializer.deSerialize(s);
 					System.out.println("recieved settings");
+					
 					s = clientListener.waitForMsg(Commands.GAMEBOARD).getParams()[0];
 					gameboard= (GameBoard) StringSerializer.deSerialize(s);
 					System.out.println("recieved gameboard");
-					System.out.println("territories: " + gameboard.territories.length);
-					int c = 0;
-					for(Territory t : gameboard.territories){
-						c += t.getCells().size();
-					}
-					System.out.println("cells: " +c);
+					
 					gameStarted = true;
 
 				} catch (InterruptedException e) {
@@ -115,13 +116,11 @@ public class GameState extends State {
 			}
 		};
 		clientThread.start();
-		super.start();
 	}
 
 	@Override
-	public void stop() {
+	public void onStop() {
 		gameOver = true;
-		super.stop();
 	}
 
 	@Override

@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gameTools.state;
 
 import java.awt.Color;
@@ -11,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Semaphore;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -33,6 +28,8 @@ public abstract class State extends JPanel{
     protected long ticks = 0;
     
     protected BufferedImage screen;
+    protected final ScreenLock screenLock = new ScreenLock();
+    static class ScreenLock{};
     protected Graphics2D g;
     
     private Thread renderThread, updateThread;
@@ -57,10 +54,14 @@ public abstract class State extends JPanel{
         @Override
         public void run() {
             do{
-                synchronized (screen) {
+                synchronized (screenLock) {
                 	render();					
 				}
-                paintImmediately(0, 0, width, height);
+                try {
+					SwingUtilities.invokeAndWait(() -> {paintImmediately(0, 0, width, height);});
+				} catch (InvocationTargetException | InterruptedException e) {
+					e.printStackTrace();
+				}
                 fpsCounter.interrupt(); 
                 
                 //handle max fps
@@ -117,7 +118,7 @@ public abstract class State extends JPanel{
         g = screen.createGraphics();
     }
     
-    public void start(){
+    public final void start(){
     	onStart();
         if(!running){
             running = true;
@@ -128,10 +129,9 @@ public abstract class State extends JPanel{
             updateThread.start();
             renderThread.start();
         }
-//        repaint();
     }
     
-    public void stop(){
+    public final void stop(){
         running = false;
         soundManager.stopAllSounds();
         onStop();
@@ -179,7 +179,8 @@ public abstract class State extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        synchronized (screen) {
+        synchronized (screenLock) {
+        	//draws the screen image(that which the render function painted on) onto the panel
         	g.drawImage(screen, 0, 0, width, height, this);				
 		};
         
