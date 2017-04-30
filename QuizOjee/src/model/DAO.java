@@ -59,4 +59,6 @@ public interface DAO {
 	boolean updateStatistics(Statistics stat) throws UserNotFoundException;
 
 	List<RaceQuestion> getRaceQuestions(List<Integer> topicList, int n);
+
+	List<Topic> getTopics();
 }

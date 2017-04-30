@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import model.Statistics;
+import model.Topic;
 import model.DAO;
 import model.DAOImp;
 import model.Question;
@@ -33,6 +34,7 @@ public class Controller {
 	private Map<String,Integer> questionQuantityByCategory = null;
 	private List<Statistics> topTenPlayers = null;
 	private Map<String,Integer> userQuestionQuantity = null;
+	private List<Topic> topicList = null;
 	
 	public Controller() {
 		db = new DAOImp();
@@ -232,6 +234,45 @@ public class Controller {
 		return getRaceQuestion(actualTopicList, n);
     }
 
+    public List<Topic> getTopics() {
+    	if(topicList == null)
+    	topicList = db.getTopics();
+    	return topicList;
+    }
+    
+    public int getNumOfQuestions(int minDiff, int maxDiff, List<Integer> topicIdList) {
+    	if(topicList == null) topicList = db.getTopics();
+    	int re = 0;
+    	if(minDiff < 0) minDiff = 0;
+    	if(maxDiff < minDiff) return 0;
+    	if(maxDiff > maxDifficulty) maxDiff = maxDifficulty;
+    	for(int i : topicIdList) {
+    		Topic good = topicList.get(i);
+    		if(good.getTopicId() != i) {
+    			for(int j=0;j<topicList.size();++j) {
+    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
+    			}
+    		}
+			re+=good.getNumberOfQuestions(minDiff, maxDiff);
+    	}
+    	return re;
+    }
+    
+    public int getNumOfRaceQuestions(List<Integer> topicIdList) {
+    	if(topicList == null) topicList = db.getTopics();
+    	int re = 0;
+    	for(int i : topicIdList) {
+    		Topic good = topicList.get(i);
+    		if(good.getTopicId() != i) {
+    			for(int j=0;j<topicList.size();++j) {
+    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
+    			}
+    		}
+			re+=good.getNumberOfRaceQuestions();
+    	}
+    	return re;
+    	
+    }
     
     public int getMaxDifficulty() {
     	return maxDifficulty;

@@ -57,6 +57,7 @@ public class DAOImp implements DAO {
 	private static final String SQL_GET_USER_QUESTION_QUANTITY = "SELECT T1.UNAME AS \"username\", 	(T1.\"count\" + T2.\"count\") AS \"kerdesek_szama\" FROM (SELECT UT.UNAME,COUNT(UT.UNAME) AS \"count\" FROM USERS UT LEFT JOIN NORMAL_QUESTIONS NQ ON UT.UNAME=NQ.AUTHOR GROUP BY UT.UNAME) T1 LEFT JOIN (SELECT UT.UNAME,COUNT(UT.UNAME) AS \"count\" FROM USERS UT LEFT JOIN RACE_QUESTIONS NQ ON UT.UNAME=NQ.AUTHOR GROUP BY UT.UNAME) T2 ON T1.UNAME = T2.UNAME ORDER BY \"kerdesek_szama\" DESC";
 	private static final String SQL_UPDATE_STATISTICS = "UPDATE USERS SET age = ?, points = ?, wins = ?, defeats = ?, right_answers = ?, wrong_answers = ?, right_tips = ?, wrong_tips = ?" +
 			"WHERE uname = ?";
+	private static final String SQL_GET_TOPICS_WITH_NUMBERS = "select T1.topic_id, normalDB, NVL(raceDBnull,0) AS raceDB, T1.difficulty, name FROM ( select count(*) AS normalDB, difficulty, topic_id FROM NORMAL_QUESTIONS group by topic_id, difficulty order by topic_id, difficulty ) T1 LEFT JOIN ( select count(*) AS raceDBnull, topic_id FROM RACE_QUESTIONS group by topic_id order by topic_id ) T2 ON T1.topic_id = T2.topic_id, QUESTION_TOPICS where T1.topic_id = question_topics.topic_ID";
 	
 	public DAOImp() {
 		/*
@@ -654,6 +655,48 @@ public class DAOImp implements DAO {
 			session.disconnect();
 		}
 		return re;
+	}
+
+	public synchronized List<Topic> getTopics() {
+	System.out.println("get Topics");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_TOPICS_WITH_NUMBERS);
+			List<Topic> topics = new ArrayList<Topic>();
+			if(rs.next()) {
+				while(!rs.isAfterLast()) {
+					Topic topic = new Topic();
+					topic.setName(rs.getString("name"));
+					topic.setNumberOfRaceQuestions(rs.getInt("raceDB"));
+					int id = rs.getInt("topic_ID");
+					topic.setTopicId(id);
+					
+					Map<Integer,Integer> normals = new HashMap<Integer,Integer>();
+					normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
+
+					while(rs.next()) {
+						if(rs.getInt("topic_ID") != id) {
+							break;
+						}
+						normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
+					}
+					topic.setNumberOfQuestionsByDifficulty(normals);
+					topics.add(topic);
+				}
+			}
+			return topics;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
 	}
 	
 }

@@ -21,6 +21,7 @@ import gameTools.map.Layout;
 import gameTools.map.Orientation;
 import gameTools.map.generators.MapGeneratorHexRectangleFlat;
 import view.Labels;
+import model.Topic;
 
 
 public class Main {
@@ -29,6 +30,16 @@ public class Main {
 		System.out.println("hello");
 		
 		Controller c = new Controller();
+		
+		List<Topic> topics = c.getTopics(); 
+		System.out.println(topics.size());
+		for(Topic topic : topics) {
+			System.out.println(topic);
+		}
+		
+		List<Integer> topicIdList = new ArrayList<Integer>();
+		topicIdList.add(2);
+		System.out.println(c.getNumOfQuestions(0, 10, topicIdList));
 		
 		//DEMO kapcsolat a host-kliens kozott.
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
@@ -96,11 +107,6 @@ public class Main {
 					System.out.println("host: " + msg.getParams()[0]+ " egy kocsog es kilepett...");
 				} else if(msg.getMessage().equals(Commands.CHOOSE)) {
 					System.out.println("host: " + msg.getParams()[0]+" kivalasztotta a "+ msg.getParams()[1]+" blockot!");
-				} else if(msg.getMessage().equals(Commands.SEND_OBJ)) {
-					Cell b = (Cell) game.StringSerializer.deSerialize(msg.getParams()[0]);
-					System.out.println(
-						b.getOwner()
-					);
 				} else if(msg.getMessage().equals(Commands.RETURNED)) {
 					System.out.println("host: " + msg.getParams()[0]+ " RETURNED");
 					//FONTOS a varakozasi ido
@@ -164,7 +170,6 @@ public class Main {
 					c.setOwner(t);
 					
 					String s = game.StringSerializer.serialize(c);
-					client.sendMessage(new GameMessage(Commands.SEND_OBJ, s));
 					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
