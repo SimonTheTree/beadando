@@ -3,39 +3,50 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dicewars;
+package game;
 
-import dicewars.players.Player;
+import game.players.Player;
 import gameTools.Graphical;
 import gameTools.map.Layout;
 import gameTools.map.Map;
 import gameTools.map.generators.MapGenerator;
+import model.Question;
+import model.RaceQuestion;
+
 import java.awt.Graphics2D;
+import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *  ez az osztál a játék játéktáblája. ezen kell kijelölni az országokat, és ez
- * az osztál ( példányosított obj.) felelős a lépések kiértékeléséért
+ * az osztály (példányosított obj.) felelős a lépések kiértékeléséért.<br>
+ * Ő a gameClient, és kommunikál a szerverrel
  * @author ganter
  */
 public class GameBoard extends Map<Cell> implements Graphical{
     
     //tool variables   
 //    public static final double GYOK3 = Math.sqrt(3);
+	private static enum QuestionType {
+		RACE,
+		NORMAL
+	}
     
     public Territory[] territories;
-    public boolean updated = false;
+    public boolean needsRender = false;
     //play-variables
     private Territory mouseOver;
     
-    private class Move{
-        public Player attPlayer;
+    private class Move implements Serializable{
+        public QuestionType type;
+    	public Player attPlayer;
         public Player defPlayer;
-        public Territory selectedBase = null;
         public Territory selectedTarget = null;
-        public int[] baseRoll = new int[0];
-        public int[] targetRoll = new int[0];
-        public int baseRollSum=0, targetRollSum=0;        
+        public Question question;
+        public RaceQuestion rQuestion;
+        public String answerString;
+        public double answerValue;     
     }
     
     private final Move[] move;
@@ -66,7 +77,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
     public void generateTerritories(final int TPP){
         System.out.println("generating gameboard... ");
         
-        final int territoryNum = TPP * Settings.PLAYERS.size();
+        final int territoryNum = TPP * GameSettings.getInstance().PLAYERS.size();
         
         if(this.values().size() < territoryNum) throw new AssertionError("There is not enough tiles on the map for the players!");
         
@@ -87,37 +98,37 @@ public class GameBoard extends Map<Cell> implements Graphical{
                     if(f.equals(territories[j].getCells().get(0))) ok = false;
                 }
             }while(!ok);
-//            territories[i] = Settings.usedTerritory.getInstance();
+//            territories[i] = GameSettings.getInstance().usedTerritory.getInstance();
             territories[i] = new Territory();
             territories[i].add(f);
         }
         
         for(int i = 0; i< territories.length; i++){
-            territories[i].setOwner(Settings.PLAYERS.get(i%Settings.PLAYERS.size()));
+            territories[i].setOwner(GameSettings.getInstance().PLAYERS.get(i%GameSettings.getInstance().PLAYERS.size()));
         }
         
         
         //distribute Dices
-        for(Player p : Settings.PLAYERS){
-            int num = 3*TPP;
-            for(Territory t : p.getTerritories()){
-                num -= t.addDices(1);
-            }
-
-            while(num>0){
-                int rand = Settings.RANDOM.nextInt(p.getTerritories().size());
-                num -= p.getTerritories().get(rand).addDices(1);
-            }
-        }
+//        for(Player p : GameSettings.getInstance().PLAYERS){
+//            int num = 3*TPP;
+//            for(Territory t : p.getTerritories()){
+////                num -= t.addDices(1);
+//            }
+//
+//            while(num>0){
+//                int rand = GameSettings.getInstance().RANDOM.nextInt(p.getTerritories().size());
+//                num -= p.getTerritories().get(rand).addDices(1);
+//            }
+//        }
         
         //expand territories
         boolean emptyNeighborFound;
         do{
             emptyNeighborFound = false;
-            ArrayList<Cell> unownedNeighborsOfCell; // unowned neighboring cells of random cell in territory
+            List<Cell> unownedNeighborsOfCell; // unowned neighboring cells of random cell in territory
             
             for(Territory territory : territories){ //at the end of this loop every territory(that can) gets new member(s)
-                ArrayList<Cell> unownedNeighborsOfTerritory = new ArrayList<>(); //unowned neighboring cells of the territory
+                List<Cell> unownedNeighborsOfTerritory = new ArrayList<>(); //unowned neighboring cells of the territory
                 //collect the cells that have empty neighbors
                 for(Cell cell: territory.getCells()){
                     unownedNeighborsOfCell = getSpecNeighborTiles(Cell.CELL_NOT_OWNED, cell.x, cell.y);
@@ -134,7 +145,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
                 for(int i = 0; i< 10; i++){
                     if(!unownedNeighborsOfTerritory.isEmpty()){
                         //get random cell from the collected ownerless cells
-                        Cell c = unownedNeighborsOfTerritory.remove(Settings.RANDOM.nextInt(unownedNeighborsOfTerritory.size()));
+                        Cell c = unownedNeighborsOfTerritory.remove(GameSettings.getInstance().RANDOM.nextInt(unownedNeighborsOfTerritory.size()));
                         if (c == null) break;
                         territory.add(c);
                     }
@@ -149,25 +160,20 @@ public class GameBoard extends Map<Cell> implements Graphical{
         System.out.println("done generating");
     }
     
-    public Territory getSelectedBase(){
-        return move[0].selectedBase;
-    }
-    
+    /**
+     * Kap egy {@link GameBoard}-t, adatait átveszi, a sajátjait ezzel felülírva.
+     * @param map
+     */
+    public void mimic(GameBoard other){}
+
+    /**
+     * vásolatot készít magáról(shallow), amit majd vki arra használ hogy átvegye a 
+     * tulajdonságait a {@link #mimic(GameBoard)}-el.... nem biztos h erre szükség lesz
+     */
+    public GameBoard clone(){return this;}
+
     public Territory getSelectedTarget(){
         return move[0].selectedTarget;
-    }
-    
-    public void selectBase(Territory t){
-        if(t != null){
-            move[0].selectedBase = t;
-            move[0].selectedBase.highlight();
-            move[0].attPlayer = t.getOwner();
-            System.out.printf("Player%d selecting BASE   territory%d%n",t.getOwner().getId(), t.id);
-        }
-    }
-    public void unSelectBase(){
-        if(move[0].selectedBase != null) move[0].selectedBase.unLight();
-        move[0].selectedBase = null;
     }
     
     public void selectTarget(Territory t){
@@ -183,46 +189,19 @@ public class GameBoard extends Map<Cell> implements Graphical{
         move[0].selectedTarget = null;
     }
     
-    public void evaluateMove(){
-        move[0].baseRoll = Dice.roll(move[0].selectedBase.getStrength());
-        move[0].targetRoll = Dice.roll(move[0].selectedTarget.getStrength());
-        move[0].baseRollSum=0;
-        move[0].targetRollSum=0;
-        for(int i : move[0].baseRoll) move[0].baseRollSum+=i;
-        for(int i : move[0].targetRoll) move[0].targetRollSum+=i;
-        move[1] = move[0];
-        
-        if(move[0].baseRollSum > move[0].targetRollSum){ //win!
-            move[0].selectedTarget.setStrength(move[0].selectedBase.getStrength()-1);
-            move[0].selectedTarget.setOwner(move[0].selectedBase.getOwner());
-        }
-        move[0].selectedBase.setStrength(1);
-        
-        unSelectBase();
+    public void evaluateMove(){   	
         unSelectTarget();
         //swich moves
         move[0] = new Move();
-        updated = true;
+        needsRender = true;
     }
     
     public void finishRound(Player p){
         int num = (int) Math.round(p.getTerritoryNum()/2.0);
         
-        int maxNum = 0;
-        for(Territory t : p.getTerritories()){
-            maxNum += 8-t.getStrength();
-        }
-        num = (num > maxNum)? maxNum : num;
-        
-        while(num>0){
-            int rand = Settings.RANDOM.nextInt(p.getTerritories().size());
-            num -= p.getTerritories().get(rand).addDices(1);
-        }
-
-        unSelectBase();
         unSelectTarget();
         
-        for(Player pp : Settings.PLAYERS){
+        for(Player pp : GameSettings.getInstance().PLAYERS){
             if(pp.getTerritoryNum() == 0)
                 pp.kill();
         }
@@ -237,9 +216,9 @@ public class GameBoard extends Map<Cell> implements Graphical{
         
         
         try{
-            move[0].selectedBase.highlight();
-            move[0].selectedBase.render(g, layout);
-            move[0].selectedBase.unLight();
+//            move[0].selectedBase.highlight();
+//            move[0].selectedBase.render(g, layout);
+//            move[0].selectedBase.unLight();
         }catch(NullPointerException ignore){}
         
         try{
@@ -248,10 +227,10 @@ public class GameBoard extends Map<Cell> implements Graphical{
             mouseOver.unLight();
         }catch(NullPointerException ignore){};
         
-        if(updated && move[1] != null){
+        if(needsRender && move[1] != null){
             int x0 = 0;
-            int y0 = Settings.GAME_HEIGHT;
-            int cellHeight = (int) ((Settings.SCREEN_HEIGHT-Settings.GAME_HEIGHT) / 2.0);
+            int y0 = GameSettings.getInstance().GAME_HEIGHT;
+            int cellHeight = (int) ((GameSettings.getInstance().SCREEN_HEIGHT-GameSettings.getInstance().GAME_HEIGHT) / 2.0);
             int cellWidth =  cellHeight;
             int padding = 5;
             
@@ -263,26 +242,26 @@ public class GameBoard extends Map<Cell> implements Graphical{
             int x = x0;
 
             //render attacker symbol and dices
-            g.drawImage(Settings.ATTACK_ICON[attCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
+//            g.drawImage(GameSettings.getInstance().ATTACK_ICON[attCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
 
-            for(int i = 0; i<move[1].baseRoll.length; i++){
-                x += cellWidth;
-                g.drawImage(Settings.DICES[move[1].baseRoll[i]-1][attCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
-            }
+//            for(int i = 0; i<move[1].baseRoll.length; i++){
+//                x += cellWidth;
+//                g.drawImage(GameSettings.getInstance().DICES[move[1].baseRoll[i]-1][attCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
+//            }
 
             //render defender symbol and dices
 
             x = x0;
             y = y0 + cellHeight;
 
-            g.drawImage(Settings.SHIELD_ICON[defCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
+//            g.drawImage(GameSettings.getInstance().SHIELD_ICON[defCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
 
-            for(int i = 0; i<move[1].targetRoll.length; i++){
-                x += cellWidth;
-                g.drawImage(Settings.DICES[move[1].targetRoll[i]-1][defCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
-            }
+//            for(int i = 0; i<move[1].targetRoll.length; i++){
+//                x += cellWidth;
+//                g.drawImage(GameSettings.getInstance().DICES[move[1].targetRoll[i]-1][defCol], x+padding, y+padding, cellWidth-2*padding, cellHeight-2*padding, null);
+//            }
             
-            updated = false;            
+            needsRender = false;            
         }
     }
 }

@@ -5,6 +5,7 @@
  */
 package gameTools.map.generators;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import gameTools.map.Tile;
 
@@ -13,7 +14,7 @@ import gameTools.map.Tile;
  * @author ganter
  * @param <T>
  */
-public abstract class MapGenerator<T extends Tile> {
+public abstract class MapGenerator<T extends Tile> implements Serializable{
 
     public final String name;
     protected T t;

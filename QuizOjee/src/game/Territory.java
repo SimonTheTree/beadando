@@ -3,186 +3,202 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dicewars;
+package game;
 
-import dicewars.players.Player;
+import game.players.Player;
+import gameTools.PointHD;
 import gameTools.map.Layout;
 import gameTools.map.Map;
+import gameTools.map.TileHex;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.geom.PathIterator;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- *  Egy ország a térképen, cellák összessége
+ * Egy ország a térképen, cellák összessége
+ * 
  * @author ganter
  */
-public class Territory {
-        private static int numOfTerritories=0;
-        private static final int maxStrength = 8;
-        public final int id=++numOfTerritories;
-        private Player owner;
-        public int strength;
-        public final ArrayList<Cell> cells; //inside
-        private boolean highlighted;
-        private boolean updated = true;
+public class Territory implements Serializable {
+	private static int numOfTerritories = 0;
+	public final int id = ++numOfTerritories;
+	private Player owner;
+	public final List<Cell> cells; // inside
+	private boolean highlighted;
+	private boolean needsRender = true;
 
-        public Territory() {
-            strength = 0;
-            cells = new ArrayList<>();
-        }
-        
-        void add(Cell c){
-            cells.add(c);
-            c.setOwner(this);
-        }
-        
-        public void setOwner(Player p) {
-            if (owner != null) owner.removeTerritory(this);
-            this.owner = p;
-            p.addTerritory(this);
-        }
-        public Player getOwner() {
-            return this.owner;
-        }
-        
-        public ArrayList<Territory> getNeighborTerritories(Map map){
-            ArrayList<Cell> neighborsOfCell;
-            ArrayList<Territory> neighborsOfTerritory = new ArrayList<>(); //unowned neighboring cells of the territory
-            
-            //collect the territories
-            for(Cell cell: cells){
-                neighborsOfCell = map.getNeighborTiles(cell.x, cell.y);
-                for(Cell c : neighborsOfCell){
-                    if( (!neighborsOfTerritory.contains(c.getOwner())) && (!this.equals(c.getOwner())) ) {
-                        neighborsOfTerritory.add(c.getOwner());
-                    }
-                }
-            }
+	public Territory() {
+		cells = new ArrayList<>();
+	}
 
-            return neighborsOfTerritory;
-            
-        }
-        
-        public ArrayList<Cell> getCells(){
-            return cells;
-        }
-        
-        public boolean isNeighbor(Territory t, Map map){
-            ArrayList<Cell> unownedNeighborsOfCell;
-            
-            //check each neighbor cell (of any cell in this) if its owner is t
-            for(Cell cell: cells){
-                unownedNeighborsOfCell = map.getNeighborTiles(cell.x, cell.y);
-                for(Cell c : unownedNeighborsOfCell){
-                    if( t.equals(c.getOwner()))  {
-                        return true;
-                    }
-                }
-            }
-            
-            return false;
-        }
-        
-        /**
-         * adds the amount of strength(dices). The strength cannot get higher than the maximum(def.: 8).
-         * @param i the amount of strength to add.
-         * @return the amount of strength used up of i.
-         */
-        public int addDices(int i){
-            strength+=i;
-            if(strength > 8){
-                int ret = 8-(strength-i);
-                strength = 8;
-                return ret;
-            } else {
-                return i;
-            }
-        }
-        
-        public void touch(){
-            this.updated = true;
-            for(Cell c : cells){
-                c.touch();
-            }
-        }
-        
-        public Point getCenter(){
-            double sumX=0, sumY=0;
-            double cellN = cells.size();
-            for(Cell c: cells){
-                sumX += c.x / cellN;
-                sumY += c.y / cellN; 
-            }
-            return new Point((int)sumX,(int)sumY);
-        }
-        
-        public int getStrength(){
-            return this.strength;
-        }
-        public void setStrength(int i){
-            if(i<=8){
-                this.strength = i;
-            }else{
-                this.strength = 8;
-            }
-        }
+	void add(Cell c) {
+		cells.add(c);
+		c.setOwner(this);
+	}
 
-        public void highlight() {
-            this.highlighted = true;
-            for(Cell c : cells){
-                c.highlight();
-            }
-            touch();
-        }
-        public void unLight() {
-            this.highlighted = false;
-            for(Cell c : cells){
-                c.unLight();
-            }
-            touch();
-        }
-        public boolean isHighlighted() {
-            return highlighted;
-        }
-        
-        public void render(Graphics2D g, Layout layout){
-            if(!updated){
-                return;
-            } else {
-                updated=false;
-            }
+	public void setOwner(Player p) {
+		if (owner != null)
+			owner.removeTerritory(this);
+		this.owner = p;
+		p.addTerritory(this);
+	}
 
-            if(owner != null ){
-                g.setColor(owner.getColor());
-            } else {
-                g.setColor(Color.GRAY);
-            }
-            for(Cell c : cells){
-                c.render(g, layout);
-            }
+	public Player getOwner() {
+		return this.owner;
+	}
 
-            
-            //draw strength
-            g.setColor(Color.WHITE);
-            Cell c = new Cell(getCenter().x, getCenter().y);
-            Point p = c.toPixel(layout).toPoint();
-            int X = p.x;
-            int Y = p.y+15;
-            String s = String.format("%d", strength);
-            g.setFont(new Font("Courier New", Font.PLAIN, 20));
-            g.drawString(s, X, Y);
-        }
-        
-        @Override
-        public boolean equals(Object o){
-            if (o != null && o instanceof Territory){
-                Territory t = (Territory) o;
-                return (id == t.id);
-            } else {
-                return false;
-            }
-        }
-        
+	public List<Territory> getNeighborTerritories(Map map) {
+		List<Cell> neighborsOfCell;
+		List<Territory> neighborsOfTerritory = new ArrayList<>(); // unowned
+																	// neighboring
+																	// cells of
+																	// the
+																	// territory
+
+		// collect the territories
+		for (Cell cell : cells) {
+			neighborsOfCell = map.getNeighborTiles(cell.x, cell.y);
+			for (Cell c : neighborsOfCell) {
+				if ((!neighborsOfTerritory.contains(c.getOwner())) && (!this.equals(c.getOwner()))) {
+					neighborsOfTerritory.add(c.getOwner());
+				}
+			}
+		}
+
+		return neighborsOfTerritory;
+
+	}
+
+	public List<Cell> getCells() {
+		return cells;
+	}
+
+	public boolean isNeighbor(Territory t, Map map) {
+		List<Cell> unownedNeighborsOfCell;
+
+		// check each neighbor cell (of any cell in this) if its owner is t
+		for (Cell cell : cells) {
+			unownedNeighborsOfCell = map.getNeighborTiles(cell.x, cell.y);
+			for (Cell c : unownedNeighborsOfCell) {
+				if (t.equals(c.getOwner())) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public void touch() {
+		this.needsRender = true;
+		for (Cell c : cells) {
+			c.touch();
+		}
+	}
+
+	public Point getCenter() {
+		double sumX = 0, sumY = 0;
+		double cellN = cells.size();
+		for (Cell c : cells) {
+			sumX += c.x / cellN;
+			sumY += c.y / cellN;
+		}
+		return new Point((int) sumX, (int) sumY);
+	}
+
+	public void highlight() {
+		this.highlighted = true;
+		for (Cell c : cells) {
+			c.highlight();
+		}
+		touch();
+	}
+
+	public void unLight() {
+		this.highlighted = false;
+		for (Cell c : cells) {
+			c.unLight();
+		}
+		touch();
+	}
+
+	public boolean isHighlighted() {
+		return highlighted;
+	}
+
+	public void render(Graphics2D g, Layout layout) {
+		if (!needsRender) {
+			return;
+		} else {
+			needsRender = false;
+		}
+		if (owner != null) {
+			g.setColor(owner.getColor());
+		} else {
+			g.setColor(Color.GRAY);
+		}
+		for (Cell c : cells) {
+			c.render(g, layout);
+		}
+
+		// draw strength
+		g.setColor(Color.WHITE);
+		Cell c = new Cell(getCenter().x, getCenter().y);
+		Point p = c.toPixel(layout).toPoint();
+		int X = p.x;
+		int Y = p.y + 15;
+		// String s = String.format("%d", strength);
+		// g.setFont(new Font("Courier New", Font.PLAIN, 20));
+		// g.drawString(s, X, Y);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o != null && o instanceof Territory) {
+			Territory t = (Territory) o;
+			return (id == t.id);
+		} else {
+			return false;
+		}
+	}
+	
+    Polygon getBorder(Layout layout){
+    	Polygon border = new Polygon();
+    	int step = (layout.size.x < layout.size.y)? layout.size.x : layout.size.y;
+    	for(Cell c : cells){
+    		for(int i = 0; i < 6; i++){
+    			int val = 0;
+    			PointHD p = c.hexCornerOffset(layout, i);
+    			PointHD p1 = p.add(new PointHD(step, 0));
+    			PointHD p2 = p.add(new PointHD(-step, 0));
+    			PointHD p3 = p.add(new PointHD(0, step));
+    			PointHD p4 = p.add(new PointHD(0, -step));
+    			if (cells.contains(c.fromPixel(p1.getIntx(), p1.getInty(), layout))){
+    				val++;
+    			}
+    			if (cells.contains(c.fromPixel(p2.getIntx(), p2.getInty(), layout))){
+    				val++;
+    			}
+    			if (cells.contains(c.fromPixel(p3.getIntx(), p3.getInty(), layout))){
+    				val++;
+    			}
+    			if (cells.contains(c.fromPixel(p4.getIntx(), p4.getInty(), layout))){
+    				val++;
+    			}
+    			if(val <= 2) {
+    				border.addPoint(p.getIntx(), p.getInty());
+    			}
+    		}
+    	}
     }
+
+}

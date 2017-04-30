@@ -3,11 +3,22 @@
 + -> addition feature
 - -> remove something
 )
-* néha bénán indul és lefagy minden
 
 GUI
++ quiz végén eredmények mutatása, majd kilépés
++ quiz pontszámítás
++ quiz fancy villogás csillogás amikor bejelölnek egy választ és jó/roszz
++ bejelölni zölddel a jó választ, villogjon, ha nem találta el és várni egy kicsit
++ profile state befejezése
+* GameSettings state néha indokolatlanul lefagy amikor átváltunk rá
+-> deadlock
+-> ha gyorsan átkattintok mindent, akkor szokott előfordulni
+-> ha ismételten od vissza váltogatom a state-eket, akkor már nem fagy le
 
 CONTROLLER
++ összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean
 
 MODEL
-+ összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean
+
+DONE
+* vmiért fagy a rajzolása amióta megpróbáltam okossá tenni

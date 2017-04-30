@@ -6,10 +6,17 @@ import view.Labels;
 import view.MainWindow;
 import view.Settings;
 import view.components.GLabel;
+import view.components.PlayerReport;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JDialog;
+
 import view.components.GButton;
+import view.components.GButtonUI;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.plaf.ButtonUI;
 import javax.swing.JPanel;
 
 import java.awt.Color;
@@ -22,9 +29,13 @@ import java.util.regex.Pattern;
 public class QuizState extends DefaultState {
 	MainWindow root;
 	private List<Question> questions;
-	private String[] currentAnswers;
 	private int currentQuestionIndex;
-	private int rightN, wrongN; 
+	
+	private int rightN, wrongN;
+	private int[][] diffN;
+//	private int[][] topicN;
+	private int points;
+	private boolean enabled;
 
 	public QuizState(MainWindow r) {
 		super(MainWindow.STATE_QUIZ, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
@@ -41,25 +52,29 @@ public class QuizState extends DefaultState {
 		panel.setBackground(new Color(0, 0, 0, 150));
 		
 		
-		lblRightAns = new GLabel(Labels.LBL_USER_N_RIGHT_ANS);
-		lblWrongAns = new GLabel(Labels.LBL_USER_N_WRONG_ANS);
+		lblRightAns = new GLabel(Labels.LBL_N_RIGHT_ANS);
+		lblWrongAns = new GLabel(Labels.LBL_N_WRONG_ANS);
 		lblWrongN = new GLabel();
 		lblRightN = new GLabel();
 
 		btnAnswerA = new GButton();
 			btnAnswerA.addActionListener((e) -> {
+				if (enabled)
 				checkAnswer((GButton)e.getSource());
 			});
 		btnAnswerB = new GButton();
 			btnAnswerB.addActionListener((e) -> {
+				if (enabled)
 				checkAnswer((GButton)e.getSource());
 			});
 		btnAnswerC = new GButton();
 			btnAnswerC.addActionListener((e) -> {
+				if (enabled)
 				checkAnswer((GButton)e.getSource());
 			});	
 		btnAnswerD = new GButton();
 			btnAnswerD.addActionListener((e) -> {
+				if (enabled)
 				checkAnswer((GButton)e.getSource());
 			});
 		btnQuit = new GButton(Labels.BTN_QUIT);
@@ -106,29 +121,78 @@ public class QuizState extends DefaultState {
 		questCount = questCount.replaceFirst("@", String.valueOf(Settings.quiz_numOfQuestions));
 		lblSubTitle.setText(questCount);
 
+		//update answer counter
+		lblRightN.setText(String.valueOf(rightN));
+		lblWrongN.setText(String.valueOf(wrongN));
+		
+		//update difficulty counter
+		diffN[quest.getDifficulty()][1]++;
+		
 	}
 	
 	private void checkAnswer(GButton self){
-		Question quest = questions.get(currentQuestionIndex);
-		//if text on clicked button == right answer text
-		if( quest.getRightAnswer().equals(self.getText())){
-			rightN++;
-			lblRightN.setText(String.valueOf(rightN));
-		} else {
-			wrongN++;
-			lblWrongN.setText(String.valueOf(wrongN));
-		}
+		Thread th = new Thread(() -> { //hogy a gui ne fagyjon le amig ez fut
+			enabled = false;
+			final int WAIT_TIME = 2000;
+			final int TIMES = 3;
+			if(currentQuestionIndex < Settings.quiz_numOfQuestions){
+				Question quest = questions.get(currentQuestionIndex);
+				//if text on clicked button == right answer text
+				if( quest.getRightAnswer().equals(self.getText())){
+					//RIGHT ANSWER
+					rightN++;
+					points += quest.getDifficulty()+1;
+				} else {
+					//WRONG ANSWER
+					//button turns red
+					self.setBackground(Settings.color_error);
+					wrongN++;
+				}
+				
+				//get the right answer button
+				GButton rightButton = btnAnswerD;
+				if(quest.getRightAnswer().equals(btnAnswerA.getText())) rightButton = btnAnswerA;
+				if(quest.getRightAnswer().equals(btnAnswerB.getText())) rightButton = btnAnswerB;
+				if(quest.getRightAnswer().equals(btnAnswerC.getText())) rightButton = btnAnswerC;
+				//right button bliks, wait 2 sec
+				for(int i = 0; i < TIMES*2; i++){
+					try {
+						rightButton.setBackground(Settings.color_success);
+						Thread.sleep(WAIT_TIME/(TIMES*2));
+						rightButton.setBackground(Settings.color_GButton);
+						Thread.sleep(WAIT_TIME/(TIMES*2));
+					} catch (InterruptedException ignore) {}
+				}
+				self.setBackground(Settings.color_GButton);
+				
+			}
+			//load the next answer, if any
+			if(++currentQuestionIndex < Settings.quiz_numOfQuestions){
+				nextQuestion();
+			} else {
+				System.out.println("im here");
+				PlayerReport rp =  new PlayerReport(root.getLoggedUser());
+				rp.setQuestNVal(Settings.quiz_numOfQuestions);
+				rp.setRAnsVal(rightN);
+				rp.setWAnsVal(wrongN);
+				rp.setPointsVal(points);
+				rp.setTblDiff(diffN);
+				PlayerReport[] p = new PlayerReport[1];
+				p[0] = rp;
+				((ReportState)root.report).setReports(p);
+				System.out.println("im here");
+//				MainWindow.getInstance().setState(MainWindow.STATE_MAIN);
+				MainWindow.getInstance().setState(MainWindow.STATE_REPORT);
+			}
+			enabled = true;
+		});
+		th.start();
 		
-		//load the next answer, if any
-		if(++currentQuestionIndex < Settings.quiz_numOfQuestions){
-			nextQuestion();
-		} else {
-			System.out.println("THATS IT!!");
-		}
 	}
 	
 	@Override
 	protected void onStart(){
+		enabled = true;
 		questions = new ArrayList<>();
 		int diff = Settings.quiz_difficulity;
 		for(int i = 0; i<Settings.quiz_numOfQuestions; i++){
@@ -136,15 +200,19 @@ public class QuizState extends DefaultState {
 		}
 
 		currentQuestionIndex = 0;
-		rightN = wrongN = 0;
+		points = rightN = wrongN = 0;
 		lblRightN.setText(String.valueOf(rightN));
 		lblWrongN.setText(String.valueOf(wrongN));
-		nextQuestion();
-	}
-	
-	@Override
-	public void update() {
 
+		//init difficulitycounter array
+		diffN =  new int[root.controller.getMaxDifficulty()][2];
+		int i = 0;
+		for(int[] arr : diffN){
+			arr[0] = i++;
+			arr[1] = 0;
+		}
+		
+		nextQuestion();
 	}
 
 	private void initLayout() {

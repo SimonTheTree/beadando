@@ -5,6 +5,7 @@ import gameTools.PointHD;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -20,9 +21,13 @@ import java.util.ArrayList;
  * @author ganter
  * @param <T>
  */
-public abstract class Tile<T extends Tile>{
+public abstract class Tile<T extends Tile> implements Serializable{
     public final int x,y;
-
+    
+    public Tile(){
+    	this(0,0);
+    }
+    
     public Tile(int x, int y) {
         this.x = x;
         this.y = y;

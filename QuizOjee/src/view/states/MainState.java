@@ -101,10 +101,4 @@ public class MainState extends DefaultState {
 		setLayout(groupLayout);
 	}
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

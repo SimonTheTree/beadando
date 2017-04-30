@@ -49,6 +49,13 @@ public class StateManager {
     public void stopCurrentState(){
 //        System.out.println("stopping state: "+states.get(currentState).name);
         states.get(currentState).stop();
+        while(states.get(currentState).isRunning()){
+        	try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        }
         gameFrame.remove(states.get(currentState));
     }
     

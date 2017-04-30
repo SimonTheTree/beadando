@@ -22,7 +22,15 @@ public class GButton extends JButton{
 	}
 	public GButton(String s){
 		super(s);
-		setUI(new GButtonUI(new Color(103, 45, 0, 200), new Color(255, 143, 0, 200), Color.RED, Settings.FONT_BUTTON_DEFAULT, Color.WHITE));
+		setUI(
+			new GButtonUI(
+				Settings.color_GButton, 
+				Settings.color_GButtonHover, 
+				Settings.color_GButtonClick, 
+				Settings.FONT_GBUTTON_DEFAULT, 
+				Settings.color_GButtonFont
+			)
+		);
 //		setUI(new WoodButtonUI(new ImageIcon(Resources.WOOD_BTN_BG), new ImageIcon(Resources.WOOD_BTN_BG), new ImageIcon(Resources.WOOD_BTN_BG)));
 	}
 	

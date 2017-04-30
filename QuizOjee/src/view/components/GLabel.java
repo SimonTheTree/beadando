@@ -10,7 +10,7 @@ public class GLabel extends JLabel {
 	public GLabel(String s){
 		super(s);
 		setFont(Settings.FONT_DEFAULT);
-		setForeground(Color.WHITE);
+		setForeground(Settings.color_GLabelFont);
 	}
 	public GLabel(){
 		this("");

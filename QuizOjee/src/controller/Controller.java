@@ -38,8 +38,9 @@ public class Controller {
 	
 	public Controller() {
 		db = new DAOImp();
-		gui = new MainWindow(this);
+		gui = MainWindow.getInstance(this);
 		maxDifficulty = db.getMax("difficulty");
+		System.out.println(maxDifficulty);
 		maxTopicId = db.getMax("TOPIC_ID");
 		System.out.println("maxDifficulty "+maxDifficulty);
 		setThemNummThread();

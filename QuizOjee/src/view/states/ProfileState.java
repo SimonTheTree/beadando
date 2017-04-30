@@ -21,16 +21,16 @@ public class ProfileState extends DefaultState {
 		
 		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_PROFILE);
 			lblTitle.setFont(Settings.FONT_TITLE);
-		GLabel lblUsername = new GLabel(Labels.LBL_USER_UNAME);
-		GLabel lblRealName = new GLabel(Labels.LBL_USER_RNAME);
-		GLabel lblAge = new GLabel(Labels.LBL_USER_AGE);
-		GLabel lblWins = new GLabel(Labels.LBL_USER_N_WINS);
-		GLabel lblDefeats = new GLabel(Labels.LBL_USER_N_DEFEATS);
-		GLabel lblPoints = new GLabel(Labels.LBL_USER_POINTS);
-		GLabel lblRightAns = new GLabel(Labels.LBL_USER_N_RIGHT_ANS);
-		GLabel lblWrongAns = new GLabel(Labels.LBL_USER_N_WRONG_ANS);
-		GLabel lblRightTips = new GLabel(Labels.LBL_USER_N_RIGHT_TIPS);
-		GLabel lblWrongTips = new GLabel(Labels.LBL_USER_N_WRONG_TIPS);
+		GLabel lblUsername = new GLabel(Labels.LBL_UNAME);
+		GLabel lblRealName = new GLabel(Labels.LBL_RNAME);
+		GLabel lblAge = new GLabel(Labels.LBL_AGE);
+		GLabel lblWins = new GLabel(Labels.LBL_N_WINS);
+		GLabel lblDefeats = new GLabel(Labels.LBL_N_DEFEATS);
+		GLabel lblPoints = new GLabel(Labels.LBL_POINTS);
+		GLabel lblRightAns = new GLabel(Labels.LBL_N_RIGHT_ANS);
+		GLabel lblWrongAns = new GLabel(Labels.LBL_N_WRONG_ANS);
+		GLabel lblRightTips = new GLabel(Labels.LBL_N_RIGHT_TIPS);
+		GLabel lblWrongTips = new GLabel(Labels.LBL_N_WRONG_TIPS);
 		
 		GLabel lblDataAge = new GLabel("?");
 		GLabel lblDataPoints = new GLabel("?");
@@ -51,7 +51,7 @@ public class ProfileState extends DefaultState {
 				        );						
 						
 				if(option == 0){
-					root.controller.deleteUser(root.getUser().getUsername());
+					root.controller.deleteUser(root.getLoggedUser().getUsername());
 					root.setUser(null);
 					root.setState(MainWindow.STATE_LOGIN);
 				}
@@ -74,7 +74,7 @@ public class ProfileState extends DefaultState {
 		txtfUsername.setEditable(false);
 		txtfUsername.setColumns(10);
 		
-		txtfRealName = new JTextField(root.getUser().getRealName());
+		txtfRealName = new JTextField(root.getLoggedUser().getRealName());
 		txtfRealName.setColumns(10);
 		
 		
@@ -186,8 +186,8 @@ public class ProfileState extends DefaultState {
 	
 	@Override
 	protected void onStart() {
-		txtfUsername.setText(root.getUser().getUsername());
-		txtfRealName.setText(root.getUser().getRealName());
+		txtfUsername.setText(root.getLoggedUser().getUsername());
+		txtfRealName.setText(root.getLoggedUser().getRealName());
 	}
 	
 	@Override

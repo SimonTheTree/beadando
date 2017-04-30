@@ -2,6 +2,7 @@ package gameTools.map;
 
 
 import java.awt.Point;
+import java.io.Serializable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,7 +14,7 @@ import java.awt.Point;
  *  Ez az osztály meghatározza hogy az egyes cellákat egy map hogyan rajzolja ki
  * @author ganter
  */
-public class Layout{
+public class Layout implements Serializable{
     public Orientation orientation;
     public Point size;
     public Point origin;

@@ -96,6 +96,7 @@ public class DAOImp implements DAO {
 	        session.setConfig("StrictHostKeyChecking", "no");
 	        // create port forward from 1521 on local system to port 1521 on tunnelRemoteHost
 	        session.setPortForwardingL(1521, tunnelRemoteHost, 1521);
+	        session.setTimeout(3000);
 	        session.connect();
 	        session.openChannel("direct-tcpip");
 	        
@@ -104,10 +105,11 @@ public class DAOImp implements DAO {
 	        } else {
 	        	return null;
 	        }
-		} catch (JSchException e){
+		} catch (Exception  e){
 			e.printStackTrace();
 			return null;
 		}
+//		System.out.println("vege");
 	}
 	
 	public synchronized List<Question> getQuestions(int minDiff, int maxDiff, List<Integer> topicList, int n) {
@@ -574,7 +576,7 @@ public class DAOImp implements DAO {
 	}
 
 	public synchronized Map<String,Integer> getQuestionQuantityByCategory() {
-		System.out.println("1.lekérdezés");
+		System.out.println("1.lekï¿½rdezï¿½s");
 		Map<String,Integer> re = new HashMap<String,Integer>();
 		
 		Session session = openSSHTunnel();
@@ -597,7 +599,7 @@ public class DAOImp implements DAO {
 	}
 
 	public synchronized List<Statistics> getTopTenPlayersStatistics() {
-		System.out.println("2.lekérdezés");
+		System.out.println("2.lekï¿½rdezï¿½s");
 		
 		List<Statistics> stats = new ArrayList<Statistics>();
 		
@@ -633,7 +635,7 @@ public class DAOImp implements DAO {
 	}
 
 	public synchronized Map<String, Integer> getUserQuestionQuantity() {
-		System.out.println("3.lekérdezés");
+		System.out.println("3.lekï¿½rdezï¿½s");
 		Map<String,Integer> re = new HashMap<String,Integer>();
 		
 		Session session = openSSHTunnel();

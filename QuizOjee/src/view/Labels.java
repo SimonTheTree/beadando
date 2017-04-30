@@ -18,6 +18,7 @@ public final class Labels {
 	public static final String LBL_TITLE_PROFILE = "Profile"; 
 	public static final String LBL_TITLE_LOGIN = "Login"; 
 	public static final String LBL_TITLE_REGISTER = "Register"; 
+	public static final String LBL_TITLE_REPORT = "Report @"; 
 	public static final String LBL_DIFFICULITY = "Difficulity"; 
 	public static final String LBL_NUMBER_OF_QUESTIONS = "Number of questions:"; 
 	public static final String LBL_MAP = "Map"; 
@@ -27,18 +28,24 @@ public final class Labels {
 	public static final String LBL_30_ROUNDS = "30 rounds"; 
 	public static final String LBL_BLITZKIREG = "Blitzkrieg"; 
 	public static final String LBL_REFERENCED_COMMENT = "Referenced comment: "; 	
-	public static final String LBL_USER_UNAME = "Username: "; 	
-	public static final String LBL_USER_RNAME = "Real name: "; 	
-	public static final String LBL_USER_AGE = "Age: "; 	
-	public static final String LBL_USER_POINTS = "Points: "; 	
-	public static final String LBL_USER_N_WINS = "Number of victories: "; 	
-	public static final String LBL_USER_N_DEFEATS = "Number of losses: "; 	
-	public static final String LBL_USER_N_RIGHT_ANS = "Right answers: "; 	
-	public static final String LBL_USER_N_WRONG_ANS = "Wrong answers: "; 	
-	public static final String LBL_USER_N_RIGHT_TIPS = "Right tips: "; 	
-	public static final String LBL_USER_N_WRONG_TIPS = "Wrong tips: ";
+	public static final String LBL_UNAME = "Username: "; 	
+	public static final String LBL_RNAME = "Real name: "; 	
+	public static final String LBL_AGE = "Age: "; 	
+	public static final String LBL_POINTS = "Points: "; 	
+	public static final String LBL_N_WINS = "Number of victories: "; 	
+	public static final String LBL_N_DEFEATS = "Number of losses: "; 	
+	public static final String LBL_N_RIGHT_ANS = "Right answers: "; 	
+	public static final String LBL_N_WRONG_ANS = "Wrong answers: "; 	
+	public static final String LBL_N_RIGHT_TIPS = "Right tips: "; 	
+	public static final String LBL_N_WRONG_TIPS = "Wrong tips: ";
 	public static final String LBL_NO_ACCOUNT_YET = "Don't have an account yet?";
 	public static final String LBL_QUIZ_QUESTION_INDEX = "Question @ of @";
+	public static final String LBL_EARNED_POINTS = "Points earned:";
+	public static final String LBL_QUESTION_DIFFICULTIES = "Question difficulities";
+	public static final String LBL_DIFFICULTY = "difficulity";
+	public static final String LBL_NUMBER = "number";
+	public static final String LBL_TERRITORIES_WON = "territories won";
+	public static final String LBL_TERRITORIES_LOST = "territories lost";
 	
 	
 	public static final String MSG_FIELD_EMPTY = " field is was empty.";

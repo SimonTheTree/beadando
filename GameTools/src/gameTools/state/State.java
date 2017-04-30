@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gameTools.state;
 
 import java.awt.Color;
@@ -11,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Semaphore;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -27,12 +22,14 @@ import javax.swing.SwingUtilities;
  * @see StateManager
  */
 public abstract class State extends JPanel{
-    private final Semaphore mutex = new Semaphore(1); //for rendering
+//    private final Semaphore mutex = new Semaphore(1); //for rendering
     
     private volatile boolean running = false;
     protected long ticks = 0;
     
-    private BufferedImage screen;
+    protected BufferedImage screen;
+    protected final ScreenLock screenLock = new ScreenLock();
+    static class ScreenLock{};
     protected Graphics2D g;
     
     private Thread renderThread, updateThread;
@@ -42,13 +39,7 @@ public abstract class State extends JPanel{
         @Override
         public void run() {
             do{
-                try{
-                    mutex.acquire();
-                    update();
-                } catch (InterruptedException ex) {
-                } finally {
-                  mutex.release();
-                }
+                update(); 
                 ticks++;
                 tpsCounter.interrupt();
                 
@@ -63,18 +54,15 @@ public abstract class State extends JPanel{
         @Override
         public void run() {
             do{
-                try{
-                    mutex.acquire();
-                    render();
-                } catch (InterruptedException ex) {
-                } finally {
-                  mutex.release();
-                }
-                SwingUtilities.invokeLater(() -> {
-                        paintImmediately(0, 0, width, height);
-                    }
-                );
-                fpsCounter.interrupt();
+                synchronized (screenLock) {
+                	render();					
+				}
+                try {
+					SwingUtilities.invokeAndWait(() -> {paintImmediately(0, 0, width, height);});
+				} catch (InvocationTargetException | InterruptedException e) {
+					e.printStackTrace();
+				}
+                fpsCounter.interrupt(); 
                 
                 //handle max fps
                 if (fpsCounter.fps() > maxFps){
@@ -130,19 +118,20 @@ public abstract class State extends JPanel{
         g = screen.createGraphics();
     }
     
-    public void start(){
+    public final void start(){
     	onStart();
         if(!running){
             running = true;
             updateThread = new Thread(updateRunnable);
+            updateThread.setName(this.name+"-update-cycle");
             renderThread = new Thread(renderRunnable);
+            renderThread.setName(this.name+"-render-cycle");
             updateThread.start();
             renderThread.start();
         }
-//        repaint();
     }
     
-    public void stop(){
+    public final void stop(){
         running = false;
         soundManager.stopAllSounds();
         onStop();
@@ -190,13 +179,11 @@ public abstract class State extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-    	try{
-            mutex.acquire();
-            g.drawImage(screen, 0, 0, width, height, this);
-        } catch (InterruptedException ex) {
-        } finally {
-          mutex.release();
-        }
+        synchronized (screenLock) {
+        	//draws the screen image(that which the render function painted on) onto the panel
+        	g.drawImage(screen, 0, 0, width, height, this);				
+		};
+        
     }
       
 }
