@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.Map;
 
 import controller.Commands;
 import controller.Controller;
@@ -21,6 +22,7 @@ import gameTools.map.Layout;
 import gameTools.map.Orientation;
 import gameTools.map.generators.MapGeneratorHexRectangleFlat;
 import view.Labels;
+
 import model.Topic;
 
 
@@ -30,18 +32,13 @@ public class Main {
 		System.out.println("hello");
 		
 		Controller c = new Controller();
-		
-		List<Topic> topics = c.getTopics(); 
-		System.out.println(topics.size());
-		for(Topic topic : topics) {
-			System.out.println(topic);
+		 
+		Map<String,Integer> favs = c.getFavMaps("ganter"); 
+		for(String name : favs.keySet()) {
+			System.out.println(name + " " + favs.get(name));
 		}
-		
-		List<Integer> topicIdList = new ArrayList<Integer>();
-		topicIdList.add(2);
-		System.out.println(c.getNumOfQuestions(0, 10, topicIdList));
-		
-		//DEMO kapcsolat a host-kliens kozott.
+
+				//DEMO kapcsolat a host-kliens kozott.
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
 		//Megertesehez ajanlom a GameHost es GameClient osztaly leirasanak olvasgatasat :P
 		
@@ -62,17 +59,18 @@ public class Main {
 
 //		hostThread().start();
 //		clientThread("asd",false).start();
-//		clientThread("asd2",false).start();
-//		clientThread("Mr.Troll",true).start();
+		//clientThread("asd2",false).start();
+		//clientThread("Mr.Troll",true).start();
 	}
 	
 	public static Thread hostThread() {
 		return new Thread() {
 			public void run() {
-				GameHost host = null;
+				GameHost host = new GameHost();
+				host.addInputListener(hostInputListener(host));
+				host.setMaxPlayers(3);
 				try {
-					host = new GameHost();
-					host.addInputListener(hostInputListener(host));
+					host.start();
 					while(!host.isStarted()) {Thread.sleep(100);}
 					Set<String> uNames = host.getUserNames();
 					String[] userNames = new String[uNames.size()];
@@ -146,16 +144,16 @@ public class Main {
 	public static Thread clientThread(String uname, boolean trollkodik) {
 		return new Thread() {
 			public void run() {
-				GameClient client = null;
+				GameClient client = new GameClient();
 				try {
-					client = new GameClient("localhost", uname);
 					client.addInputListener(clientInputListener(uname));
+					client.start("localhost", uname);
 					while(!client.isStarted()) {Thread.sleep(100);}
 					client.sendMessage(new GameMessage(Commands.CHOOSE,uname,"1"));
 					if(trollkodik) {
 						client.abort();
 						Thread.sleep(1000);
-						client = new GameClient("localhost", uname);
+						client.start("localhost", uname);
 						client.addInputListener(clientInputListener(uname));
 						while(!client.isStarted()) {Thread.sleep(100);}
 						client.sendMessage(new GameMessage(Commands.CHOOSE,uname,"1"));

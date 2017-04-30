@@ -31,20 +31,29 @@ public class Controller {
 	private List<Question> questions;
 	private List<Integer> actualRaceTopicList = null;
 	private List<RaceQuestion> raceQuestions;
+	private List<Topic> topicList = null;
+	
+	//lekerdezesekhez
 	private Map<String,Integer> questionQuantityByCategory = null;
 	private List<Statistics> topTenPlayers = null;
 	private Map<String,Integer> userQuestionQuantity = null;
-	private List<Topic> topicList = null;
+	private Map<String, Integer> topFiveMaps = null;
+	private String userQuestionsUname = null;
+	private List<String[]> userQuestions = null;
+	private List<String[]> gameWinners = null;
+	private String winnersMap = null;
+	private List<String> winners = null;
+	private String favMapsUname = null;
+	private Map<String,Integer> favMaps = null;
 	
 	public Controller() {
 		db = new DAOImp();
-		gui = MainWindow.getInstance(this);
+		//gui = MainWindow.getInstance(this);
 		maxDifficulty = db.getMax("difficulty");
 		System.out.println(maxDifficulty);
 		maxTopicId = db.getMax("TOPIC_ID");
 		System.out.println("maxDifficulty "+maxDifficulty);
 		setThemNummThread();
-		
 	}
 	
 	/**
@@ -282,6 +291,9 @@ public class Controller {
     	return maxTopicId;
     }
 
+    /** 
+     * Beallit mindent nullra idonkent.
+     */
 	private void setThemNummThread() {
 		Thread t = new Thread(() -> {
 			while(true) {
@@ -290,19 +302,36 @@ public class Controller {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				actualTopicList = null;
+				questions = null;
+				actualRaceTopicList = null;
+				raceQuestions = null;
+				topicList = null;
+				
+				//lekerdezesekhez
 				questionQuantityByCategory = null;
 				topTenPlayers = null;
 				userQuestionQuantity = null;
+				topFiveMaps = null;
+				userQuestionsUname = null;
+				userQuestions = null;
+				gameWinners = null;
+				winnersMap = null;
+				winners = null;
+				favMapsUname = null;
+				favMaps = null;
 			}
 		});
 		t.setDaemon(true);
 		t.start();
 	}
 	
+	//TODO lekerdezesek
+	
     /** 
      * 1. lekerdezes<p>
      * @param category : Milyen kategoriaban.
-     * @return Hany kerdes van. (normal+race)
+     * @return Hany kerdes van. (normal+race) vagy null
      */
     public int getQuestionQuantityByCategory(String category) {
     	if(questionQuantityByCategory == null) {
@@ -313,7 +342,7 @@ public class Controller {
     
     /** 
      * 2. lekerdezes<p>
-     * @return Top 10 jatekos statisztikaja.
+     * @return Top 10 jatekos statisztikaja. vagy null
      */
     public List<Statistics> getTopTenPlayersStatistics() {
     	if(topTenPlayers == null) {
@@ -325,7 +354,7 @@ public class Controller {
     /** 
      * 3. lekerdezes.<p>
      * @param uname : Melyik jatekos.
-     * @return Hany kerdessel jarult hozza a jatekhoz. (normal+race)
+     * @return Hany kerdessel jarult hozza a jatekhoz. (normal+race) vagy null
      */
     public int getUserQuestionQuantity(String uname) {
     	if(userQuestionQuantity == null) {
@@ -334,4 +363,70 @@ public class Controller {
     	return userQuestionQuantity.get(uname)==null?0:userQuestionQuantity.get(uname);    	
     }
 
+    /** 
+     *4. lekerdezes.<p>
+     *@return Az 5 leggyakrabban használt map nevet. 
+     */
+	public Map<String, Integer> getTopFiveMaps() {
+		if(topFiveMaps == null) {
+			topFiveMaps = db.getTopFiveMaps();
+		}
+		return topFiveMaps;
+	}
+	/** 
+	 *5. lekerdezes.<p>
+	 *@return A user altal felrakott kerdesek topicnevvel kiirva. vagy null
+	 */
+	public List<String[]> getUserQuestions(String uname) {
+		if(userQuestions != null) {
+			userQuestionsUname = uname;
+			userQuestions = db.getUserQuestions(uname);
+		} else if(userQuestionsUname != null && !userQuestionsUname.equals(uname)) {
+			userQuestionsUname = uname;
+			userQuestions = db.getUserQuestions(uname);
+		}
+		return userQuestions;
+	}
+	
+	/** 
+	 * 6. lekerdezes.<p>
+	 * @return kilistazza a befejezett jatekok nyerteseit, a nevuket, a nyero pontszamot, es a csatateret (terkep) vagy null
+	 */
+	public List<String[]> getGameWinners() {
+		if(gameWinners == null) {
+			gameWinners = db.getGameWinners();
+		}
+		return gameWinners;
+	}
+	
+	/** 
+	 * 7. lekerdezes.<p>
+	 * @return az adott mapon tortent jatekok nyerteseit es pontszamat (mapnev alapjan!) vagy null
+	 */
+	public List<String> getWinners(String map) {
+		if(winners == null) {
+			winnersMap = map;
+			winners = db.getWinners(map);
+		} else if(winnersMap != null && !winnersMap.equals(map)) {
+			winnersMap = map;
+			winners = db.getWinners(map);
+		}
+		return winners;
+	}
+	
+	/**
+	 *8. lekerdezes.<p>
+	 *@return Az adott user kedvenc mapjait, es azt, hogy hanyszor volt rajtuk. vagy null
+	 */
+	public Map<String, Integer> getFavMaps(String uname) {
+		if(favMaps != null) {
+			favMapsUname = uname;
+			favMaps = db.getFavMaps(uname);
+		} else if(favMapsUname != null && !favMapsUname.equals(uname)) {
+			favMapsUname = uname;
+			favMaps = db.getFavMaps(uname);
+		}
+		return favMaps;
+	}
+	
 }

@@ -61,4 +61,15 @@ public interface DAO {
 	List<RaceQuestion> getRaceQuestions(List<Integer> topicList, int n);
 
 	List<Topic> getTopics();
+
+	Map<String, Integer> getTopFiveMaps();
+	
+	List<String[]> getUserQuestions(String uname);
+	
+	List<String[]> getGameWinners();
+	
+	List<String> getWinners(String map);
+	
+	Map<String,Integer> getFavMaps(String uname);
+
 }

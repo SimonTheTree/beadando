@@ -8,10 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +21,8 @@ import java.util.TimerTask;
  * 
  * <b>Hasznalata:</b><br>
  * - hozz letre egy uj objektumot belole.<br>
- * - addolj egy {@link GameInputListener}t.<br>
+ * - addolj egy {@link GameInputListener}t, allitsd be a maxPlayers-t.<br>
+ * - {@link start} <br>
  * - varj addig, amig mindenki csatlakozott. Ezt az {@link #isStarted()} metodussal tesztelheted.<br>
  * - {@link #broadCast} vagy {@link #sendMessage} metodusokkal kommunikalj a {@link GameClient}-ekkel.<br>
  * - vegen hivd meg az {@link #abort()} metodust.<p>
@@ -44,7 +43,7 @@ public class GameHost {
 	private Map<String,PrintWriter> outs = new HashMap<String,PrintWriter>();
 	private Map<String,BufferedReader> ins = new HashMap<String,BufferedReader>();
 	private Map<String,Boolean> alive = new HashMap<String,Boolean>();
-	private final int maxPlayers = 1;
+	private int maxPlayers = 1;
 	private static final String host = "@host@";
 	private boolean started = false;
 	private boolean someoneExited = false;
@@ -60,7 +59,13 @@ public class GameHost {
 	 * Ha csatlakoztak elegen automatikusan elindul.
 	 * @throws IOException ha nem sikerult servert inditani.
 	 */
-	public GameHost() throws IOException {
+	public GameHost() {}
+	
+	public void setMaxPlayers(int maxPlayers) {
+		this.maxPlayers = maxPlayers;
+	}
+	
+	public void start() throws IOException {
 		////System.err.println("GameHost");
 		Thread t = new Thread(){			
 			@Override
@@ -71,7 +76,7 @@ public class GameHost {
 		t.start();
 		while(!triedToOpenServer);
 		if(failedToStartServer) throw new IOException();
-		////System.err.println("GameHost END");
+		////System.err.println("GameHost END");		
 	}
 	
 	/**

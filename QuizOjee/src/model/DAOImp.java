@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import com.jcraft.jsch.*;
 
 import model.exceptions.UserAlreadyExistsException;
@@ -21,43 +20,42 @@ import ssh.SshCredentials;
 
 public class DAOImp implements DAO {
 
+	//Connection
 	private static final String DATABASE_LINK = "localhost:1521:kabinet";
-	private static final String SQL_GET_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, answer1, answer2, answer3, topic_id, difficulty, author, dbms_random.value AS rand FROM NORMAL_QUESTIONS "
-			+ "WHERE difficulty BETWEEN ? and ? ";
+
+	//Question
+	private static final String SQL_GET_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, answer1, answer2, answer3, topic_id, difficulty, author, dbms_random.value AS rand FROM NORMAL_QUESTIONS WHERE difficulty BETWEEN ? and ? ";
 	private static final String SQL_GET_RACE_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, topic_id, author, dbms_random.value AS rand FROM RACE_QUESTIONS ";
 	
-	private static final String SQL_CHECK_USER = "SELECT uname, password FROM USERS "
-			+ "WHERE uname = ? and password = ?";
-	private static final String SQL_GET_USER = "SELECT uname, password, age, real_name FROM USERS "
-			+ "WHERE uname = ?";
-    private static final String SQL_ADD_USER =
-            "INSERT INTO USERS " +
-            "(uname, password, real_name, age, wins, defeats, points, right_answers, wrong_answers, right_tips, wrong_tips) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String SQL_MODIFY_USER = 
-			"UPDATE USERS " +
-			"SET password = ?, real_name = ?, age = ? " +
-			"WHERE uname = ?";
-	private static final String SQL_DEL_USER = "DELETE FROM USERS "
-			+ "WHERE uname = ?";
+	//User
+	private static final String SQL_CHECK_USER = "SELECT uname, password FROM USERS WHERE uname = ? and password = ?";
+	private static final String SQL_GET_USER = "SELECT uname, password, age, real_name FROM USERS WHERE uname = ?";
+    private static final String SQL_ADD_USER = "INSERT INTO USERS (uname, password, real_name, age, wins, defeats, points, right_answers, wrong_answers, right_tips, wrong_tips) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String SQL_MODIFY_USER = "UPDATE USERS SET password = ?, real_name = ?, age = ? WHERE uname = ?";
+	private static final String SQL_DEL_USER = "DELETE FROM USERS WHERE uname = ?";
 
-	private static final String SQL_GET_AGE_STATISTICS = "SELECT uname, age, points, wins, defeats, right_answers, wrong_answers, right_tips, wrong_tips FROM USERS "
-			+ "WHERE age BETWEEN ? and ?";
+	//Statistics
+	private static final String SQL_GET_USER_STATISTICS = "SELECT uname, age, points, wins, defeats, right_answers, wrong_answers, right_tips, wrong_tips FROM USERS WHERE uname = ?";
+	private static final String SQL_UPDATE_STATISTICS = "UPDATE USERS SET age = ?, points = ?, wins = ?, defeats = ?, right_answers = ?, wrong_answers = ?, right_tips = ?, wrong_tips = ? WHERE uname = ?";
+	private static final String SQL_GET_AGE_STATISTICS = "SELECT uname, age, points, wins, defeats, right_answers, wrong_answers, right_tips, wrong_tips FROM USERS WHERE age BETWEEN ? and ?";
 
-	private static final String SQL_GET_USER_STATISTICS = "SELECT uname, age, points, wins, defeats, right_answers, wrong_answers, right_tips, wrong_tips FROM USERS "
-			+ "WHERE uname = ?";
-
-	// tudom hogy ronda,de nem ment preparedStatement-tel:
+	//tudom hogy ronda,de nem ment preparedStatement-tel:
 	private static final String SQL_MAX_DIFFICULTY = "SELECT MAX(difficulty) FROM NORMAL_QUESTIONS";
 	private static final String SQL_MAX_TOPIC_ID = "SELECT MAX(topic_id) FROM NORMAL_QUESTIONS";
 	
+	//Topic
+	private static final String SQL_GET_TOPICS_WITH_NUMBERS = "select T1.topic_id, normalDB, NVL(raceDBnull,0) AS raceDB, T1.difficulty, name FROM ( select count(*) AS normalDB, difficulty, topic_id FROM NORMAL_QUESTIONS group by topic_id, difficulty order by topic_id, difficulty ) T1 LEFT JOIN ( select count(*) AS raceDBnull, topic_id FROM RACE_QUESTIONS group by topic_id order by topic_id ) T2 ON T1.topic_id = T2.topic_id, QUESTION_TOPICS where T1.topic_id = question_topics.topic_ID";
+	
 	//Lekerdezesek:
 	private static final String SQL_GET_QUESTION_QUANTITY_BY_CATEGORY = "SELECT T1.NAME AS \"temakor\", (T1.\"count\" + T2.\"count\") AS \"kerdesek_szama\" FROM ( SELECT QT.NAME, COUNT(NQ.TOPIC_ID) AS \"count\" FROM QUESTION_TOPICS QT LEFT JOIN NORMAL_QUESTIONS NQ ON QT.TOPIC_ID=NQ.TOPIC_ID GROUP BY QT.NAME ) T1 LEFT JOIN (SELECT QT.NAME, COUNT(RQ.TOPIC_ID) AS \"count\" FROM QUESTION_TOPICS QT LEFT JOIN RACE_QUESTIONS RQ ON QT.TOPIC_ID=RQ.TOPIC_ID GROUP BY QT.NAME ) T2 ON T1.NAME = T2.NAME ORDER BY \"kerdesek_szama\" DESC";
-	private static final String SQL_GET_TOP_TEN = "SELECT * FROM(SELECT UNAME, POINTS, WINS, DEFEATS, RIGHT_ANSWERS, WRONG_ANSWERS, RIGHT_TIPS, WRONG_TIPS, age FROM USERS ORDER BY POINTS DESC, WINS DESC, DEFEATS ASC, RIGHT_ANSWERS DESC, WRONG_ANSWERS ASC, RIGHT_TIPS DESC , WRONG_TIPS ASC, AGE ASC) WHERE ROWNUM <= 10";
+	private static final String SQL_GET_TOP_TEN_PLAYERS = "SELECT * FROM(SELECT UNAME, POINTS, WINS, DEFEATS, RIGHT_ANSWERS, WRONG_ANSWERS, RIGHT_TIPS, WRONG_TIPS, age FROM USERS ORDER BY POINTS DESC, WINS DESC, DEFEATS ASC, RIGHT_ANSWERS DESC, WRONG_ANSWERS ASC, RIGHT_TIPS DESC , WRONG_TIPS ASC, AGE ASC) WHERE ROWNUM <= 10";
 	private static final String SQL_GET_USER_QUESTION_QUANTITY = "SELECT T1.UNAME AS \"username\", 	(T1.\"count\" + T2.\"count\") AS \"kerdesek_szama\" FROM (SELECT UT.UNAME,COUNT(UT.UNAME) AS \"count\" FROM USERS UT LEFT JOIN NORMAL_QUESTIONS NQ ON UT.UNAME=NQ.AUTHOR GROUP BY UT.UNAME) T1 LEFT JOIN (SELECT UT.UNAME,COUNT(UT.UNAME) AS \"count\" FROM USERS UT LEFT JOIN RACE_QUESTIONS NQ ON UT.UNAME=NQ.AUTHOR GROUP BY UT.UNAME) T2 ON T1.UNAME = T2.UNAME ORDER BY \"kerdesek_szama\" DESC";
-	private static final String SQL_UPDATE_STATISTICS = "UPDATE USERS SET age = ?, points = ?, wins = ?, defeats = ?, right_answers = ?, wrong_answers = ?, right_tips = ?, wrong_tips = ?" +
-			"WHERE uname = ?";
-	private static final String SQL_GET_TOPICS_WITH_NUMBERS = "select T1.topic_id, normalDB, NVL(raceDBnull,0) AS raceDB, T1.difficulty, name FROM ( select count(*) AS normalDB, difficulty, topic_id FROM NORMAL_QUESTIONS group by topic_id, difficulty order by topic_id, difficulty ) T1 LEFT JOIN ( select count(*) AS raceDBnull, topic_id FROM RACE_QUESTIONS group by topic_id order by topic_id ) T2 ON T1.topic_id = T2.topic_id, QUESTION_TOPICS where T1.topic_id = question_topics.topic_ID";
+	private static final String SQL_GET_TOP_FIVE_MAPS = "SELECT * FROM (SELECT M.NAME AS \"Terkep\", T.N_MAP AS \"Nepszeruseg\" FROM (SELECT MAP_ID, COUNT(MAP_ID) AS N_MAP FROM GAMES GROUP BY MAP_ID ) T LEFT JOIN MAPS M ON M.MAP_ID=T.MAP_ID) WHERE ROWNUM <= 5 ORDER BY \"Nepszeruseg\" DESC";
+	private static final String SQL_GET_USERQUESTIONS = "SELECT \"kerdes\", \"valasz\", \"temakor\" FROM (SELECT QUESTION AS \"kerdes\", TO_CHAR(RIGHT_ANSWER) AS \"valasz\", QUESTION_TOPICS.NAME AS \"temakor\" FROM RACE_QUESTIONS, QUESTION_TOPICS WHERE RACE_QUESTIONS.TOPIC_ID = QUESTION_TOPICS.TOPIC_ID AND RACE_QUESTIONS.AUTHOR LIKE ? ) UNION ALL ( SELECT QUESTION AS \"kerdes\", RIGHT_ANSWER AS \"valasz\", QUESTION_TOPICS.NAME AS \"temakor\" FROM NORMAL_QUESTIONS, QUESTION_TOPICS WHERE NORMAL_QUESTIONS.TOPIC_ID = QUESTION_TOPICS.TOPIC_ID AND NORMAL_QUESTIONS.AUTHOR LIKE ? )";
+	private static final String SQL_GET_GAME_WINNERS = "SELECT U.UNAME AS \"username\", U.REAL_NAME AS \"nev\", T.WINNERSCORE AS \"elert_pontszam\", M.NAME AS \"terkep\" FROM ( SELECT MAP_ID, CASE GREATEST(PLAYER1_SCORE, PLAYER2_SCORE, PLAYER3_SCORE)  WHEN PLAYER1_SCORE THEN PLAYER1 WHEN PLAYER2_SCORE THEN PLAYER2 WHEN PLAYER3_SCORE THEN PLAYER3 END AS winner, GREATEST(PLAYER1_SCORE, PLAYER2_SCORE, PLAYER3_SCORE) AS winnerScore FROM GAMES WHERE STATE = 'finished') T LEFT JOIN USERS U ON winner = U.UNAME LEFT JOIN MAPS M ON T.MAP_ID = M.MAP_ID";
+	private static final String SQL_GET_WINNERS = "SELECT CASE GREATEST(PLAYER1_SCORE,PLAYER2_SCORE,PLAYER3_SCORE) WHEN PLAYER1_SCORE THEN PLAYER1 WHEN PLAYER2_SCORE THEN PLAYER2 WHEN PLAYER3_SCORE THEN PLAYER3 END AS winner, GREATEST(PLAYER1_SCORE,PLAYER2_SCORE,PLAYER3_SCORE) AS winnerScore FROM MAPS M LEFT JOIN GAMES G ON M.MAP_ID = G.MAP_ID WHERE M.NAME LIKE ?";
+	private static final String SQL_GET_FAV_MAPS = "SELECT \"terkep\", count(\"terkep\") AS \"jatekok_szama\" FROM (SELECT ? AS \"jatekos_neve\", M.NAME AS \"terkep\", G.PLAYER1 AS \"p1\", G.PLAYER2 AS \"p2\", G.PLAYER3 AS \"p3\" FROM GAMES G LEFT JOIN MAPS M ON G.MAP_ID = M.MAP_ID WHERE M.NAME IS NOT NULL ) T WHERE (T.\"p1\" = T.\"jatekos_neve\" OR T.\"p2\" = T.\"jatekos_neve\" OR T.\"p3\" = T.\"jatekos_neve\") GROUP BY \"terkep\" ORDER BY \"jatekok_szama\" DESC";
+
 	
 	public DAOImp() {
 		/*
@@ -84,11 +82,8 @@ public class DAOImp implements DAO {
 	Session openSSHTunnel(){
 		try{
 			String host="linux.inf.u-szeged.hu"; // First level target
-	        String user="h670486";
-	        String password=""; //ezt a jelszó dolgot majd megoldom, de nem ma, már késő van...
 	        String tunnelRemoteHost="orania.inf.u-szeged.hu"; // The host of the second target
 	        int port=22;
-	
 	
 	        JSch jsch=new JSch();
 	        Session session=jsch.getSession(SshCredentials.getUser(), host, port);
@@ -218,7 +213,7 @@ public class DAOImp implements DAO {
 				RaceQuestion q = new RaceQuestion();
 				q.setQuestionId(rs.getInt("question_id"));
 				q.setQuestion(rs.getString("question"));
-				q.setRightAnswer(rs.getString("right_answer"));
+				q.setRightAnswer(Integer.parseInt(rs.getString("right_answer")));
 				q.setTopicId(rs.getInt("topic_id"));
 				q.setAuthor(rs.getString("author"));
 				questions.add(q);
@@ -574,13 +569,55 @@ public class DAOImp implements DAO {
 		}
 		return null;
 	}
+	
+	public synchronized List<Topic> getTopics() {
+		System.out.println("get Topics");
+			
+			Session session = openSSHTunnel();
+			if (session == null) return null;
+			
+			try (
+				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+				Statement st = conn.createStatement();
+			) {
+				ResultSet rs = st.executeQuery(SQL_GET_TOPICS_WITH_NUMBERS);
+				List<Topic> topics = new ArrayList<Topic>();
+				if(rs.next()) {
+					while(!rs.isAfterLast()) {
+						Topic topic = new Topic();
+						topic.setName(rs.getString("name"));
+						topic.setNumberOfRaceQuestions(rs.getInt("raceDB"));
+						int id = rs.getInt("topic_ID");
+						topic.setTopicId(id);
+						
+						Map<Integer,Integer> normals = new HashMap<Integer,Integer>();
+						normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
+
+						while(rs.next()) {
+							if(rs.getInt("topic_ID") != id) {
+								break;
+							}
+							normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
+						}
+						topic.setNumberOfQuestionsByDifficulty(normals);
+						topics.add(topic);
+					}
+				}
+				return topics;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				session.disconnect();
+			}
+			return null;
+		}
 
 	public synchronized Map<String,Integer> getQuestionQuantityByCategory() {
-		System.out.println("1.lek�rdez�s");
+		System.out.println("1.lekerdezes");
 		Map<String,Integer> re = new HashMap<String,Integer>();
 		
 		Session session = openSSHTunnel();
-		if (session == null) return re;
+		if (session == null) return null;
 		
 		try (
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
@@ -590,16 +627,18 @@ public class DAOImp implements DAO {
 			while(rs.next()) {
 				re.put(rs.getString("temakor"),Integer.parseInt(rs.getString("kerdesek_szama")));
 			}
+			return re;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			session.disconnect();
 		}
-		return re;
+		return null;
 	}
 
 	public synchronized List<Statistics> getTopTenPlayersStatistics() {
-		System.out.println("2.lek�rdez�s");
+		System.out.println("2.lekerdezes");
 		
 		List<Statistics> stats = new ArrayList<Statistics>();
 		
@@ -611,7 +650,7 @@ public class DAOImp implements DAO {
 			Statement st = conn.createStatement();
 		) {
 			
-			ResultSet rs = st.executeQuery(SQL_GET_TOP_TEN);
+			ResultSet rs = st.executeQuery(SQL_GET_TOP_TEN_PLAYERS);
 			while(rs.next()) {
 				Statistics stat = new Statistics();
 				stat.setUname(rs.getString("uname"));
@@ -625,21 +664,23 @@ public class DAOImp implements DAO {
 				stat.setWrongTips(rs.getInt("wrong_tips"));
 				stats.add(stat);
 			}
+			return stats;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			session.disconnect();
 		}
-		return stats;
+		return null;
 
 	}
 
 	public synchronized Map<String, Integer> getUserQuestionQuantity() {
-		System.out.println("3.lek�rdez�s");
+		System.out.println("3.lekerdezes");
 		Map<String,Integer> re = new HashMap<String,Integer>();
 		
 		Session session = openSSHTunnel();
-		if (session == null) return re;
+		if (session == null) return null;
 		
 		try (
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
@@ -649,16 +690,20 @@ public class DAOImp implements DAO {
 			while(rs.next()) {
 				re.put(rs.getString("username"),Integer.parseInt(rs.getString("kerdesek_szama")));
 			}
+			return re;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			session.disconnect();
 		}
-		return re;
+		return null;
 	}
-
-	public synchronized List<Topic> getTopics() {
-	System.out.println("get Topics");
+	
+	public synchronized Map<String, Integer> getTopFiveMaps() {
+		System.out.println("4.lekerdezes");
+		
+		Map<String, Integer> maps = new HashMap<String, Integer>();
 		
 		Session session = openSSHTunnel();
 		if (session == null) return null;
@@ -667,30 +712,45 @@ public class DAOImp implements DAO {
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
 			Statement st = conn.createStatement();
 		) {
-			ResultSet rs = st.executeQuery(SQL_GET_TOPICS_WITH_NUMBERS);
-			List<Topic> topics = new ArrayList<Topic>();
-			if(rs.next()) {
-				while(!rs.isAfterLast()) {
-					Topic topic = new Topic();
-					topic.setName(rs.getString("name"));
-					topic.setNumberOfRaceQuestions(rs.getInt("raceDB"));
-					int id = rs.getInt("topic_ID");
-					topic.setTopicId(id);
-					
-					Map<Integer,Integer> normals = new HashMap<Integer,Integer>();
-					normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
-
-					while(rs.next()) {
-						if(rs.getInt("topic_ID") != id) {
-							break;
-						}
-						normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
-					}
-					topic.setNumberOfQuestionsByDifficulty(normals);
-					topics.add(topic);
-				}
+			
+			ResultSet rs = st.executeQuery(SQL_GET_TOP_FIVE_MAPS);
+			while(rs.next()) {
+				maps.put(rs.getString("Terkep"),rs.getInt("nepszeruseg"));
 			}
-			return topics;
+			return maps;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+
+	}
+	
+	public synchronized List<String[]> getUserQuestions(String uname) {
+	System.out.println("5.lekerdezes");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			PreparedStatement pst = conn.prepareStatement(SQL_GET_USERQUESTIONS);
+		) {
+			pst.setString(1, uname);
+			pst.setString(2, uname);
+			ResultSet rs = pst.executeQuery();
+			
+			List<String[]> re = new ArrayList<>();
+			
+			while(rs.next()) {
+				String[] str = new String[3];
+				for(int i=0;i<3;++i) {
+					str[i] = rs.getString(i+1);
+				}
+				re.add(str);
+			}
+			return re;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -698,5 +758,90 @@ public class DAOImp implements DAO {
 		}
 		return null;
 	}
+	
+	public synchronized List<String[]> getGameWinners() {
+	System.out.println("6.lekerdezes");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_GAME_WINNERS);
+			
+			List<String[]> re = new ArrayList<>();
+			
+			while(rs.next()) {
+				String[] str = new String[4];
+				for(int i=0;i<4;++i) {
+					str[i] = rs.getString(i+1);
+				}
+				re.add(str);
+			}
+			return re;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+	
+	public synchronized List<String> getWinners(String map) {
+	System.out.println("7.lekerdezes");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			PreparedStatement pst = conn.prepareStatement(SQL_GET_WINNERS);
+		) {
+			pst.setString(1, map);
+			
+			ResultSet rs = pst.executeQuery();
+			
+			List<String> re = new ArrayList<>();
+			
+			while(rs.next()) {
+				re.add(rs.getString(1));
+			}
+			return re;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+	
+	public synchronized Map<String,Integer> getFavMaps(String uname) {
+	System.out.println("8.lekerdezes");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			PreparedStatement pst = conn.prepareStatement(SQL_GET_FAV_MAPS);
+		) {
+			pst.setString(1, uname);
+			ResultSet rs = pst.executeQuery();
+			
+			Map<String,Integer> re = new HashMap<String,Integer>();
+			while(rs.next()) {
+				re.put(rs.getString("terkep"),rs.getInt("jatekok_szama"));
+			}
+			return re;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+	
 	
 }

@@ -4,7 +4,7 @@ public class RaceQuestion {
 
 	private long questionId;
 	private String question;
-	private String rightAnswer;
+	private int rightAnswer;
 	private int topicId;
 	private String author;
 	
@@ -20,10 +20,10 @@ public class RaceQuestion {
 	public void setQuestion(String question) {
 		this.question = question;
 	}
-	public String getRightAnswer() {
+	public int getRightAnswer() {
 		return rightAnswer;
 	}
-	public void setRightAnswer(String rightAnswer) {
+	public void setRightAnswer(int rightAnswer) {
 		this.rightAnswer = rightAnswer;
 	}
 	public int getTopicId() {

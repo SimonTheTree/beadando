@@ -19,6 +19,7 @@ import controller.exceptions.HostDoesNotExistException;
  * <b>Hasznalata:</b> <br>
  *  - hozz letre egy uj objektumot belole.<br>
  *  - addolj egy {@link GameInputListener}-t.<br>
+ *  - {@link #start} <br>
  *  - varj addig, amig mindenki csatlakozott. Ezt az {@link #isStarted()} metodussal tesztelheted.<br>
  *  - {@link #sendMessage}-el kommunikalsz a {@link GameHost}-al<br>
  *  - nem kotelezo {@link #abort()}-olnod, ha a host leall, automatikusan megteszi.<p>
@@ -52,7 +53,9 @@ public class GameClient {
 	 *  - {@link HostDoesNotExistException}-t dob, ha nem valaszolt a host.... [van meg leiras]<p>
 	 * Kozvetetten elinditja az inputListenert egy uj szalon.
 	 */
-	public GameClient(String ip, String userName) throws GameIsStartedException, HostDoesNotExistException {
+	public GameClient() {}
+	
+	public void start(String ip, String userName) throws GameIsStartedException, HostDoesNotExistException {
 		this.userName = userName;
 		Thread t = new Thread(() -> {
 			buildConnection(ip,userName);
