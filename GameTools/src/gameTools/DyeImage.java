@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
- *  Ez az osztály kép és színmmanipulálási eljárásokat tartalmaz
+ *  Ez az osztaly kep es szinmmanipulalasi eljarasokat tartalmaz
  * @author ganter
  */
 

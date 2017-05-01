@@ -4,6 +4,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
 import view.components.GButton;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import gameTools.state.State;
 import resources.Resources;
@@ -36,7 +38,8 @@ public class MainState extends DefaultState {
 		GButton btnJoin = new GButton(Labels.BTN_JOIN_GAME);
 			btnJoin.setFont(Settings.FONT_BUTTON_MAIN);
 			btnJoin.addActionListener((e) -> {
-				
+				Settings.gameServer = JOptionPane.showInputDialog(root, Labels.MSG_ENTER_IP_ADDRESS);
+				root.setState(MainWindow.STATE_GAME);
 			});
 		GButton btnStats = new GButton(Labels.BTN_STATS);
 			btnStats.setFont(Settings.FONT_BUTTON_MAIN);

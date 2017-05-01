@@ -15,7 +15,7 @@ import java.awt.Point;
  */
 
 /**
- *  Hexagon cella melyet ki lehet rajzolni, és "tudja" melyik országhoz tartozik
+ *  Hexagon cella melyet ki lehet rajzolni, es "tudja" melyik orszaghoz tartozik
  * @author ganter
  */
 public class Cell extends TileHex{

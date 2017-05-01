@@ -40,7 +40,6 @@ public class GameCreatorState extends DefaultState {
 			btnStart.addActionListener((e) -> {
 				GameServer gs = new GameServer();
 				gs.createGame();
-//				gs.createGame();
 				System.out.println("game created switching to gamestate");
 				Settings.gameServer = "localhost";
 				root.setState(MainWindow.STATE_GAME);

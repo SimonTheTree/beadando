@@ -16,8 +16,8 @@ import java.util.ArrayList;
  */
 
 /**
- *  abstract Tile osztály. Ezen osztály leszármazottaiból készíthető térkép
- * a játékhoz 
+ *  abstract Tile osztaly. Ezen osztaly leszarmazottaibol keszitheto terkep
+ * a jatekhoz 
  * @author ganter
  * @param <T>
  */

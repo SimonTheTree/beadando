@@ -14,8 +14,8 @@ import com.jcraft.jsch.*;
 
 import model.exceptions.UserAlreadyExistsException;
 import model.exceptions.UserNotFoundException;
-// így oldottam meg, hogy ne legyen benne direkt a kódban a jelszavam, nem szeretném közzétenni...
-// kérlek ne törd fel :D
+// igy oldottam meg, hogy ne legyen benne direkt a kodban a jelszavam, nem szeretnem kozzetenni...
+// kerlek ne tord fel :D
 import ssh.SshCredentials; 
 
 public class DAOImp implements DAO {

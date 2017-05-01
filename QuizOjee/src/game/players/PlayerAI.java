@@ -8,6 +8,10 @@ package game.players;
 import game.GameBoard;
 import game.Territory;
 import gameTools.state.InputManager;
+import model.Question;
+import model.RaceQuestion;
+import model.User;
+
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -20,67 +24,85 @@ public class PlayerAI extends Player {
     public PlayerAI(){
         super();
     };
+    public PlayerAI(User u){
+    	super(u);
+    };
     
-    public PlayerAI(int color, int team) {
-        super(color, team);
+    public PlayerAI(User u, int color) {
+        super(u, color);
     }
-    public PlayerAI(int color) {
-        super(color);
+    public PlayerAI(User u, int color, int team) {
+    	super(u, color, team);
     }
+	@Override
+	public void selectTarget(GameBoard board, InputManager input) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String askQuestion(Question quest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public double askRaceQuestion(RaceQuestion quest) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    @Override
-    public void selectBase(GameBoard board, InputManager input) throws EndOfTurnException{
-        try{
-            //get all owned territories, that have attackable neighbors
-            ArrayList<Territory> validBase = new ArrayList<>();
-            for(Territory t : territories){
-                ArrayList<Territory> tn = t.getNeighborTerritories(board);
-                for (Territory next : tn) {                        
-                    if(next.getOwner().getTeam() != team && t.getStrength() > 1){
-                        if(!validBase.contains(t)) validBase.add(t);
-                    }
-                }
-            }
-            if(validBase.isEmpty()) throw new EndOfTurnException();
-
-            //select the strongest one [relative to the surrounding - hint for better ai]
-            Territory strongest = validBase.get(0);
-            for(Territory t : validBase){
-                if(t.getStrength() > strongest.getStrength()) strongest = t;
-            }
-
-            if(strongest.getStrength() == 1) throw new EndOfTurnException();
-
-            board.selectBase(strongest);
-
-            Thread.sleep(50);
-        } catch(NullPointerException | InterruptedException ignore){}
-    }
-    
-    @Override
-    public void selectTarget(GameBoard board, InputManager input) throws EndOfTurnException{
-        try{
-            //attack the strongest one still weaker of the neighbors
-            Territory base = board.getSelectedBase();
-
-            ArrayList<Territory> validTarget = new ArrayList<>();
-            ArrayList<Territory> tn = base.getNeighborTerritories(board);
-            for (Territory next : tn) {                        
-                if(next.getOwner().getTeam() != team && next.getStrength() <= base.getStrength()){
-                    if(!validTarget.contains(next)) validTarget.add(next);
-                }
-            }
-
-            if(validTarget.isEmpty()) throw new EndOfTurnException();
-
-            Territory target = validTarget.get(0);
-            for (Territory t : validTarget) {    
-                if(target.getStrength() <= t.getStrength() ) target = t;
-            } 
-
-            board.selectTarget(target);
-            Thread.sleep(50);
-        } catch(NullPointerException | InterruptedException ignore){}
-    }
+//    @Override
+//    public void selectBase(GameBoard board, InputManager input) throws EndOfTurnException{
+//        try{
+//            //get all owned territories, that have attackable neighbors
+//            ArrayList<Territory> validBase = new ArrayList<>();
+//            for(Territory t : territories){
+//                ArrayList<Territory> tn = t.getNeighborTerritories(board);
+//                for (Territory next : tn) {                        
+//                    if(next.getOwner().getTeam() != team && t.getStrength() > 1){
+//                        if(!validBase.contains(t)) validBase.add(t);
+//                    }
+//                }
+//            }
+//            if(validBase.isEmpty()) throw new EndOfTurnException();
+//
+//            //select the strongest one [relative to the surrounding - hint for better ai]
+//            Territory strongest = validBase.get(0);
+//            for(Territory t : validBase){
+//                if(t.getStrength() > strongest.getStrength()) strongest = t;
+//            }
+//
+//            if(strongest.getStrength() == 1) throw new EndOfTurnException();
+//
+//            board.selectBase(strongest);
+//
+//            Thread.sleep(50);
+//        } catch(NullPointerException | InterruptedException ignore){}
+//    }
+//    
+//    @Override
+//    public void selectTarget(GameBoard board, InputManager input) throws EndOfTurnException{
+//        try{
+//            //attack the strongest one still weaker of the neighbors
+//            Territory base = board.getSelectedBase();
+//
+//            ArrayList<Territory> validTarget = new ArrayList<>();
+//            ArrayList<Territory> tn = base.getNeighborTerritories(board);
+//            for (Territory next : tn) {                        
+//                if(next.getOwner().getTeam() != team && next.getStrength() <= base.getStrength()){
+//                    if(!validTarget.contains(next)) validTarget.add(next);
+//                }
+//            }
+//
+//            if(validTarget.isEmpty()) throw new EndOfTurnException();
+//
+//            Territory target = validTarget.get(0);
+//            for (Territory t : validTarget) {    
+//                if(target.getStrength() <= t.getStrength() ) target = t;
+//            } 
+//
+//            board.selectTarget(target);
+//            Thread.sleep(50);
+//        } catch(NullPointerException | InterruptedException ignore){}
+//    }
     
 }

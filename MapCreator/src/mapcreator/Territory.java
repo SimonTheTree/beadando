@@ -14,7 +14,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 /**
- *  Egy ország a térképen, eTileák összessége
+ *  Egy orszag a terkepen, eTileak osszessege
  * @author ganter
  */
 public class Territory {

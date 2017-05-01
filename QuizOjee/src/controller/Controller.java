@@ -48,7 +48,7 @@ public class Controller {
 	
 	public Controller() {
 		db = new DAOImp();
-		//gui = MainWindow.getInstance(this);
+		gui = MainWindow.getInstance(this);
 		maxDifficulty = db.getMax("difficulty");
 		System.out.println(maxDifficulty);
 		maxTopicId = db.getMax("TOPIC_ID");
@@ -365,7 +365,7 @@ public class Controller {
 
     /** 
      *4. lekerdezes.<p>
-     *@return Az 5 leggyakrabban használt map nevet. 
+     *@return Az 5 leggyakrabban hasznï¿½lt map nevet. 
      */
 	public Map<String, Integer> getTopFiveMaps() {
 		if(topFiveMaps == null) {

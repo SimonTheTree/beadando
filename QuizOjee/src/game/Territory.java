@@ -6,6 +6,7 @@
 package game;
 
 import game.players.Player;
+import gameTools.LineHD;
 import gameTools.PointHD;
 import gameTools.map.Layout;
 import gameTools.map.Map;
@@ -20,19 +21,24 @@ import java.awt.geom.PathIterator;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
- * Egy ország a térképen, cellák összessége
+ * Egy orszag a terkepen, cellak osszessege
  * 
  * @author ganter
  */
 public class Territory implements Serializable {
+	public static final Territory NULL_TERRITORY = new Territory();
 	private static int numOfTerritories = 0;
+	
+	public final List<Cell> cells; // inside
 	public final int id = ++numOfTerritories;
 	private Player owner;
-	public final List<Cell> cells; // inside
 	private boolean highlighted;
 	private boolean needsRender = true;
 
@@ -149,6 +155,13 @@ public class Territory implements Serializable {
 		for (Cell c : cells) {
 			c.render(g, layout);
 		}
+		
+		g.setColor(Color.BLACK);
+//		if(id==1){
+			for(LineHD l : getBorderLines(layout)){
+	            g.drawLine(l.A.getIntx(), l.A.getInty(), l.B.getIntx(), l.B.getInty());
+	        }
+//		}
 
 		// draw strength
 		g.setColor(Color.WHITE);
@@ -171,34 +184,27 @@ public class Territory implements Serializable {
 		}
 	}
 	
-    Polygon getBorder(Layout layout){
-    	Polygon border = new Polygon();
-    	int step = (layout.size.x < layout.size.y)? layout.size.x : layout.size.y;
+	
+	
+	Set<LineHD> getBorderLines(Layout layout){
+//		System.out.println();
+//		System.out.println();
+//		System.out.println("calcBorder");
+//		System.out.println();
+//		System.out.println();
+    	Set<LineHD> border = new TreeSet<>(LineHD.COMPARATOR);
     	for(Cell c : cells){
-    		for(int i = 0; i < 6; i++){
-    			int val = 0;
-    			PointHD p = c.hexCornerOffset(layout, i);
-    			PointHD p1 = p.add(new PointHD(step, 0));
-    			PointHD p2 = p.add(new PointHD(-step, 0));
-    			PointHD p3 = p.add(new PointHD(0, step));
-    			PointHD p4 = p.add(new PointHD(0, -step));
-    			if (cells.contains(c.fromPixel(p1.getIntx(), p1.getInty(), layout))){
-    				val++;
-    			}
-    			if (cells.contains(c.fromPixel(p2.getIntx(), p2.getInty(), layout))){
-    				val++;
-    			}
-    			if (cells.contains(c.fromPixel(p3.getIntx(), p3.getInty(), layout))){
-    				val++;
-    			}
-    			if (cells.contains(c.fromPixel(p4.getIntx(), p4.getInty(), layout))){
-    				val++;
-    			}
-    			if(val <= 2) {
-    				border.addPoint(p.getIntx(), p.getInty());
+    		for(LineHD l : c.getBorderLines(layout)){
+    			if(border.contains(l)){
+    				border.remove(l);
+//    				System.out.println("KI  : " + l);
+    			} else {
+    				border.add(l);
+//    				System.out.println("BELE: " + l);
     			}
     		}
     	}
+    	return border;
     }
 
 }

@@ -1,6 +1,5 @@
 package view.states;
 
-import gameTools.state.State;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
@@ -115,13 +114,6 @@ public class StatsState extends DefaultState {
 		setLayout(groupLayout);
 		root = r;
 		
-	}
-	
-	
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

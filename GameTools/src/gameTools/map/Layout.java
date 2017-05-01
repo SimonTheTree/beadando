@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 
 /**
- *  Ez az osztály meghatározza hogy az egyes cellákat egy map hogyan rajzolja ki
+ *  Ez az osztaly meghatarozza hogy az egyes cellakat egy map hogyan rajzolja ki
  * @author ganter
  */
 public class Layout implements Serializable{

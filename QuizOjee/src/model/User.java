@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 import controller.PasswordCoder;
 
 /** 
@@ -11,7 +13,7 @@ import controller.PasswordCoder;
  * - realName<br>
  * - age<br>
  */
-public class User {
+public class User implements Serializable{
 
 	private String username;
 	private String password;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import gameTools.map.Tile;
 
 /**
- *  mapgenerátor interfész: ide van belekódolva ( az alosztályokban) hogy milxen függvény alapján hozza létre a térképet
+ *  mapgenerator interfesz: ide van belekodolva ( az alosztalyokban) hogy milxen fuggveny alapjan hozza letre a terkepet
  * @author ganter
  * @param <T>
  */

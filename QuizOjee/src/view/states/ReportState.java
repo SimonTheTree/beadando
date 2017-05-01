@@ -43,9 +43,9 @@ public class ReportState extends DefaultState {
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		User u = new User();
-		u.setUsername("alfréd");
+		u.setUsername("alfred");
 		User u2 = new User();
-		u2.setUsername("béni");
+		u2.setUsername("beni");
 		rs.start();
 		PlayerReport[] p = new PlayerReport[2];
 		
@@ -58,7 +58,7 @@ public class ReportState extends DefaultState {
 		}
 
 		p[0] =  new PlayerReport(u);
-		p[0].setQuestNVal(Settings.quiz_numOfQuestions);
+		p[0].setQuestNVal(Settings.game_numOfQuestions);
 		p[0].setRAnsVal(10);
 		p[0].setWAnsVal(20);
 		p[0].setTblDiff(diffN);

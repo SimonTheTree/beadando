@@ -65,21 +65,21 @@ public class MjkToSQL {
 
                             isQuestion = true;
 
-                            //SQL-escape-eljük a sort (' ->\')
+                            //SQL-escape-eljuk a sort (' ->\')
                             line = line.replace("'", "''");
                             
-                            //kiszedjük a kérdést:
+                            //kiszedjuk a kerdest:
                             question = line.substring(line.indexOf("=") + 1, line.indexOf("^"));
 
-                            //kiszedjük a helyes választ:
-                            //^& van előtte, és utána ^ vagy sorvége van
+                            //kiszedjuk a helyes valaszt:
+                            //^& van elotte, es utana ^ vagy sorvege van
                             Pattern pattern = Pattern.compile("(?<=\\^&).*?(?=(\\^|$))");
                             Matcher matcher = pattern.matcher(line);
                             matcher.find();
                             answer[0] = matcher.group();
 
-                            //kiszedjük a helytelen válaszokat
-                            //^ van előtte, nem &-el kezdődik, és utána ^ vagy sorvége van
+                            //kiszedjuk a helytelen valaszokat
+                            //^ van elotte, nem &-el kezdodik, es utana ^ vagy sorvege van
                             pattern = Pattern.compile("(?<=\\^)[^&](.*?)(?=(\\^|$))");
                             matcher = pattern.matcher(line);
                             matcher.find();

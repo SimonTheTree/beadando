@@ -9,8 +9,8 @@ import java.io.Serializable;
  */
 
 /**
- *  egy hexagon cella kétféleképpen állhat csúccsal fölfelé, vagy oldallal felfelé.
- * Ezen osztály statikus paraméterei ezt tartalmazzák
+ *  egy hexagon cella ketfelekeppen allhat csuccsal folfele, vagy oldallal felfele.
+ * Ezen osztaly statikus parameterei ezt tartalmazzak
  * @author ganter
  */
 public class Orientation extends Object implements Serializable{

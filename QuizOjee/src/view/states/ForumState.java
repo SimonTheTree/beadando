@@ -35,7 +35,7 @@ public class ForumState extends DefaultState {
 		panel.setLayout(null);
 			for(int i = 0; i < topics.size(); i++){
 				GButton btn = topics.get(i);
-				//tudom h nem szép, de úgy sincs átméretezés
+				//tudom h nem szep, de ugy sincs atmeretezes
 				btn.setBounds(5, i*40+5, Settings.MAIN_WINDOW_WIDTH-95, 35); 
 				panel.add(btn);
 				//set forumtopic states topic

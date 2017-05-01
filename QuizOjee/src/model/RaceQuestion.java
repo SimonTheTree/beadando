@@ -1,6 +1,8 @@
 package model;
 
-public class RaceQuestion {
+import java.io.Serializable;
+
+public class RaceQuestion implements Serializable{
 
 	private long questionId;
 	private String question;

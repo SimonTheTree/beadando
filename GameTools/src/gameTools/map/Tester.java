@@ -7,7 +7,7 @@ package gameTools.map;
  */
 
 /**
- *  egy cella megvizsgálásájoz szolgál vmien cellaspecifikus tulajdonság alapján
+ *  egy cella megvizsgalasajoz szolgal vmien cellaspecifikus tulajdonsag alapjan
  * @author ganter
  * @param <C>
  */

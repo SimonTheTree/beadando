@@ -152,7 +152,7 @@ public class Login extends JDialog {
 		for(int i = 0; i < msg.size(); i++){
 			GLabel label = msg.get(i);
 			System.out.println(msg.get(i).getText());
-			//tudom h nem szép, de úgy sincs átméretezés
+			//tudom h nem szep, de ugy sincs atmeretezes
 			label.setBounds(5, i*20+5, 300-10, 20); 
 			label.setForeground(Color.RED);
 			label.setFont(Settings.FONT_ERROR_MSG);

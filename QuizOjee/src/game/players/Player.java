@@ -10,6 +10,7 @@ import game.GameSettings;
 import game.Territory;
 import gameTools.state.InputManager;
 import model.RaceQuestion;
+import model.User;
 import model.Question;
 
 import java.awt.Color;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *  Abstaract játékos osztály, mely tulajdonképpen csak a játékos interfész miatt
+ *  Abstaract jatekos osztaly, mely tulajdonkeppen csak a jatekos interfesz miatt
  * fontos, hogy legyen.
  * @author ganter
  */
@@ -27,21 +28,30 @@ public abstract class Player implements Serializable{
     protected int color;
     protected ArrayList<Territory> territories;
     protected boolean isAlive;
+    protected User user;
     
     public Player(){
-        this(0);
+        this(null, 0);
     };
-    public Player(int color) {
-        this(color,0);
+    public Player(User u){
+    	this(u, 0);
+    };
+    public Player(User u, int color) {
+        this(u, color, 0);
         this.team = getId();
     }
-    public Player(int color, int team) {
-        this.color = color;
+    public Player(User u, int color, int team) {
+        this.user = u;
+    	this.color = color;
         this.team = team;
         territories = new ArrayList<>();
         GameSettings.getInstance().PLAYERS.add(this);
     }
 
+    public User getUser(){
+    	return user;
+    }
+    
     public Color getColor() {
         return GameSettings.getInstance().COLORS[color];
     }

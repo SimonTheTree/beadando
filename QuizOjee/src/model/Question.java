@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /** 
  * <b>Question</b><br>
  *  Egy feleletvalasztos kerdes tarolasara valo. <p>
@@ -15,7 +17,7 @@ package model;
  *   - difficulty - int<br>
  *   - author - String<br>
  */
-public class Question {
+public class Question implements Serializable{
 
 	private long questionId;
 	private String question;

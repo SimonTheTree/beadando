@@ -129,7 +129,7 @@ public abstract class TileHex<H extends TileHex> extends Tile<H>{
         double y_diff = Math.abs(ry - r);
         double z_diff = Math.abs(rz - (-q-r));
 
-        //eredmény javítása - normalizálás
+        //eredmeny javitasa - normalizalas
         if (Double.compare(x_diff, y_diff) > 0 && Double.compare(x_diff, z_diff) > 0){
             rx = -ry-rz;
         }else if (Double.compare(y_diff, z_diff) > 0){

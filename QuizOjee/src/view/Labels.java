@@ -62,6 +62,9 @@ public final class Labels {
 	public static final String MSG_SERVER_ERROR = "Server error";
 	public static final String MSG_CONFIRM_DELETE_USER = "<html><body style='text-align: center'> Are you shure you want to delete yourself? <br> This will erase all your stats forever. (Thats a very long time...). <br>You will be logged out immediatly after this operation.";
 	public static final String MSG_TITLE_CONFIRM = "Are you sure?";
+	public static final String MSG_ENTER_IP_ADDRESS = "Enter the server IP:";
+	public static final String MSG_GAME_STARTED = "The game has already started";
+	public static final String MSG_BAD_IP_ADDRESS = "The game has already started";
 	 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS

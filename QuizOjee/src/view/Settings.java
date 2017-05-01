@@ -3,10 +3,10 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.UIManager;
 
-import com.jcraft.jsch.jce.Random;
 
 import game.Cell;
 import game.players.Player;
@@ -14,6 +14,8 @@ import gameTools.map.Tile;
 
 public class Settings {
 
+	public static final Random RANDOM = new Random();
+	
 	// --------------------------------------------------------------//
 	// MAIN SETTINGS
 	// --------------------------------------------------------------//
@@ -46,13 +48,19 @@ public class Settings {
 	public static Color color_GLabelFont = Color.WHITE;
 	public static Color color_error = Color.RED;
 	public static Color color_success = new Color(0, 132, 0);
+	public static Color color_GButtonFont_inGame = Color.WHITE;
+	public static Color color_GButton_inGame = new Color(50, 50, 50);
+	public static Color color_GButtonHover_inGame =  new Color(70, 70,70);
+	public static Color color_GButtonClick_inGame = new Color(60, 60,100);
 	
 	// --------------------------------------------------------------//
 	// QUIZ SETTINGS
 	// --------------------------------------------------------------//
-	public static int quiz_numOfQuestions;
+	public static int game_numOfQuestions = 10;
+	public static int game_numOfRaceQuestions = 10;
 //	public static List<Topic> quiz_topicList;
-	public static int quiz_difficulity;
+	public static int game_difficulity;
+	
 
 	public static String gameServer; //connection string, {GameCreatorState} -> {GameState}
 	

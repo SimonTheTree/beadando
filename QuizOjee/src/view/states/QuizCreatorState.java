@@ -35,8 +35,8 @@ public class QuizCreatorState extends DefaultState {
 		
 		GButton btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
-				Settings.quiz_numOfQuestions = (Integer) spinQuestionN.getValue();
-				Settings.quiz_difficulity = (cboxDifficulity.getSelectedIndex() ==-1)? 0 : cboxDifficulity.getSelectedIndex();
+				Settings.game_numOfQuestions = (Integer) spinQuestionN.getValue();
+				Settings.game_difficulity = (cboxDifficulity.getSelectedIndex() ==-1)? 0 : cboxDifficulity.getSelectedIndex();
 				root.setState(MainWindow.STATE_QUIZ);
 			});
 		GButton btnCancel = new GButton(Labels.BTN_CANCEL);

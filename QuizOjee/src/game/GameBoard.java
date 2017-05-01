@@ -19,9 +19,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *  ez az osztál a játék játéktáblája. ezen kell kijelölni az országokat, és ez
- * az osztály (példányosított obj.) felelős a lépések kiértékeléséért.<br>
- * Ő a gameClient, és kommunikál a szerverrel
+ *  ez az osztal a jatek jatektablaja. ezen kell kijelolni az orszagokat, es ez
+ * az osztaly (peldanyositott obj.) felelos a lepesek kiertekeleseert.<br>
+ * Ő a gameClient, es kommunikal a szerverrel
  * @author ganter
  */
 public class GameBoard extends Map<Cell> implements Graphical{
@@ -36,13 +36,13 @@ public class GameBoard extends Map<Cell> implements Graphical{
     public Territory[] territories;
     public boolean needsRender = false;
     //play-variables
-    private Territory mouseOver;
+    private Territory mouseOver = Territory.NULL_TERRITORY;
     
     private class Move implements Serializable{
         public QuestionType type;
     	public Player attPlayer;
         public Player defPlayer;
-        public Territory selectedTarget = null;
+        public Territory selectedTarget = Territory.NULL_TERRITORY;
         public Question question;
         public RaceQuestion rQuestion;
         public String answerString;
@@ -52,10 +52,16 @@ public class GameBoard extends Map<Cell> implements Graphical{
     private final Move[] move;
     
     public void setHighlitCell(Cell c){
-        if(c != null)
-            mouseOver = c.getOwner();
-        else
-            mouseOver=null;
+        synchronized (mouseOver) {
+        	if(c != null)
+        		mouseOver = c.getOwner();
+        	else
+        		mouseOver=Territory.NULL_TERRITORY;			
+		}
+    }
+    
+    public Territory getHighlitTerritory(){
+    	return mouseOver;
     }
     
     public void setCurrentPlayer(Player p){
@@ -161,19 +167,33 @@ public class GameBoard extends Map<Cell> implements Graphical{
     }
     
     /**
-     * Kap egy {@link GameBoard}-t, adatait átveszi, a sajátjait ezzel felülírva.
+     * Kap egy {@link GameBoard}-t, adatait atveszi, a sajatjait ezzel felulirva.
      * @param map
      */
     public void mimic(GameBoard other){}
 
     /**
-     * vásolatot készít magáról(shallow), amit majd vki arra használ hogy átvegye a 
-     * tulajdonságait a {@link #mimic(GameBoard)}-el.... nem biztos h erre szükség lesz
+     * vasolatot keszit magarol(shallow), amit majd vki arra hasznal hogy atvegye a 
+     * tulajdonsagait a {@link #mimic(GameBoard)}-el.... nem biztos h erre szukseg lesz
      */
     public GameBoard clone(){return this;}
 
     public Territory getSelectedTarget(){
         return move[0].selectedTarget;
+    }
+    
+    /**
+     * Selects the terrytory with specified id on the {@link GameBoard}
+     * @param id
+     * @return the {@link Territory} with the specified id or {@link Territory#NULL_TERRITORY} if none found
+     */
+    public Territory getTerrytoryById(int id){
+    	for(Territory t : territories){
+    		if(t.id == id){
+    			return t;
+    		}
+    	}
+    	return Territory.NULL_TERRITORY;
     }
     
     public void selectTarget(Territory t){
@@ -221,11 +241,11 @@ public class GameBoard extends Map<Cell> implements Graphical{
 //            move[0].selectedBase.unLight();
         }catch(NullPointerException ignore){}
         
-        try{
-            mouseOver.highlight();
-            mouseOver.render(g, layout);
-            mouseOver.unLight();
-        }catch(NullPointerException ignore){};
+    	synchronized (mouseOver) {
+    		mouseOver.highlight();
+    		mouseOver.render(g, layout);
+    		mouseOver.unLight();				
+		}
         
         if(needsRender && move[1] != null){
             int x0 = 0;

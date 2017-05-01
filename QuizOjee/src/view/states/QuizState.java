@@ -87,7 +87,7 @@ public class QuizState extends DefaultState {
 	}
 
 	private void nextQuestion(){
-		Random rand = new Random();
+		Random rand = Settings.RANDOM;
 		String[] q = new String[4];
 		Question quest = questions.get(currentQuestionIndex);
 		
@@ -118,7 +118,7 @@ public class QuizState extends DefaultState {
 		//update question counter
 		String questCount = Labels.LBL_QUIZ_QUESTION_INDEX;
 		questCount = questCount.replaceFirst("@", String.valueOf(currentQuestionIndex+1));
-		questCount = questCount.replaceFirst("@", String.valueOf(Settings.quiz_numOfQuestions));
+		questCount = questCount.replaceFirst("@", String.valueOf(Settings.game_numOfQuestions));
 		lblSubTitle.setText(questCount);
 
 		//update answer counter
@@ -135,7 +135,7 @@ public class QuizState extends DefaultState {
 			enabled = false;
 			final int WAIT_TIME = 2000;
 			final int TIMES = 3;
-			if(currentQuestionIndex < Settings.quiz_numOfQuestions){
+			if(currentQuestionIndex < Settings.game_numOfQuestions){
 				Question quest = questions.get(currentQuestionIndex);
 				//if text on clicked button == right answer text
 				if( quest.getRightAnswer().equals(self.getText())){
@@ -167,12 +167,12 @@ public class QuizState extends DefaultState {
 				
 			}
 			//load the next answer, if any
-			if(++currentQuestionIndex < Settings.quiz_numOfQuestions){
+			if(++currentQuestionIndex < Settings.game_numOfQuestions){
 				nextQuestion();
 			} else {
 				System.out.println("im here");
 				PlayerReport rp =  new PlayerReport(root.getLoggedUser());
-				rp.setQuestNVal(Settings.quiz_numOfQuestions);
+				rp.setQuestNVal(Settings.game_numOfQuestions);
 				rp.setRAnsVal(rightN);
 				rp.setWAnsVal(wrongN);
 				rp.setPointsVal(points);
@@ -194,9 +194,9 @@ public class QuizState extends DefaultState {
 	protected void onStart(){
 		enabled = true;
 		questions = new ArrayList<>();
-		int diff = Settings.quiz_difficulity;
-		for(int i = 0; i<Settings.quiz_numOfQuestions; i++){
-			questions.add(root.controller.getQuestion(diff*5,diff*5+5, null, Settings.quiz_numOfQuestions));
+		int diff = Settings.game_difficulity;
+		for(int i = 0; i<Settings.game_numOfQuestions; i++){
+			questions.add(root.controller.getQuestion(diff*5,diff*5+5, null, Settings.game_numOfQuestions));
 		}
 
 		currentQuestionIndex = 0;

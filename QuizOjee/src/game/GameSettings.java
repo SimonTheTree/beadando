@@ -44,7 +44,8 @@ public class GameSettings implements Serializable{
       new Color(255,120,140),
       new Color(0,0,0)
   };
-
+  public final int questionTime = 20000; //in microseconds
+  public final int raceTime = 10000; //in microseconds
   
   /* ----- GAME DIMENSIONS ----- */
   public final int SCREEN_WIDTH = Settings.MAIN_WINDOW_WIDTH;
@@ -57,6 +58,19 @@ public class GameSettings implements Serializable{
   public final List<Player> PLAYERS = new ArrayList<>();
   public int getNumOfPlayers(){
       return PLAYERS.size();
+  }
+  /**
+   * Finds player with specified username in PLAYERS
+   * @param uname
+   * @return the {@link Player} or null if not found
+   */
+  public Player getPlayerByUname(String uname){
+	  for (Player p : PLAYERS){
+		  if(uname.equals(p.getUser().getUsername())){
+			  return p;
+		  }
+	  }
+	  return null;
   }
   
   /* ----- MAP OPTIONS ----- */
@@ -167,6 +181,7 @@ public class GameSettings implements Serializable{
       layout.size = new Point(getCellWidth(),getCellHeight());
   }
   
+  //-------- SINGLETON SELF ---------//
   private static GameSettings self = null;
   public static GameSettings getInstance(){
   	if (self == null){

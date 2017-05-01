@@ -33,10 +33,10 @@ public class Main {
 		
 		Controller c = new Controller();
 		 
-		Map<String,Integer> favs = c.getFavMaps("ganter"); 
-		for(String name : favs.keySet()) {
-			System.out.println(name + " " + favs.get(name));
-		}
+//		Map<String,Integer> favs = c.getFavMaps("ganter"); 
+//		for(String name : favs.keySet()) {
+//			System.out.println(name + " " + favs.get(name));
+//		}
 
 				//DEMO kapcsolat a host-kliens kozott.
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
