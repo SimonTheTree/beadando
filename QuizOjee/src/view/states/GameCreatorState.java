@@ -41,6 +41,18 @@ public class GameCreatorState extends DefaultState {
 				GameServer gs = new GameServer();
 				gs.createGame();
 				System.out.println("game created switching to gamestate");
+				int counter = 0;
+				while(!gs.isLyukendzsoint()){
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					//System.out.print("!");
+					//if(counter++%100 == 0) System.out.println();
+				};
+				
 				Settings.gameServer = "localhost";
 				root.setState(MainWindow.STATE_GAME);
 			});

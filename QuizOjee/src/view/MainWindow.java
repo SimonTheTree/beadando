@@ -5,7 +5,9 @@ import controller.Controller;
 
 import gameTools.state.State;
 import gameTools.state.StateManager;
+import model.Statistics;
 import model.User;
+import model.exceptions.UserNotFoundException;
 import resources.Resources;
 
 public class MainWindow extends JFrame{
@@ -29,6 +31,7 @@ public class MainWindow extends JFrame{
     private StateManager sm = new StateManager(this);
     public Controller controller;
     private User user = null;
+    private Statistics stat = null;
     
     public State main = new view.states.MainState(this);
     public State gameCreator = new view.states.GameCreatorState(this);
@@ -105,7 +108,30 @@ public class MainWindow extends JFrame{
 		}
 	}
 	
+	public Statistics getLoggedUserStats() {
+		return stat;
+	}
+	public void pushLoggedUserStats() {
+		try {
+			controller.updateStatistics(stat);
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("invalid Statistics object: ");
+			System.err.println(stat);
+		}
+	}
+	public void pushLoggedUser() {
+		try {
+			controller.modifyUser(user);
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("invalid Statistics object: ");
+			System.err.println(stat);
+		}
+	}
+	
 	public void setUser(User u) {
+		stat = controller.getUserStatistics(u);
 		user = u;
 	}
     

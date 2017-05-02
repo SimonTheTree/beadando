@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +49,47 @@ public class Login extends JDialog {
 		
 		txtfUserName = new JTextField();
 			txtfUserName.setColumns(10);
+			txtfUserName.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER){
+						btnLogin.doClick();
+					}
+				}
+			});
 		
 		txtfPassword = new JPasswordField();
 			txtfPassword.setColumns(10);
+			txtfPassword.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER){
+						btnLogin.doClick();
+					}
+				}
+			});
 		
 		btnLogin = new GButton(Labels.BTN_LOGIN);
 			btnLogin.addActionListener((e) -> {

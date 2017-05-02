@@ -126,14 +126,10 @@ public class GameState extends State implements GameInputListener {
 		System.out.println("starting gamestate ");
 		gameOver = false;
 		gameStarted = false;
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 		interruptThread =  new Thread() {
 			public void run() {
 				try {
+					Thread.currentThread().setName("GameClient");
 					System.out.println("client booting...");
 					String uname = MainWindow.getInstance().getLoggedUser().getUsername();
 					System.out.println(uname +"connecting to" + Settings.gameServer);
@@ -361,12 +357,14 @@ public class GameState extends State implements GameInputListener {
 		}
 
 		if (inputManager.isClicked("ButtonLeft") && !gameOver) {
-			client.sendMessage(new GameMessage(
-					Commands.ATTACK, 
-					player.getUser().getUsername(), 
-					String.valueOf(gameboard.getHighlitTerritory().id)
-			));
-			System.out.println("leftclicked, sent attack from "+ player.getUser().getUsername() +" to " +gameboard.getHighlitTerritory().id);
+			if(gameStarted){
+				client.sendMessage(new GameMessage(
+						Commands.ATTACK, 
+						player.getUser().getUsername(), 
+						String.valueOf(gameboard.getHighlitTerritory().id)
+				));
+				System.out.println("leftclicked, sent attack from "+ player.getUser().getUsername() +" to " +gameboard.getHighlitTerritory().id);
+			}
 		}
 
 		try {

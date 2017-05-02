@@ -2,6 +2,7 @@ package view.states;
 
 import gameTools.state.State;
 import model.Question;
+import model.Statistics;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
@@ -170,13 +171,17 @@ public class QuizState extends DefaultState {
 			if(++currentQuestionIndex < Settings.game_numOfQuestions){
 				nextQuestion();
 			} else {
-				System.out.println("im here");
 				PlayerReport rp =  new PlayerReport(root.getLoggedUser());
+				Statistics stat = root.getLoggedUserStats();
 				rp.setQuestNVal(Settings.game_numOfQuestions);
 				rp.setRAnsVal(rightN);
+				stat.setRightAnswers(rightN);
 				rp.setWAnsVal(wrongN);
+				stat.setWrongAnswers(wrongN);
 				rp.setPointsVal(points);
+				stat.setPoints(points);
 				rp.setTblDiff(diffN);
+				root.pushLoggedUserStats();
 				PlayerReport[] p = new PlayerReport[1];
 				p[0] = rp;
 				((ReportState)root.report).setReports(p);

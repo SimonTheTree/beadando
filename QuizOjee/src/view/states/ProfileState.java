@@ -8,6 +8,8 @@ import javax.swing.GroupLayout.Alignment;
 import view.components.GLabel;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import model.Statistics;
 import view.components.GButton;
 import javax.swing.JTextField;
 
@@ -15,6 +17,15 @@ public class ProfileState extends DefaultState {
 	MainWindow root;
 	private JTextField txtfUsername;
 	private JTextField txtfRealName;
+	
+	GLabel lblDataAge;
+	GLabel lblDataPoints; 
+	GLabel lblDataWins;
+	GLabel lblDataDefeats;
+	GLabel lblDataRightAns; 
+	GLabel lblDataWrongAns;
+	GLabel lblDataRightTips;
+	GLabel lblDataWrongTips;
 	public ProfileState(MainWindow r) {
 		super(MainWindow.STATE_PROFILE, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
@@ -32,14 +43,14 @@ public class ProfileState extends DefaultState {
 		GLabel lblRightTips = new GLabel(Labels.LBL_N_RIGHT_TIPS);
 		GLabel lblWrongTips = new GLabel(Labels.LBL_N_WRONG_TIPS);
 		
-		GLabel lblDataAge = new GLabel("?");
-		GLabel lblDataPoints = new GLabel("?");
-		GLabel lblDataWins = new GLabel("?");
-		GLabel lblDataDefeats = new GLabel("?");
-		GLabel lblDataRightAns = new GLabel("?");
-		GLabel lblDataWrongAns = new GLabel("?");
-		GLabel lblDataRightTips = new GLabel("?");
-		GLabel lblDataWrongTips = new GLabel("?");
+		lblDataAge = new GLabel("?");
+		lblDataPoints = new GLabel("?");
+		lblDataWins = new GLabel("?");
+		lblDataDefeats = new GLabel("?");
+		lblDataRightAns = new GLabel("?");
+		lblDataWrongAns = new GLabel("?");
+		lblDataRightTips = new GLabel("?");
+		lblDataWrongTips = new GLabel("?");
 		
 		GButton btnDeleteUser = new GButton(Labels.BTN_DELETE);
 			btnDeleteUser.addActionListener((e) -> {
@@ -188,6 +199,21 @@ public class ProfileState extends DefaultState {
 	protected void onStart() {
 		txtfUsername.setText(root.getLoggedUser().getUsername());
 		txtfRealName.setText(root.getLoggedUser().getRealName());
+		Statistics stats = root.controller.getUserStatistics(root.getLoggedUser());
+		lblDataAge.setText(String.valueOf(stats.getAge()));
+		lblDataDefeats.setText(String.valueOf(stats.getDefeats()));
+		lblDataPoints.setText(String.valueOf(stats.getPoints()));
+		lblDataRightAns.setText(String.valueOf(stats.getRightAnswers()));
+		lblDataRightTips.setText(String.valueOf(stats.getRightTips()));
+		lblDataWins.setText(String.valueOf(stats.getWins()));
+		lblDataWrongAns.setText(String.valueOf(stats.getWrongAnswers()));
+		lblDataWrongTips.setText(String.valueOf(stats.getWrongTips()));
+	}
+	
+	@Override
+	protected void onStop(){
+		root.getLoggedUser().setRealName(txtfRealName.getText());
+		root.pushLoggedUser();
 	}
 	
 	@Override

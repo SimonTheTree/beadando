@@ -62,6 +62,7 @@ public class GameHost {
 	public GameHost() {}
 	
 	public void setMaxPlayers(int maxPlayers) {
+		if(triedToOpenServer) return;
 		this.maxPlayers = maxPlayers;
 	}
 	
@@ -74,7 +75,18 @@ public class GameHost {
 			}
 		}; 
 		t.start();
-		while(!triedToOpenServer);
+		int counter = 0;
+		while(!triedToOpenServer) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//System.out.print(".");
+			//if(counter++%100 == 0) System.out.println();
+		};
+		//System.out.println("irjunkmarvalamitawhileutan");
 		if(failedToStartServer) throw new IOException();
 		////System.err.println("GameHost END");		
 	}
@@ -90,6 +102,8 @@ public class GameHost {
 		////System.err.println("StartHost");
 		try {
 			server = new ServerSocket(19969);
+			System.out.println("tried to open server");
+			
 			triedToOpenServer = true;
 			//System.out.println("Host: Server activated!");
 			//clients[0] = new Socket("localhost",19969);

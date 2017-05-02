@@ -15,6 +15,7 @@ import controller.GameMessage;
 import game.players.Player;
 import game.players.PlayerAI;
 import game.players.PlayerHuman;
+import gameTools.map.Orientation;
 import gameTools.map.generators.MapGeneratorHexRectangleFlat;
 import model.Question;
 import model.RaceQuestion;
@@ -26,6 +27,7 @@ import view.Settings;
 public class GameServer implements GameInputListener {
 	GameHost host = null;
 	
+	private boolean lyukendzsoint = false;
 	private boolean gameFinished;
 	private GameBoard board;
 	private GameSettings settings;
@@ -43,6 +45,10 @@ public class GameServer implements GameInputListener {
 	
 	MyServerListener serverListener;
 	Thread serverThread;
+	
+	public boolean isLyukendzsoint(){
+		return lyukendzsoint;
+	}
 	
 	public void createGame(){
 		for(int i =  0; i < Settings.game_numOfQuestions; i++){
@@ -69,7 +75,8 @@ public class GameServer implements GameInputListener {
 //		u.setUsername("harom");
 //		settings.PLAYERS.add(new PlayerHuman(u, 2));
 		
-		settings.layout.size = new Point(12, 8);
+		settings.setLayoutOrientation(Orientation.LAYOUT_FLAT);
+		settings.layout.size = new Point(32, 10);
 		settings.layout.origin = new Point(0, 0);
 		settings.mapTileN = new Dimension(1, 1);
 		MapGeneratorHexRectangleFlat<Cell> gen = new MapGeneratorHexRectangleFlat<Cell>("name", new Cell(0,0), new int[]{25, 25});
@@ -84,14 +91,17 @@ public class GameServer implements GameInputListener {
 		serverThread = new Thread() {
 			public void run() {
 				try {
+					Thread.currentThread().setName("GameServer");
 					System.out.println("starting up server....");
 					host = new GameHost();
 					host.addInputListener(GameServer.this);
 					System.out.println("server ready...");
 //					host.setMaxPlayers(settings.PLAYERS.size());
-					host.setMaxPlayers(2);
+					host.setMaxPlayers(1);
 					host.start();
 					System.out.println("server launched...");
+					
+					lyukendzsoint = true;
 					while (!host.isStarted()) {
 						System.out.println("server waiting for players...");
 						Thread.sleep(1000);
