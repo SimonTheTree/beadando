@@ -429,7 +429,6 @@ public class DAOImp implements DAO {
 		return null;
 	}
 
-	//TODO ez csak egy jeloles arra h itt van a deleteUser. Ezt a legjobb copy paste-zni.
 	public synchronized boolean deleteUser(String uname) {
 	System.out.println("get User " + uname);
 		
@@ -612,6 +611,8 @@ public class DAOImp implements DAO {
 			return null;
 		}
 
+	//TODO lekerdezes
+	
 	public synchronized Map<String,Integer> getQuestionQuantityByCategory() {
 		System.out.println("1.lekerdezes");
 		Map<String,Integer> re = new HashMap<String,Integer>();

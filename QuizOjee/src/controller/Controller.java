@@ -17,6 +17,7 @@ import model.User;
 import model.exceptions.BadUsernameFormatException;
 import model.exceptions.UserAlreadyExistsException;
 import model.exceptions.UserNotFoundException;
+import view.Labels;
 import view.MainWindow;
 public class Controller {
 	
@@ -27,22 +28,35 @@ public class Controller {
 	private int maxTopicId;
 	private int actualMinDiff = -1;
 	private int actualMaxDiff = -1;
+	//private Object actualTopicListKey = new Object();
 	private List<Integer> actualTopicList = null;
+	private Object questionsKey = new Object();
 	private List<Question> questions;
+	//private Object actualRaceTopicListKey = new Object();
 	private List<Integer> actualRaceTopicList = null;
+	private Object raceQuestionsKey = new Object();
 	private List<RaceQuestion> raceQuestions;
+	private Object topicListKey = new Object();
 	private List<Topic> topicList = null;
 	
 	//lekerdezesekhez
+	private Object questionQuantityByCategoryKey = new Object();
 	private Map<String,Integer> questionQuantityByCategory = null;
+	private Object topTenPlayersKey = new Object();
 	private List<Statistics> topTenPlayers = null;
+	private Object userQuestionQuantityKey = new Object();
 	private Map<String,Integer> userQuestionQuantity = null;
+	private Object topFiveMapsKey = new Object();
 	private Map<String, Integer> topFiveMaps = null;
+	private Object userQuestionsKey = new Object();
 	private String userQuestionsUname = null;
 	private List<String[]> userQuestions = null;
+	private Object gameWinnersKey= new Object();
 	private List<String[]> gameWinners = null;
+	private Object winnersKey = new Object();
 	private String winnersMap = null;
 	private List<String> winners = null;
+	private Object favMapsKey = new Object();
 	private String favMapsUname = null;
 	private Map<String,Integer> favMaps = null;
 	
@@ -180,107 +194,124 @@ public class Controller {
      * @return {@link Question} or null
      */
     public Question getQuestion(int minDiff, int maxDiff, List<Integer> topicList, int n) {
-    	if(minDiff >  maxDiff) return null;
-    	if(maxDiff < 0) return null;
-    	if(minDiff < 0) minDiff = 0;
-    	if(maxDiff > maxDifficulty) maxDiff = maxDifficulty;
-    	//---------Ha min es max is megegyezik------------------ES-----------(--------Ha nem nullok akkor a topicListek megegyeznek--------------VAGY--------------mindketto null---------)-------ES--------A jelenlegi nehezsegek nem -1 ek---
-		if(minDiff == actualMinDiff && maxDiff == actualMaxDiff && ((topicList != null && actualTopicList != null && topicList.equals(actualTopicList)) || (topicList == null && actualTopicList == null)) && actualMinDiff != -1 && actualMaxDiff != -1) {
-			System.out.println("load question from memory");
-			int random;
-			if(questions.size() == 1) {
-				random = 0;
+		synchronized(questionsKey) {
+			if(minDiff >  maxDiff) return null;
+	    	if(maxDiff < 0) return null;
+	    	if(minDiff < 0) minDiff = 0;
+	    	if(maxDiff > maxDifficulty) maxDiff = maxDifficulty;
+	    	//---------Ha min es max is megegyezik------------------ES-----------(--------Ha nem nullok akkor a topicListek megegyeznek--------------VAGY--------------mindketto null---------)-------ES--------A jelenlegi nehezsegek nem -1 ek---
+			if(minDiff == actualMinDiff && maxDiff == actualMaxDiff && ((topicList != null && actualTopicList != null && topicList.equals(actualTopicList)) || (topicList == null && actualTopicList == null)) && actualMinDiff != -1 && actualMaxDiff != -1) {
+				System.out.println("load question from memory");
+				int random;
+				if(questions.size() == 1) {
+					random = 0;
+					actualMinDiff = -1;
+					actualMaxDiff = -1;
+					actualTopicList = null;
+				} else {
+					random = new Random().nextInt(questions.size());
+				}
+				Question re = questions.get(random);
+				questions.remove(random);
+				return re;
+			}
+			
+			questions = db.getQuestions(minDiff, maxDiff, topicList, n);
+			if(questions == null) {
 				actualMinDiff = -1;
 				actualMaxDiff = -1;
 				actualTopicList = null;
+				return null;
 			} else {
-				random = new Random().nextInt(questions.size());
+				actualMinDiff = minDiff;
+				actualMaxDiff = maxDiff;
+				actualTopicList = topicList==null?null:new ArrayList<Integer>(topicList);
 			}
-			Question re = questions.get(random);
-			questions.remove(random);
-			return re;
+			
+			return getQuestion(minDiff, maxDiff, actualTopicList, n);
 		}
-		
-		questions = db.getQuestions(minDiff, maxDiff, topicList, n);
-		if(questions == null) {
-			actualMinDiff = -1;
-			actualMaxDiff = -1;
-			actualTopicList = null;
-			return null;
-		} else {
-			actualMinDiff = minDiff;
-			actualMaxDiff = maxDiff;
-			actualTopicList = topicList==null?null:new ArrayList<Integer>(topicList);
-		}
-		
-		return getQuestion(minDiff, maxDiff, actualTopicList, n);
     }
 
     public RaceQuestion getRaceQuestion(List<Integer> topicList, int n) {
-    	//---------Ha min es max is megegyezik------------------ES-----------(--------Ha nem nullok akkor a topicListek megegyeznek--------------VAGY--------------mindketto null---------)-------ES--------A jelenlegi nehezsegek nem -1 ek---
-		if(raceQuestions != null && ((topicList != null && actualRaceTopicList != null && topicList.equals(actualTopicList)) || (topicList == null && actualTopicList == null))) {
-			System.out.println("load raceQuestion from memory");
-			int random;
-			if(raceQuestions.size() == 1) {
-				random = 0;
-				actualRaceTopicList = null;
-			} else {
-				random = new Random().nextInt(raceQuestions.size());
+		synchronized(raceQuestionsKey) {
+	    	//---------Ha min es max is megegyezik------------------ES-----------(--------Ha nem nullok akkor a topicListek megegyeznek--------------VAGY--------------mindketto null---------)-------ES--------A jelenlegi nehezsegek nem -1 ek---
+			if(raceQuestions != null && ((topicList != null && actualRaceTopicList != null && topicList.equals(actualTopicList)) || (topicList == null && actualTopicList == null))) {
+				System.out.println("load raceQuestion from memory");
+				int random;
+				if(raceQuestions.size() == 1) {
+					random = 0;
+					actualRaceTopicList = null;
+				} else {
+					random = new Random().nextInt(raceQuestions.size());
+				}
+				RaceQuestion re = raceQuestions.get(random);
+				raceQuestions.remove(random);
+				return re;
 			}
-			RaceQuestion re = raceQuestions.get(random);
-			raceQuestions.remove(random);
-			return re;
+			
+			raceQuestions = db.getRaceQuestions(topicList, n);
+			if(raceQuestions == null) {
+				actualRaceTopicList = null;
+				return null;
+			} else {
+				actualRaceTopicList = topicList==null?null:new ArrayList<Integer>(topicList);
+			}
+			
+			return getRaceQuestion(actualTopicList, n);
 		}
-		
-		raceQuestions = db.getRaceQuestions(topicList, n);
-		if(raceQuestions == null) {
-			actualRaceTopicList = null;
-			return null;
-		} else {
-			actualRaceTopicList = topicList==null?null:new ArrayList<Integer>(topicList);
-		}
-		
-		return getRaceQuestion(actualTopicList, n);
     }
 
     public List<Topic> getTopics() {
-    	if(topicList == null)
-    	topicList = db.getTopics();
-    	return topicList;
+		synchronized(topicListKey) {
+	    	if(topicList == null)
+	    	topicList = db.getTopics();
+	    	return topicList;
+		}
     }
-    
+/*
+    public List<String[]> getTopicsTable() {
+		synchronized(topicListKey) {
+	    	if(topicList == null)
+	    	topicList = db.getTopics();
+	    	return topicList;
+		}
+    }
+*/    
     public int getNumOfQuestions(int minDiff, int maxDiff, List<Integer> topicIdList) {
-    	if(topicList == null) topicList = db.getTopics();
-    	int re = 0;
-    	if(minDiff < 0) minDiff = 0;
-    	if(maxDiff < minDiff) return 0;
-    	if(maxDiff > maxDifficulty) maxDiff = maxDifficulty;
-    	for(int i : topicIdList) {
-    		Topic good = topicList.get(i);
-    		if(good.getTopicId() != i) {
-    			for(int j=0;j<topicList.size();++j) {
-    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
-    			}
-    		}
-			re+=good.getNumberOfQuestions(minDiff, maxDiff);
+		synchronized(topicListKey) {
+			if(topicList == null) topicList = db.getTopics();
+	    	int re = 0;
+	    	if(minDiff < 0) minDiff = 0;
+	    	if(maxDiff < minDiff) return 0;
+	    	if(maxDiff > maxDifficulty) maxDiff = maxDifficulty;
+	    	for(int i : topicIdList) {
+	    		Topic good = topicList.get(i);
+	    		if(good.getTopicId() != i) {
+	    			for(int j=0;j<topicList.size();++j) {
+	    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
+	    			}
+	    		}
+				re+=good.getNumberOfQuestions(minDiff, maxDiff);
+	    	}
+	    	return re;
     	}
-    	return re;
     }
     
     public int getNumOfRaceQuestions(List<Integer> topicIdList) {
-    	if(topicList == null) topicList = db.getTopics();
-    	int re = 0;
-    	for(int i : topicIdList) {
-    		Topic good = topicList.get(i);
-    		if(good.getTopicId() != i) {
-    			for(int j=0;j<topicList.size();++j) {
-    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
-    			}
-    		}
-			re+=good.getNumberOfRaceQuestions();
-    	}
-    	return re;
-    	
+		synchronized(topicListKey) {
+	    	if(topicList == null) topicList = db.getTopics();
+	    	int re = 0;
+	    	for(int i : topicIdList) {
+	    		Topic good = topicList.get(i);
+	    		if(good.getTopicId() != i) {
+	    			for(int j=0;j<topicList.size();++j) {
+	    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
+	    			}
+	    		}
+				re+=good.getNumberOfRaceQuestions();
+	    	}
+	    	return re;
+		}
     }
     
     public int getMaxDifficulty() {
@@ -295,31 +326,46 @@ public class Controller {
      * Beallit mindent nullra idonkent.
      */
 	private void setThemNummThread() {
-		Thread t = new Thread(() -> {
+		Thread t = new Thread(() ->  {
 			while(true) {
 				try {
 					Thread.sleep(5000*60);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 				actualTopicList = null;
-				questions = null;
 				actualRaceTopicList = null;
-				raceQuestions = null;
-				topicList = null;
+				
+				synchronized(questionsKey) {
+					questions = null;
+				} synchronized(raceQuestionsKey) {
+					raceQuestions = null;
+				} synchronized(topicListKey) {
+					topicList = null;
+				}
 				
 				//lekerdezesekhez
-				questionQuantityByCategory = null;
-				topTenPlayers = null;
-				userQuestionQuantity = null;
-				topFiveMaps = null;
-				userQuestionsUname = null;
-				userQuestions = null;
-				gameWinners = null;
-				winnersMap = null;
-				winners = null;
-				favMapsUname = null;
-				favMaps = null;
+				synchronized(questionQuantityByCategoryKey) {
+					questionQuantityByCategory = null;
+				} synchronized(topTenPlayersKey) {
+					topTenPlayers = null;
+				} synchronized(userQuestionQuantityKey) {
+					userQuestionQuantity = null;
+				} synchronized(topFiveMapsKey) {
+					topFiveMaps = null;
+				} synchronized(userQuestionsKey) {
+					userQuestionsUname = null;
+					userQuestions = null;
+				} synchronized(gameWinnersKey) {
+					gameWinners = null;
+				} synchronized(winnersKey) {
+					winnersMap = null;
+					winners = null;
+				} synchronized(favMapsKey) {
+					favMapsUname = null;
+					favMaps = null;
+				}
 			}
 		});
 		t.setDaemon(true);
@@ -327,17 +373,31 @@ public class Controller {
 	}
 	
 	//TODO lekerdezesek
-	
+
     /** 
      * 1. lekerdezes<p>
      * @param category : Milyen kategoriaban.
      * @return Hany kerdes van. (normal+race) vagy null
      */
-    public int getQuestionQuantityByCategory(String category) {
-    	if(questionQuantityByCategory == null) {
-    		questionQuantityByCategory = db.getQuestionQuantityByCategory();
+    public Map<String,Integer> getQuestionQuantityByCategory() {
+    	synchronized(questionQuantityByCategoryKey) {
+	    	if(questionQuantityByCategory == null) {
+	    		questionQuantityByCategory = db.getQuestionQuantityByCategory();
+	    	}
+	    	return questionQuantityByCategory;
     	}
-    	return questionQuantityByCategory.get(category)==null?0:questionQuantityByCategory.get(category);
+    }
+    /** 
+     * 1. lekerdezes<p>
+     * @return Hany kerdes van. (normal+race). <br>
+     * Elso sor a title. 
+     */
+    public List<String[]> getQuestionQuantityByCategoryTable() {
+    	List<String[]> re = convert(getQuestionQuantityByCategory());
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.M_TOPIC_NAME, Labels.TBL_QUESTIONS_NUMBER, };
+    	re.add(0, head);
+    	return re;
     }
     
     /** 
@@ -345,73 +405,152 @@ public class Controller {
      * @return Top 10 jatekos statisztikaja. vagy null
      */
     public List<Statistics> getTopTenPlayersStatistics() {
-    	if(topTenPlayers == null) {
-    		topTenPlayers = db.getTopTenPlayersStatistics();
+    	synchronized(topTenPlayersKey) {
+	    	if(topTenPlayers == null) {
+	    		topTenPlayers = db.getTopTenPlayersStatistics();
+	    	}
+	    	return topTenPlayers;
     	}
-    	return topTenPlayers;
     }
+    
+    /** 
+     * 2. lekerdezes<p>
+     * @return Top 10 jatekos statisztikaja.<br>
+     * Elso sor a title.
+     */
+    public List<String[]> getTopTenPlayersStatisticsTable() {
+    	List<String[]> re = convert(getTopTenPlayersStatistics());
+    	if(re == null) re = new ArrayList<>();
+    	re.add(0, Statistics.getSequence());
+    	return re;
+    }
+    
     
     /** 
      * 3. lekerdezes.<p>
      * @param uname : Melyik jatekos.
      * @return Hany kerdessel jarult hozza a jatekhoz. (normal+race) vagy null
      */
-    public int getUserQuestionQuantity(String uname) {
-    	if(userQuestionQuantity == null) {
-    		userQuestionQuantity = db.getUserQuestionQuantity();
+    public Map<String,Integer> getUserQuestionQuantity() {
+    	synchronized(userQuestionQuantityKey) {
+	    	if(userQuestionQuantity == null) {
+	    		userQuestionQuantity = db.getUserQuestionQuantity();
+	    	}
+	    	return userQuestionQuantity;
     	}
-    	return userQuestionQuantity.get(uname)==null?0:userQuestionQuantity.get(uname);    	
+    }
+    
+    /** 
+     * 3. lekerdezes<p>
+     * @param uname : Melyik jatekos.
+     * @return Hany kerdessel jarult hozza a jatekhoz. (normal+race). <br>
+     * Elso sor a title.
+     */
+    public List<String[]> getUserQuestionQuantityTable() {
+    	List<String[]> re = convert(getUserQuestionQuantity());
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.USERNAME, Labels.TBL_QUESTIONS_NUMBER, };
+    	re.add(0, head);
+    	return re;
     }
 
     /** 
      *4. lekerdezes.<p>
-     *@return Az 5 leggyakrabban haszn�lt map nevet. 
+     *@return Az 5 leggyakrabban hasznalt map nevet. 
      */
 	public Map<String, Integer> getTopFiveMaps() {
-		if(topFiveMaps == null) {
-			topFiveMaps = db.getTopFiveMaps();
-		}
-		return topFiveMaps;
+    	synchronized(topFiveMapsKey) {
+			if(topFiveMaps == null) {
+				topFiveMaps = db.getTopFiveMaps();
+			}
+			return topFiveMaps;
+    	}
 	}
+	
+    /** 
+     * 4. lekerdezes<p>
+     *@return Az 5 leggyakrabban hasznalt map nevet. <br>
+     * Elso sor a title
+     */
+    public List<String[]> getTopFiveMapsTable() {
+    	List<String[]> re = convert(getTopFiveMaps());
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.M_MAP_NAME, Labels.TBL_POPULARITY, };
+    	re.add(0, head);
+    	return re;
+    }
+	
 	/** 
 	 *5. lekerdezes.<p>
 	 *@return A user altal felrakott kerdesek topicnevvel kiirva. vagy null
 	 */
 	public List<String[]> getUserQuestions(String uname) {
-		if(userQuestions != null) {
-			userQuestionsUname = uname;
-			userQuestions = db.getUserQuestions(uname);
-		} else if(userQuestionsUname != null && !userQuestionsUname.equals(uname)) {
-			userQuestionsUname = uname;
-			userQuestions = db.getUserQuestions(uname);
-		}
-		return userQuestions;
+    	synchronized(userQuestionsKey) {
+			if(userQuestions == null) {
+				userQuestionsUname = uname;
+				userQuestions = db.getUserQuestions(uname);
+			} else if(userQuestionsUname != null && !userQuestionsUname.equals(uname)) {
+				userQuestionsUname = uname;
+				userQuestions = db.getUserQuestions(uname);
+			}
+			return userQuestions;
+    	}
 	}
+	
+    /** 
+     * 5. lekerdezes<p>
+     *@return Az 5 leggyakrabban hasznalt map nevet. <br>
+     * Elso sor a title
+     */
+    public List<String[]> getUserQuestionsTable(String uname) {
+    	List<String[]> re = getUserQuestions(uname);
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.M_MAP_NAME, Labels.TBL_POPULARITY, };
+    	re.add(0, head);
+    	return re;
+    }
 	
 	/** 
 	 * 6. lekerdezes.<p>
 	 * @return kilistazza a befejezett jatekok nyerteseit, a nevuket, a nyero pontszamot, es a csatateret (terkep) vagy null
 	 */
 	public List<String[]> getGameWinners() {
-		if(gameWinners == null) {
-			gameWinners = db.getGameWinners();
-		}
-		return gameWinners;
+    	synchronized(gameWinnersKey) {
+			if(gameWinners == null) {
+				gameWinners = db.getGameWinners();
+			}
+			return gameWinners;
+    	}
 	}
+	
+    /** 
+     * 5. lekerdezes<p>
+	 * @return kilistazza a befejezett jatekok nyerteseit, a nevuket, a nyero pontszamot, es a csatateret (terkep)
+     * Elso sor a title
+     */
+    public List<String[]> getGameWinnersTable() {
+    	List<String[]> re = getGameWinners();
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.USERNAME, Labels.M_REAL_NAME, Labels.TBL_WINNER_SCORE, Labels.M_MAP_NAME};
+    	re.add(0, head);
+    	return re;
+    }
 	
 	/** 
 	 * 7. lekerdezes.<p>
 	 * @return az adott mapon tortent jatekok nyerteseit es pontszamat (mapnev alapjan!) vagy null
 	 */
 	public List<String> getWinners(String map) {
-		if(winners == null) {
-			winnersMap = map;
-			winners = db.getWinners(map);
-		} else if(winnersMap != null && !winnersMap.equals(map)) {
-			winnersMap = map;
-			winners = db.getWinners(map);
-		}
-		return winners;
+    	synchronized(winnersKey) {
+	    	if(winners == null) {
+				winnersMap = map;
+				winners = db.getWinners(map);
+			} else if(winnersMap != null && !winnersMap.equals(map)) {
+				winnersMap = map;
+				winners = db.getWinners(map);
+			}
+			return winners;
+    	}
 	}
 	
 	/**
@@ -419,14 +558,45 @@ public class Controller {
 	 *@return Az adott user kedvenc mapjait, es azt, hogy hanyszor volt rajtuk. vagy null
 	 */
 	public Map<String, Integer> getFavMaps(String uname) {
-		if(favMaps != null) {
-			favMapsUname = uname;
-			favMaps = db.getFavMaps(uname);
-		} else if(favMapsUname != null && !favMapsUname.equals(uname)) {
-			favMapsUname = uname;
-			favMaps = db.getFavMaps(uname);
-		}
-		return favMaps;
+    	synchronized(favMapsKey) {
+	    	if(favMaps == null) {
+				favMapsUname = uname;
+				favMaps = db.getFavMaps(uname);
+			} else if(favMapsUname != null && !favMapsUname.equals(uname)) {
+				favMapsUname = uname;
+				favMaps = db.getFavMaps(uname);
+			}
+			return favMaps;
+    	}
 	}
+	
+	public List<String[]> getFavMapsTable(String uname) {
+		List<String[]> re = convert(getFavMaps(uname));
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.M_MAP_NAME, Labels.TBL_POPULARITY, };
+    	re.add(0, head);
+    	return re;
+	}
+	
+	//CONVERT
+	private static List<String[]> convert(Map<String,Integer> in) {
+		List<String[]> re = new ArrayList<>();
+		for(String elem : in.keySet()) {
+			String[] str = new String[2];
+			str[0] = elem;
+			str[1] = in.get(elem)+"";
+			re.add(str);
+		}
+		return re;
+	}
+	
+	private static List<String[]> convert(List<Statistics> in) {
+		List<String[]> re = new ArrayList<>();
+		for(Statistics st : in) {
+			re.add(st.convertToStringArray());
+		}
+		return re;
+	}
+	
 	
 }

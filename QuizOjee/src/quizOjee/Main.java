@@ -13,6 +13,7 @@ import controller.GameClient;
 import controller.GameHost;
 import controller.GameInputListener;
 import controller.GameMessage;
+import controller.PasswordCoder;
 import controller.exceptions.GameIsStartedException;
 import controller.exceptions.HostDoesNotExistException;
 import game.Cell;
@@ -22,8 +23,10 @@ import gameTools.map.Layout;
 import gameTools.map.Orientation;
 import gameTools.map.generators.MapGeneratorHexRectangleFlat;
 import view.Labels;
-
+import view.components.KDialog;
+import model.Statistics;
 import model.Topic;
+import model.User;
 
 
 public class Main {
@@ -32,12 +35,8 @@ public class Main {
 		System.out.println("hello");
 		
 		Controller c = new Controller();
-		 
-//		Map<String,Integer> favs = c.getFavMaps("ganter"); 
-//		for(String name : favs.keySet()) {
-//			System.out.println(name + " " + favs.get(name));
-//		}
 
+		
 				//DEMO kapcsolat a host-kliens kozott.
 		//Kulon szalon futnak mintha kulon alkalmazas inditotta volna oket.
 		//Megertesehez ajanlom a GameHost es GameClient osztaly leirasanak olvasgatasat :P

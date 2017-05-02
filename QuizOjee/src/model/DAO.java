@@ -48,7 +48,7 @@ public interface DAO {
 
 	List<Statistics> getAgeStatistics(int ageMin, int ageMax);
 
-	Map<String,Integer> getQuestionQuantityByCategory();
+	Map<String, Integer> getQuestionQuantityByCategory();
 
 	List<Statistics> getTopTenPlayersStatistics();
 

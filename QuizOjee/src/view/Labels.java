@@ -104,7 +104,30 @@ public final class Labels {
 	//--------------------------------------------------------------//
 	public static final String MAIN_WINDOW_TITLE = "Quiz! Ojee!!";
 	public static final String LOGIN_WINDOW_TITLE = "Login";
-
-		
-
+	
+	//--------------------------------------------------------------//
+	//MODEL TITLES                                                  //
+	//--------------------------------------------------------------//
+	public static final String M_AGE = "Age";
+	public static final String M_POINTS = "Points";
+	public static final String M_WINS = "Number of victories";
+	public static final String M_DEFEATS = "Number of losses";
+	public static final String M_RIGHT_ANS = "Right answer";
+	public static final String M_WRONG_ANS = "Wrong answers";
+	public static final String M_RIGHT_TIPS = "Right tips";
+	public static final String M_WRONG_TIPS = "Wrong tips";
+	public static final String M_REAL_NAME = "Real name";
+	public static final String M_TOPIC_ID = "TopicID";
+	public static final String M_TOPIC_NAME = "Topic name";
+	public static final String M_MAP_ID = "MapID";
+	public static final String M_MAP_NAME = "Map name";
+	public static final String M_QUESTION = "Question";
+	public static final String M_RIGHT_ANSWER = "Right answer";
+	
+	//--------------------------------------------------------------//
+	//TABLE THINGS                                                  //
+	//--------------------------------------------------------------//
+	public static final String TBL_POPULARITY = "Popularity";
+	public static final String TBL_QUESTIONS_NUMBER = "Questions Number";
+	public static final String TBL_WINNER_SCORE = "Winner Score";
 }

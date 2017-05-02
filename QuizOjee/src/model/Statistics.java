@@ -2,6 +2,8 @@ package model;
 
 import java.util.List;
 
+import view.Labels;
+
 /**
  * <b>Statistics</b><br> 
  * Egy {@link User} vagy egy csoport atlag statisztikajanak tarolasara valo objektum.<p>
@@ -130,4 +132,34 @@ public class Statistics {
     public String toString() {
     	return "[("+uname+") "+age+" "+points+" "+wins+" "+defeats+" "+rightAnswers+" "+wrongAnswers+" "+rightTips+" "+wrongTips+"]";
     }
+    
+    public String[] convertToStringArray() {
+    	String[] re = new String[9];
+    	int index = 0;
+    	re[index++] = uname;
+    	re[index++] = age + "";
+    	re[index++] = points + "";
+    	re[index++] = wins + "";
+    	re[index++] = defeats + "";
+    	re[index++] = rightAnswers + "";
+    	re[index++] = wrongAnswers + "";
+    	re[index++] = rightTips + "";
+    	re[index++] = wrongTips + "";
+    	return re;
+    }
+    
+    public static String[] getSequence() {
+    	return new String[] {
+    		Labels.USERNAME,
+    		Labels.M_AGE,
+    		Labels.M_POINTS,
+    		Labels.M_WINS,
+    		Labels.M_DEFEATS,
+    		Labels.M_RIGHT_ANS,
+    		Labels.M_WRONG_ANS,
+    		Labels.M_RIGHT_TIPS,
+    		Labels.M_WRONG_TIPS,
+    	};
+    }
+    
 }

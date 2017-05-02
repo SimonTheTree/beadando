@@ -1,11 +1,18 @@
 package view.states;
 
+
+import gameTools.state.State;
+import model.Statistics;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
+
+import java.util.List;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import view.components.GLabel;
+import view.components.KDialog;
 import view.components.GButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
@@ -13,17 +20,18 @@ public class StatsState extends DefaultState {
 	MainWindow root;
 	public StatsState(MainWindow r) {
 		super(MainWindow.STATE_STAISTICS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
-		
+		root = r;
+
 		GLabel lblStatistics = new GLabel(Labels.LBL_TITLE_STATS);
 			lblStatistics.setFont(Settings.FONT_TITLE);
 		
 		GButton btnListQuestions = new GButton(Labels.BTN_LIST_QUESTIONS);
 			btnListQuestions.addActionListener((e) -> {
-				
-			});
+				//new KDialog(root,true,root.controller.getUserQuestions(root.getLoggedUser().getUsername()),Labels.QUESTION,Labels.RIGHT_ANSWER,Labels.TOPIC_NAME);
+			});	
 		GButton btnListMyQuestions = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
 			btnListMyQuestions.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getUserQuestionsTable(root.getLoggedUser().getUsername()));
 			});
 		GButton btnListMaps = new GButton(Labels.BTN_LIST_MAPS);
 			btnListMaps.addActionListener((e) -> {
@@ -31,15 +39,15 @@ public class StatsState extends DefaultState {
 			});
 		GButton btnListGlobalFavoriteMaps = new GButton(Labels.BTN_LIST_GLOB_FAV_MAPS);
 			btnListGlobalFavoriteMaps.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getTopFiveMapsTable());
 			});
 		GButton btnListMyFavoriteMaps = new GButton(Labels.BTN_LIST_MY_FAV_MAPS);
 			btnListMyFavoriteMaps.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getFavMapsTable(root.getLoggedUser().getUsername()));
 			});
 		GButton btnListMapWinners = new GButton(Labels.BTN_LIST_MAP_WINNERS);
 			btnListMapWinners.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getGameWinnersTable());				
 			});
 		GButton btnListTopics = new GButton(Labels.BTN_LIST_TOPICS);
 			btnListTopics.addActionListener((e) -> {
@@ -47,7 +55,7 @@ public class StatsState extends DefaultState {
 			});
 		GButton btnTopTen = new GButton(Labels.BTN_LIST_TOP_TEN);
 			btnTopTen.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getTopTenPlayersStatisticsTable());
 			});
 		GButton btnAddQuestion = new GButton(Labels.BTN_ADD_QUESTION);
 			btnAddQuestion.addActionListener((e) -> {
@@ -112,7 +120,6 @@ public class StatsState extends DefaultState {
 					.addContainerGap(34, Short.MAX_VALUE))
 		);
 		setLayout(groupLayout);
-		root = r;
 		
 	}
 
