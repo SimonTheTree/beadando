@@ -5,15 +5,23 @@
 )
 
 GUI
-+ quiz végén eredmények mutatása, majd kilépés
-+ quiz pontszámítás
-+ quiz fancy villogás csillogás amikor bejelölnek egy választ és jó/roszz
-+ bejelölni zölddel a jó választ, villogjon, ha nem találta el és várni egy kicsit
-+ profile state befejezése
-* GameSettings state néha indokolatlanul lefagy amikor átváltunk rá
--> deadlock
--> ha gyorsan átkattintok mindent, akkor szokott előfordulni
--> ha ismételten od vissza váltogatom a state-eket, akkor már nem fagy le
+
+* coundowntimer bugos
+* RacequestionDialog
++ racequestion into the game
++ játék körökre osztása
++ kiírja h server launching | waiting for others
++ kiírja, h ki van körön
+
+
++ ha vki kilép, pause
+
+¤ multicolor buttons
+
++ Fórum
++ Stats-state
+
+* quiz végén eredmények mutatása, majd kilépés
 
 CONTROLLER
 + összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean
@@ -21,4 +29,6 @@ CONTROLLER
 MODEL
 
 DONE
-* vmiért fagy a rajzolása amióta megpróbáltam okossá tenni
++ játék re-join works
++ kiírja a questionnél, kitől várja a válaszokat (player1 vs player2)
++ Támadási korlátozások(szomszéd, nem én)

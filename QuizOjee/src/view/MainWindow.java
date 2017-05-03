@@ -131,8 +131,12 @@ public class MainWindow extends JFrame{
 	}
 	
 	public void setUser(User u) {
-		stat = controller.getUserStatistics(u);
-		user = u;
+		user = u;			
+		if (u == null){
+			u = getLoggedUser();
+		} else {
+			stat = controller.getUserStatistics(u);
+		}
 	}
     
     

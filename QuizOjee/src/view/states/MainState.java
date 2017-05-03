@@ -1,5 +1,6 @@
 package view.states;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
 import view.components.GButton;
@@ -16,47 +17,65 @@ import view.Settings;
 public class MainState extends DefaultState {
 	MainWindow root;
 	
+	private GButton btnStartQuiz;
+	private GButton btnCreateGame;
+	private GButton btnJoin;
+	private GButton btnStats;
+	private GButton btnForum;
+	private GButton btnProfile;
+	private GButton btnLogOut;
+	private GButton btnQuit;
+	
 	public MainState(MainWindow r) {
 		super(MainWindow.STATE_MAIN, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
 		
-		GButton btnStartQuiz = new GButton(Labels.BTN_START_QUIZ);
+		inputManager.addKeyMapping("qiuz", KeyEvent.VK_Q);
+		inputManager.addKeyMapping("game", KeyEvent.VK_G);
+		inputManager.addKeyMapping("join", KeyEvent.VK_J);
+		inputManager.addKeyMapping("stats", KeyEvent.VK_S);
+		inputManager.addKeyMapping("forum", KeyEvent.VK_F);
+		inputManager.addKeyMapping("profile", KeyEvent.VK_P);
+		inputManager.addKeyMapping("logout", KeyEvent.VK_L);
+		inputManager.addKeyMapping("quit", KeyEvent.VK_ESCAPE);
+		
+		btnStartQuiz = new GButton(Labels.BTN_START_QUIZ);
 			btnStartQuiz.setFont(Settings.FONT_BUTTON_MAIN);
 			btnStartQuiz.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_QUIZ_SETTINGS);
 			});
-		GButton btnCreateGame = new GButton(Labels.BTN_CREATE_GAME);
+		btnCreateGame = new GButton(Labels.BTN_CREATE_GAME);
 			btnCreateGame.setFont(Settings.FONT_BUTTON_MAIN);
 			btnCreateGame.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_GAME_SETTINGS);
 			});
-		GButton btnQuit = new GButton(Labels.BTN_QUIT);
+		btnQuit = new GButton(Labels.BTN_QUIT);
 			btnQuit.setFont(Settings.FONT_BUTTON_MAIN);
 			btnQuit.addActionListener((e) -> {
 				root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
 			});
-		GButton btnJoin = new GButton(Labels.BTN_JOIN_GAME);
+		btnJoin = new GButton(Labels.BTN_JOIN_GAME);
 			btnJoin.setFont(Settings.FONT_BUTTON_MAIN);
 			btnJoin.addActionListener((e) -> {
 				Settings.gameServer = JOptionPane.showInputDialog(root, Labels.MSG_ENTER_IP_ADDRESS);
 				root.setState(MainWindow.STATE_GAME);
 			});
-		GButton btnStats = new GButton(Labels.BTN_STATS);
+		btnStats = new GButton(Labels.BTN_STATS);
 			btnStats.setFont(Settings.FONT_BUTTON_MAIN);
 			btnStats.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_STAISTICS);				
 			});
-		GButton btnForum = new GButton(Labels.BTN_FORUM);
+		btnForum = new GButton(Labels.BTN_FORUM);
 			btnForum.setFont(Settings.FONT_BUTTON_MAIN);
 			btnForum.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_FORUM);								
 			});
-		GButton btnProfile = new GButton(Labels.BTN_PROFILE);
+		btnProfile = new GButton(Labels.BTN_PROFILE);
 			btnProfile.setFont(Settings.FONT_BUTTON_MAIN);
 			btnProfile.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_PROFILE);								
 			});
-		GButton btnLogOut = new GButton(Labels.BTN_LOGOUT);
+		btnLogOut = new GButton(Labels.BTN_LOGOUT);
 			btnLogOut.setFont(Settings.FONT_BUTTON_MAIN);
 			btnLogOut.addActionListener((e) -> {
 				root.setUser(null);
@@ -102,6 +121,19 @@ public class MainState extends DefaultState {
 					.addContainerGap(114, Short.MAX_VALUE))
 		);
 		setLayout(groupLayout);
+	}
+	
+	@Override
+	public void update(){
+		if (inputManager.isKeyTyped("qiuz"   )) { btnStartQuiz.doClick();}
+		if (inputManager.isKeyTyped("game"   )) { btnCreateGame.doClick();}
+		if (inputManager.isKeyTyped("join"   )) { btnJoin.doClick();}
+		if (inputManager.isKeyTyped("stats"  )) { btnStats.doClick();}
+		if (inputManager.isKeyTyped("forum"  )) { btnForum.doClick();}
+		if (inputManager.isKeyTyped("profile")) { btnProfile.doClick();}
+		if (inputManager.isKeyTyped("logout" )) { btnLogOut.doClick();}
+		if (inputManager.isKeyTyped("quit"   )) { btnQuit.doClick();}
+		
 	}
 
 }

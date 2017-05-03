@@ -1,10 +1,14 @@
 package view.states;
 
+import gameTools.state.InputManager;
 import gameTools.state.State;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
 import view.components.GLabel;
+
+import java.awt.event.KeyEvent;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
@@ -15,9 +19,17 @@ import view.components.GButton;
 
 public class QuizCreatorState extends DefaultState {
 	MainWindow root;
+	private GButton btnStart;
+	private GButton btnCancel;
+	private JSpinner spinQuestionN;
 	public QuizCreatorState(MainWindow r) {
 		super(MainWindow.STATE_QUIZ_SETTINGS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
+		
+		inputManager.addKeyMapping("esc", KeyEvent.VK_ESCAPE);
+		inputManager.addKeyMapping("s", KeyEvent.VK_S);
+		inputManager.addKeyMapping("up", KeyEvent.VK_UP);
+		inputManager.addKeyMapping("down", KeyEvent.VK_DOWN);
 		
 		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_QUIZ_CREATOR);
 			lblTitle.setFont(Settings.FONT_TITLE);
@@ -27,19 +39,19 @@ public class QuizCreatorState extends DefaultState {
 
 		JScrollPane scrollPane = new JScrollPane();
 		
-		JSpinner spinQuestionN = new JSpinner();
+		spinQuestionN = new JSpinner();
 			spinQuestionN.setValue(20);
 		
 		String[] diffs = {"Easy", "Medium", "Hard"};
 		JComboBox<String> cboxDifficulity = new JComboBox<String>(diffs);
 		
-		GButton btnStart = new GButton(Labels.BTN_START);
+		btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
 				Settings.game_numOfQuestions = (Integer) spinQuestionN.getValue();
 				Settings.game_difficulity = (cboxDifficulity.getSelectedIndex() ==-1)? 0 : cboxDifficulity.getSelectedIndex();
 				root.setState(MainWindow.STATE_QUIZ);
 			});
-		GButton btnCancel = new GButton(Labels.BTN_CANCEL);
+		btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});
@@ -105,5 +117,16 @@ public class QuizCreatorState extends DefaultState {
 		// TODO Auto-generated constructor stub
 	}
 
-
+	@Override
+	public void update(){
+		if(inputManager.isKeyTyped("s")){btnStart.doClick();}
+		if(inputManager.isKeyTyped("esc")){btnCancel.doClick();}
+		if(inputManager.isKeyTyped("up")){
+			spinQuestionN.setValue(spinQuestionN.getNextValue());
+		}
+		if(inputManager.isKeyTyped("down")){
+			spinQuestionN.setValue(spinQuestionN.getPreviousValue());
+		}
+	}
+	
 }

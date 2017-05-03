@@ -16,6 +16,7 @@ import model.Question;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  Abstaract jatekos osztaly, mely tulajdonkeppen csak a jatekos interfesz miatt
@@ -45,7 +46,6 @@ public abstract class Player implements Serializable{
     	this.color = color;
         this.team = team;
         territories = new ArrayList<>();
-        GameSettings.getInstance().PLAYERS.add(this);
     }
 
     public User getUser(){
@@ -83,7 +83,7 @@ public abstract class Player implements Serializable{
     public void addTerritory(Territory t){
         territories.add(t);
     }
-    public ArrayList<Territory> getTerritories(){
+    public List<Territory> getTerritories(){
         return territories;
     }
     public void removeTerritory(Territory t){
@@ -114,13 +114,13 @@ public abstract class Player implements Serializable{
         this.isAlive = true;
     }
     
-    public abstract void selectTarget(GameBoard board, InputManager input);
+    public abstract void selectTarget(GameBoard board, InputManager input) throws EndOfTurnException;
     
     public abstract String askQuestion(Question quest);
     
     public abstract double askRaceQuestion(RaceQuestion quest);
     
-    public void play(GameBoard board, InputManager input){
+    public void play(GameBoard board, InputManager input) throws EndOfTurnException{
         board.setCurrentPlayer(this);
         selectTarget(board, input);
         board.evaluateMove();

@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import view.components.GLabel;
 import java.awt.FlowLayout;
+import java.awt.event.KeyEvent;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -21,9 +23,17 @@ import javax.swing.JRadioButton;
 public class GameCreatorState extends DefaultState {
 	MainWindow root;
 	
+	GButton btnPrevMap;
+	GButton btnNextMap;
+	GButton btnStart;
+	GButton btnCancel;
+	
 	public GameCreatorState(MainWindow r) {
 		super(MainWindow.STATE_GAME_SETTINGS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
+		
+		inputManager.addKeyMapping("ESC", KeyEvent.VK_ESCAPE);
+		inputManager.addKeyMapping("s", KeyEvent.VK_S);
 		
 		JPanel paneMapDisplay = new JPanel();
 		JScrollPane scrollPane = new JScrollPane();
@@ -34,9 +44,9 @@ public class GameCreatorState extends DefaultState {
 		GLabel lblMap = new GLabel(Labels.LBL_MAP);
 		GLabel lblType = new GLabel(Labels.LBL_TYPE);	
 		
-		GButton btnPrevMap = new GButton("<");
-		GButton btnNextMap = new GButton(">");
-		GButton btnStart = new GButton(Labels.BTN_START);
+		btnPrevMap = new GButton("<");
+		btnNextMap = new GButton(">");
+		btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
 				GameServer gs = new GameServer();
 				gs.createGame();
@@ -56,7 +66,7 @@ public class GameCreatorState extends DefaultState {
 				Settings.gameServer = "localhost";
 				root.setState(MainWindow.STATE_GAME);
 			});
-		GButton btnCancel = new GButton(Labels.BTN_CANCEL);
+		btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});
@@ -156,7 +166,9 @@ public class GameCreatorState extends DefaultState {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		if(inputManager.isKeyTyped("s")){btnStart.doClick();}
+		if(inputManager.isKeyTyped("next")){btnNextMap.doClick();}
+		if(inputManager.isKeyTyped("prev")){btnPrevMap.doClick();}
+		if(inputManager.isKeyTyped("ESC")){btnCancel.doClick();}
 	}
 }

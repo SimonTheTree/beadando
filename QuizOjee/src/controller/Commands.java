@@ -1,5 +1,7 @@
 package controller;
 
+import game.GameBoard;
+import game.GameSettings;
 import model.Question;
 import model.RaceQuestion;
 
@@ -32,8 +34,7 @@ public class Commands {
 	public static final String RETURNED = "[returned]";
 	/**A szerver kuldi mindenkinek, ha abortaltak.<br> Nincs parametere */
 	public static final String END = "[oktybye]";
-	/**A szerver kuldi mindenkinek, ha csatlakoztak es elindult.<br> Nincs parametere */
-	public static final String START = "[start]";
+	
 	/**A szerver kuldi adott idokozonkent. <br> Nincs parametere */
 	public static final String PING = "[ping]";
 	/**A szerver es a kliens is kuldheti. szabad teruletvalasztas eseten. <br> 2 parametere van: ki es melyik teruletet. */
@@ -41,23 +42,61 @@ public class Commands {
 	/**A szerver kuldheti ki a jatek teljes informaciojat. <br> 2 parametere van: A {@link model.Game Game} toString-je es az hogy melyik terulet kie.*/
 	public static final String GAME = "[game]";
 	
-	/** Egyetlen parametere egy serializalt gameboard */
+	/**
+	 * A Cliens alsőre ezt kérdi a szervertől. Ha valaki másodjára
+	 *  lép be, és lemaradt a START utasításról, ezzel kérhet újra 
+	 *  START-ot a szervertől, hogy beindíthassa a játékot.
+	 *  <br>Nincs paramétere.
+	 *  @sender kliens
+	 */
+	public static final String IS_STARTED = "[start]";
+	/**
+	 * A szerver kuldi mindenkinek, ha csatlakoztak es elindult.
+	 * <br> Nincs parametere.
+	 * @sender server 
+	 */
+	public static final String START = "[start]";
+	/** 
+	 * Egyetlen parametere egy serializalt gameboard
+	 * @sender server
+	 * @param0 {@link GameBoard} serialized 
+	 */
 	public static final String GAMEBOARD = "[gameboard]";
-	/** Egyetlen parametere a serializalt GameSettings */
+	/** 
+	 * Egyetlen parametere egy serializalt GameSettings
+	 * @sender server
+	 * @param0 {@link GameSettings} serialized 
+	 */
 	public static final String SETTINGS = "[settings]";
+	/** 
+	 * A kliens küldi a szervernek, ha le szeretné kérni a szerver aktuális {@link GameBoard} objektumát.<br>
+	 * Nincs paramétere.
+	 * @sender kliens
+	 */
+	public static final String GAMEBOARD_REQUEST = "[gimme a gameboard]";
+	/** 
+	 * A kliens küldi a szervernek, ha le szeretné kérni a szerver aktuális {@link GameSettings} objektumát.<br>
+	 * Nincs paramétere.
+	 * @sender kliens
+	 */
+	public static final String SETTINGS_REQUEST = "[gimme a settings]";
 	
 	/** 
-	 * A server kuldi egy jatekosnak, amikor o kerul sorra
+	 * A server ezzel broadcastolja ki kerul sorra
 	 * @sender server 
-	 * @param0 {@link String} timeframe ido, amig soron van.
+	 * @param0 {@link String} a játékos username-je aki soron van
 	 */
 	public static final String YOUR_TURN = "[your turn]";	
 	/** 
 	 * A kliens kuldi a szervernek, amikor befejezte a koret
 	 * @sender kliens
+	 * @param0 {@link String} username
 	 */
 	public static final String END_TURN = "[I'm done]";
-		/** A server kuldi egy jatekosnak, amikor o van soron, es lejart az ideje, vege a korenek <br> nincs parametere*/
+		/**
+		 * A server kuldi egy jatekosnak, amikor o van soron, es lejart az ideje, vege a korenek
+		 * nincs parametere
+		 */
 		public static final String HALT_TURN = "[time is up]";
 	/**
 	 * @sender server, kliens 
@@ -103,11 +142,11 @@ public class Commands {
 	 */
 	public static final String RQ_ANSWER = "[rq-answer]";
 	/**
-	* Valasz egy {@link RaceQuestion}-re. Ezt a server broadcastolja, hogy informalja a jatekosokat masok valaszairol.
-	* @sender server
-	* @param0 {@link Number}, a valasz
-	* @param1 {@link String}, a kuldo jatekos username-je 
-	*/
+	 * Valasz egy {@link RaceQuestion}-re. Ezt a server broadcastolja, hogy informalja a jatekosokat masok valaszairol.
+	 * @sender server
+	 * @param0 {@link Number}, a valasz
+	 * @param1 {@link String}, a kuldo jatekos username-je 
+	 */
 	public static final String RQ_PLAYER_ANSWER = "[rq-answer-player]";
 //	/**
 //	 * A szerver kerdesek kikuldese utan masodpercenkent kuldi, h mennyi ido van meg vissza. Ha param1=0, akkor lejart

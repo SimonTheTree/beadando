@@ -32,9 +32,16 @@ import java.util.TreeSet;
  * 
  * @author ganter
  */
-public class Territory implements Serializable {
-	public static final Territory NULL_TERRITORY = new Territory();
+public class Territory implements Serializable, Comparable<Territory> {
 	private static int numOfTerritories = 0;
+	public static final Territory NULL_TERRITORY;
+	static{
+		//ensure that NULL_TERRITOY has a totally unique id
+		numOfTerritories = -1;
+		NULL_TERRITORY = new Territory();
+		numOfTerritories = 0;
+	}
+	
 	
 	public final List<Cell> cells; // inside
 	public final int id = ++numOfTerritories;
@@ -182,6 +189,11 @@ public class Territory implements Serializable {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public int compareTo(Territory t) {
+		return id-t.id;
 	}
 	
 	

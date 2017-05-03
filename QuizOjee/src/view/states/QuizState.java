@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -42,6 +43,12 @@ public class QuizState extends DefaultState {
 		super(MainWindow.STATE_QUIZ, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
 
+		inputManager.addKeyMapping("1", KeyEvent.VK_1);
+		inputManager.addKeyMapping("2", KeyEvent.VK_2);
+		inputManager.addKeyMapping("3", KeyEvent.VK_3);
+		inputManager.addKeyMapping("4", KeyEvent.VK_4);
+		inputManager.addKeyMapping("esc", KeyEvent.VK_ESCAPE);
+		
 		lblSubTitle = new GLabel();
 			lblSubTitle.setFont(Settings.FONT_TITLE);
 		lblQuestionText = new GLabel();
@@ -272,6 +279,15 @@ public class QuizState extends DefaultState {
 		panel.add(btnAnswerC);
 		panel.add(btnAnswerD);
 		setLayout(groupLayout);
+	}
+	
+	@Override
+	public void update(){
+		if(inputManager.isKeyTyped("1")){btnAnswerA.doClick();}
+		if(inputManager.isKeyTyped("2")){btnAnswerB.doClick();}
+		if(inputManager.isKeyTyped("3")){btnAnswerC.doClick();}
+		if(inputManager.isKeyTyped("4")){btnAnswerD.doClick();}
+		if(inputManager.isKeyTyped("esc")){btnQuit.doClick();}
 	}
 	
 	JPanel panel;

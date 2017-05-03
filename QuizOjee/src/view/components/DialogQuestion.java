@@ -16,21 +16,35 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
 
 public class DialogQuestion extends JDialog {	
 	public DialogQuestion() {
 		
 		setSize(750, 500);
 		
+		panelNorth = new JPanel();
+			lblNorth = new GLabel();
+			lblNorth.setFont(Settings.FONT_TITLE);
+			lblNorth.setBackground(Color.black);  
+			lblNorth.setOpaque(true);             
+
+		panelSouth = new JPanel();
+			lblSouth = new GLabel();
+			lblSouth.setFont(Settings.FONT_TITLE);
+			lblSouth.setBackground(Color.black);  
+			lblSouth.setOpaque(true);    
 
 		lblQuestionText = new GLabel();
-			lblQuestionText.setFont(Settings.FONT_QUESTION);
-			lblQuestionText.setBackground(new Color(0, 0, 0, 230));
-			lblQuestionText.setOpaque(true);
+		lblQuestionText.setFont(Settings.FONT_QUESTION);
+		lblQuestionText.setBackground(new Color(0, 0, 0, 230));
+		lblQuestionText.setOpaque(true);
 	
-		panel = new JPanel();
-		panel.setBackground(new Color(0, 0, 0, 150));
-	
+		MainPanel = new JPanel();
+		AnswerPanel = new JPanel();
+		AnswerPanel.setBackground(new Color(0, 0, 0, 150));
+
 		btnAnswerA = new GButton();
 		btnAnswerB = new GButton();
 		btnAnswerC = new GButton();
@@ -38,41 +52,59 @@ public class DialogQuestion extends JDialog {
 	
 		initLayout();
 		setVisible(false);
+		setUndecorated(true);
 	}
 
 	private void initLayout() {
+		getContentPane().setLayout(new BorderLayout(0, 0));
 
-		panel.setLayout(new GridLayout(4, 1, 5, 5));
+		AnswerPanel.setLayout(new GridLayout(4, 1, 5, 5));
 
-		panel.add(btnAnswerA);
-		panel.add(btnAnswerB);
-		panel.add(btnAnswerC);
-		panel.add(btnAnswerD);
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(28)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblQuestionText, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE))
-					.addContainerGap(35, Short.MAX_VALUE))
+		AnswerPanel.add(btnAnswerA);
+		AnswerPanel.add(btnAnswerB);
+		AnswerPanel.add(btnAnswerC);
+		AnswerPanel.add(btnAnswerD);
+
+		getContentPane().add(MainPanel);
+		
+		panelNorth.setLayout(new GridLayout(1, 1));
+		panelSouth.setLayout(new GridLayout(1, 1));
+		panelSouth.add(lblSouth);
+		panelNorth.add(lblNorth);
+		getContentPane().add(panelNorth, BorderLayout.NORTH);
+		getContentPane().add(panelSouth, BorderLayout.SOUTH);
+		
+		GroupLayout gl_MainPanel = new GroupLayout(MainPanel);
+		gl_MainPanel.setHorizontalGroup(
+			gl_MainPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_MainPanel.createSequentialGroup()
+					.addGap(42)
+					.addGroup(gl_MainPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(AnswerPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(lblQuestionText, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE))
+					.addContainerGap(58, Short.MAX_VALUE))
 		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(30)
-					.addComponent(lblQuestionText, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 286, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(35, Short.MAX_VALUE))
+		gl_MainPanel.setVerticalGroup(
+			gl_MainPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_MainPanel.createSequentialGroup()
+					.addGap(31)
+					.addComponent(lblQuestionText, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(AnswerPanel, GroupLayout.PREFERRED_SIZE, 301, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(42, Short.MAX_VALUE))
 		);
-		getContentPane().setLayout(groupLayout);
+		MainPanel.setLayout(gl_MainPanel);
+		
 		
 	}
 	
-	private JPanel panel;
+	private JPanel AnswerPanel;
+	private JPanel MainPanel;
+	private JPanel panelNorth;
+	private JPanel panelSouth;
 
+	public GLabel lblNorth;
+	public GLabel lblSouth;
 	public GLabel lblQuestionText;
 
 	public GButton btnAnswerA;

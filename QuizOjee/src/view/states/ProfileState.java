@@ -3,6 +3,9 @@ package view.states;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
+
+import java.awt.event.KeyEvent;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import view.components.GLabel;
@@ -26,9 +29,17 @@ public class ProfileState extends DefaultState {
 	GLabel lblDataWrongAns;
 	GLabel lblDataRightTips;
 	GLabel lblDataWrongTips;
+	private GButton btnDeleteUser;
+	private GButton btnAddQuestions;
+	private GButton btnListMyQuestion;
+	private GButton btnBack;
 	public ProfileState(MainWindow r) {
 		super(MainWindow.STATE_PROFILE, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
+		
+		inputManager.addKeyMapping("a", KeyEvent.VK_A);
+		inputManager.addKeyMapping("l", KeyEvent.VK_L);
+		inputManager.addKeyMapping("esc", KeyEvent.VK_ESCAPE);
 		
 		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_PROFILE);
 			lblTitle.setFont(Settings.FONT_TITLE);
@@ -52,7 +63,7 @@ public class ProfileState extends DefaultState {
 		lblDataRightTips = new GLabel("?");
 		lblDataWrongTips = new GLabel("?");
 		
-		GButton btnDeleteUser = new GButton(Labels.BTN_DELETE);
+		btnDeleteUser = new GButton(Labels.BTN_DELETE);
 			btnDeleteUser.addActionListener((e) -> {
 				int option = JOptionPane.showConfirmDialog(
 						root,
@@ -67,15 +78,15 @@ public class ProfileState extends DefaultState {
 					root.setState(MainWindow.STATE_LOGIN);
 				}
 			});
-		GButton btnAddQuestions = new GButton(Labels.BTN_ADD_QUESTION);
+		btnAddQuestions = new GButton(Labels.BTN_ADD_QUESTION);
 			btnAddQuestions.addActionListener((e) -> {
 				
 			});
-		GButton btnListMyQuestion = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
+		btnListMyQuestion = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
 			btnListMyQuestion.addActionListener((e) -> {
 				
 			});
-		GButton btnBack = new GButton(Labels.BTN_BACK);
+		btnBack = new GButton(Labels.BTN_BACK);
 			btnBack.addActionListener((e) -> {
 				root.setState(MainWindow.STATE_MAIN);
 			});
@@ -218,7 +229,9 @@ public class ProfileState extends DefaultState {
 	
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		if(inputManager.isKeyTyped("a")){btnAddQuestions.doClick();}
+		if(inputManager.isKeyTyped("l")){btnListMyQuestion.doClick();}
+		if(inputManager.isKeyTyped("esc")){btnBack.doClick();}
 
 	}
 }

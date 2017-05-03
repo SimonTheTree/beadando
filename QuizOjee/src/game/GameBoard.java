@@ -51,7 +51,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
     
     private final Move[] move;
     
-    public void setHighlitCell(Cell c){
+    public synchronized void setHighlitCell(Cell c){
         synchronized (mouseOver) {
         	if(c != null)
         		mouseOver = c.getOwner();
@@ -60,7 +60,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
 		}
     }
     
-    public Territory getHighlitTerritory(){
+    public synchronized Territory getHighlitTerritory(){
     	return mouseOver;
     }
     
@@ -165,18 +165,6 @@ public class GameBoard extends Map<Cell> implements Graphical{
 //        }
         System.out.println("done generating");
     }
-    
-    /**
-     * Kap egy {@link GameBoard}-t, adatait atveszi, a sajatjait ezzel felulirva.
-     * @param map
-     */
-    public void mimic(GameBoard other){}
-
-    /**
-     * vasolatot keszit magarol(shallow), amit majd vki arra hasznal hogy atvegye a 
-     * tulajdonsagait a {@link #mimic(GameBoard)}-el.... nem biztos h erre szukseg lesz
-     */
-    public GameBoard clone(){return this;}
 
     public Territory getSelectedTarget(){
         return move[0].selectedTarget;
@@ -228,7 +216,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
     }
     
     @Override
-    public void render(Graphics2D g) {
+    public synchronized void render(Graphics2D g) {
         
         for(Territory t : territories){
                 t.render(g, layout);

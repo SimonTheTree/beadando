@@ -3,6 +3,7 @@ package game;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -29,6 +30,7 @@ public class GameServer implements GameInputListener {
 	
 	private boolean lyukendzsoint = false;
 	private boolean gameFinished;
+	private boolean gameReady = false;
 	private GameBoard board;
 	private GameSettings settings;
 
@@ -41,10 +43,6 @@ public class GameServer implements GameInputListener {
 	private Stack<GameMessage> msgStack = new Stack<>();
 	private Stack<Question> questions = new Stack<>();
 	private Stack<RaceQuestion> RaceQuestions = new Stack<>();
-	
-	
-	MyServerListener serverListener;
-	Thread serverThread;
 	
 	public boolean isLyukendzsoint(){
 		return lyukendzsoint;
@@ -67,13 +65,6 @@ public class GameServer implements GameInputListener {
 		// settings.setMapGenerator("Hexshaped Hexmap Flat");
 		// settings.setMapGenerator("Linear Hexmap Pointy");
 		// settings.setMapGenerator("Linear Hexmap Flat");
-//		User u = new User();
-//		u.setUsername("egy");
-//		settings.PLAYERS.add(new PlayerHuman(u, 0));
-//		u.setUsername("ketto");
-//		settings.PLAYERS.add(new PlayerHuman(u, 1));
-//		u.setUsername("harom");
-//		settings.PLAYERS.add(new PlayerHuman(u, 2));
 		
 		settings.setLayoutOrientation(Orientation.LAYOUT_FLAT);
 		settings.layout.size = new Point(32, 10);
@@ -88,7 +79,7 @@ public class GameServer implements GameInputListener {
 		settings.mapHeight = board.getDimensions().height - 2 * board.getZeroPointOffset().height;
 		settings.centerLayout();
 		
-		serverThread = new Thread() {
+		new Thread() {
 			public void run() {
 				try {
 					Thread.currentThread().setName("GameServer");
@@ -108,9 +99,13 @@ public class GameServer implements GameInputListener {
 					}
 					System.out.println("	[GO]   server");
 					
+					//a logolt usereket hozzáadjuk a playerlistához a játékban
 					int i = 0;
 					int c = -1;
-					for(String uname : host.getUserNames()){
+					//#bot players not supported yet
+					System.out.print("joined players: ");
+					for(String uname : host.getUserNames().toArray(new String[0])){
+						System.out.print(uname + ", ");
 						c++; i++;
 						if(! uname.startsWith("[bot")){
 							User u = MainWindow.getInstance().controller.getUser(uname);
@@ -126,12 +121,9 @@ public class GameServer implements GameInputListener {
 					}
 					
 					board.generateTerritories(settings.TerrPerPlayer);
-
-					System.out.println("sending settings");
-					host.broadCast(new GameMessage(Commands.SETTINGS, StringSerializer.serialize(settings)));
-
-					System.out.println("sending gameboard");
-					host.broadCast(new GameMessage(Commands.GAMEBOARD, StringSerializer.serialize(board)));
+					gameReady = true;
+					
+					host.broadCast(new GameMessage(Commands.START));
 					Thread.sleep(1000); //wait for players to reciewe everything
 					/* test Commands.NEW_OWNER:
 					System.out.println("sum(territories) = "+board.territories.length);
@@ -147,14 +139,14 @@ public class GameServer implements GameInputListener {
 					}*/
 					
 					//battle phase
-//					while(!gameFinished){
-//						for(Player p : settings.PLAYERS){
-//							String uname = p.getUser().getUsername();
-//							host.sendMessage(uname, new GameMessage(Commands.YOUR_TURN));
-//							// ...meanwhile a serverlistener kezeli a kliens uzeneteit
-//							serverListener.waitForMsgFrom(uname, Commands.END_TURN);
-//						}
-//					}
+					while(!gameFinished){
+						for(Player p : settings.PLAYERS){
+							String uname = p.getUser().getUsername();
+							host.broadCast(new GameMessage(Commands.YOUR_TURN, uname));
+							// ...meanwhile a serverlistener kezeli a kliens uzeneteit
+							waitForMsgFrom(uname, Commands.END_TURN);
+						}
+					}
 					
 					while(!gameFinished) {Thread.sleep(1000);}
 					
@@ -166,10 +158,10 @@ public class GameServer implements GameInputListener {
 					host.abort();
 				}
 			}
-		};
+		}.start();
 		
 		gameFinished = false;
-		serverThread.start();
+		
 	
 	}
 	
@@ -199,166 +191,223 @@ public class GameServer implements GameInputListener {
 		quest.setRightAnswer(q[3]);
 	}
 	
+	public void manageAttack(GameMessage msg) throws InterruptedException {
+		//remove this attack from msgStack
+		synchronized (msgStack) {
+			msgStack.pop();
+		}
+		
+		//inform everyone
+		String attacker = msg.getSender();
+//		System.out.println("attacker = " + attacker);
+		int targetTerritoryID = Integer.parseInt(msg.getParams()[1]);
+		String targetPlayer = board.getTerrytoryById(targetTerritoryID).getOwner().getUser().getUsername();
+//		System.out.println("defender = " + targetPlayer);
+//		System.out.println("TARGET: " +targetPlayer);
+
+		host.broadCast(new GameMessage(Commands.ATTACK, msg.getSender(), String.valueOf(targetTerritoryID)));
+		//Wait for the clients to process the news
+		Thread.sleep(1000);
+
+		Question question = questions.pop();
+		String rightAnswer = question.getRightAnswer();
+		shuffleQuestion(question);
+		String serializedQuestion = StringSerializer.serialize(question);
+		host.sendMessage(targetPlayer, new GameMessage(Commands.NORMAL_QUESTION, Commands.PARAM_YOURS, serializedQuestion));
+		host.sendMessage(attacker, new GameMessage(Commands.NORMAL_QUESTION, Commands.PARAM_YOURS, serializedQuestion));
+		for(Player p : settings.PLAYERS){
+			//for all players except the attacker and defender
+			if( !attacker.equals(p.getUser().getUsername()) && !targetPlayer.equals(p.getUser().getUsername())){
+				//send the question with "not yours"
+				host.sendMessage(attacker, new GameMessage(Commands.NORMAL_QUESTION, Commands.PARAM_NOT_YOURS, serializedQuestion));					
+			}
+		}
+		//should recieve 2 answers... wait for settings.questionTime max before continuing
+		GameMessage[] ans =  waitForMsg(Commands.NORM_ANSWER, settings.questionTime);
+		
+		host.broadCast(new GameMessage(Commands.NORM_ANSWER, rightAnswer));
+
+		if(ans.length == 2){ //in case of two answers
+			host.broadCast(new GameMessage(Commands.NORM_PLAYER_ANSWER, ans[0].getParams()[0], ans[0].getSender()));
+			host.broadCast(new GameMessage(Commands.NORM_PLAYER_ANSWER, ans[1].getParams()[0], ans[1].getSender()));
+			String ansAttacker;
+			String ansDefender; 
+			if(ans[0].getSender().equals(attacker) ){
+				ansAttacker = ans[0].getParams()[0];
+				ansDefender = ans[1].getParams()[0];
+			} else {
+				ansAttacker = ans[1].getParams()[0];					
+				ansDefender = ans[0].getParams()[0];
+			}
+			//both answers are right
+			if( ansAttacker.equals( ansDefender ) && rightAnswer.equals(ansAttacker)){
+//				//another raceQuestion round
+//				RaceQuestion rQuestion = RaceQuestions.pop();
+//				int rightRQAnswer = rQuestion.getRightAnswer();
+//				rQuestion.setRightAnswer(Integer.MIN_VALUE); 
+//				String serializedRQuestion = StringSerializer.serialize(rQuestion);
+//				host.sendMessage(targetPlayer, new GameMessage(Commands.RACE_QUESTION, Commands.PARAM_YOURS, serializedRQuestion));
+//				host.sendMessage(attacker, new GameMessage(Commands.RACE_QUESTION, Commands.PARAM_YOURS, serializedRQuestion));
+//				for(Player p : settings.PLAYERS){
+//					if( !attacker.equals(p.getUser().getUsername()) && !targetPlayer.equals(p.getUser().getUsername())){
+//						host.sendMessage(attacker, new GameMessage(Commands.RACE_QUESTION, Commands.PARAM_NOT_YOURS, serializedRQuestion));					
+//					}
+//				}
+//				//should have recieved 2 answers...
+//				GameMessage[] RQans =  waitForMsg(Commands.RQ_ANSWER, settings.raceTime);
+//				host.broadCast(new GameMessage(Commands.RQ_ANSWER, rightAnswer));
+//				if (RQans.length == 2){
+//					host.broadCast(new GameMessage(Commands.RQ_PLAYER_ANSWER, RQans[0].getParams()[0], RQans[0].getSender()));
+//					host.broadCast(new GameMessage(Commands.RQ_PLAYER_ANSWER, RQans[1].getParams()[0], RQans[1].getSender()));
+//					double attAns;
+//					double defAns;
+//					if(attacker.equals(RQans[0].getSender()) ){
+//						attAns = Double.parseDouble(RQans[0].getParams()[0]);
+//						defAns = Double.parseDouble(RQans[1].getParams()[0]);
+//					} else {
+//						attAns = Double.parseDouble(RQans[1].getParams()[0]);					
+//						defAns = Double.parseDouble(RQans[0].getParams()[0]);
+//					}
+//					if(Double.compare(attAns, defAns) == 0){ //a gyorsabbik nyer
+//						gameboard_changeOwner(attacker, targetTerritoryID);
+//					} else {
+//						if(Math.abs(rightRQAnswer-attAns) < Math.abs(rightRQAnswer-defAns)){
+//							gameboard_changeOwner(attacker, targetTerritoryID);
+//						} else {
+//							//nothin changes
+//						}
+//					}
+//				} else {
+//					host.broadCast(new GameMessage(Commands.RQ_PLAYER_ANSWER, RQans[0].getParams()[0], RQans[0].getSender()));
+//					if(attacker.equals(RQans[0].getSender())){
+//						gameboard_changeOwner(attacker, targetTerritoryID);
+//					} else {
+//						//nothin happens
+//					}
+//				}
+			} else { //not both answers were right
+				//only one right answer
+				if(rightAnswer.equals(ansAttacker)){
+					gameboard_changeOwner(attacker, targetTerritoryID);
+				}
+				if(rightAnswer.equals(ansDefender)){
+					//nothin changes
+				}
+			}
+		} else { //less than two answers were submitted
+			if(ans.length == 1){
+				host.broadCast(new GameMessage(Commands.NORM_PLAYER_ANSWER, ans[0].getParams()[0], ans[0].getSender()));
+				if(attacker.equals(ans[0].getSender()) && rightAnswer.equals(ans[0].getParams()[0])){
+					gameboard_changeOwner(attacker, targetTerritoryID);
+				} else {
+					//nothin happens
+				}								
+			}
+		}
+	}
+	
 	@Override
 	public void gotMessage(GameMessage msg) { //ez masik threaden fut!!
-		System.out.println("server GotMessage:" +msg.getMessage());
-		msgStack.push(msg);
+		System.out.println("server GotMessage: " +msg.toString());
+		synchronized (msgStack) {
+			msgStack.push(msg);
+		}
 		if(msg.getMessage().equals(interrupt)) {
-			lastMsg.push(msg);
-			System.out.println("server recieved " + msg + " from " + msg.getSender() );
+			System.out.println("interruptcounter caught message, only " + interruptCounter +"left" );
+			synchronized (msgStack) {
+				lastMsg.push(msg);
+				msgStack.pop();
+			}
 			if(--interruptCounter == 0){ 
 				interruptThread.interrupt(); //this one should interrupt the waitFor... method
 			}
 		};
+		if(!gameReady) return;
 		new Thread(){
 			public void run(){
-				if(msg.getMessage().equals(Commands.ATTACK)) {
-					msgStack.pop();
-					String attacker = msg.getSender();
-					int targetTerritoryID = Integer.parseInt(msg.getParams()[1]);
-					String target = board.getTerrytoryById(targetTerritoryID).getOwner().getUser().getUsername();
-					System.out.println("TARGET: " +target);
-					host.broadCast(new GameMessage(Commands.ATTACK, msg.getSender(), String.valueOf(targetTerritoryID)));
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					Question question = questions.pop();
-					shuffleQuestion(question);
-					String rightAnswer = question.getRightAnswer();
-					String serializedQuestion = StringSerializer.serialize(question);
-					host.sendMessage(target, new GameMessage(Commands.NORMAL_QUESTION, Commands.PARAM_YOURS, serializedQuestion));
-					host.sendMessage(attacker, new GameMessage(Commands.NORMAL_QUESTION, Commands.PARAM_YOURS, serializedQuestion));
-					for(Player p : settings.PLAYERS){
-						if( !attacker.equals(p.getUser().getUsername()) && !target.equals(p.getUser().getUsername())){
-							host.sendMessage(attacker, new GameMessage(Commands.NORMAL_QUESTION, Commands.PARAM_NOT_YOURS, serializedQuestion));					
-						}
-					}
-					//should have recieved 2 answers...
-					GameMessage[] ans =  waitForMsg(Commands.NORM_ANSWER, settings.questionTime);
-					host.broadCast(new GameMessage(Commands.NORM_ANSWER, rightAnswer));
-					
-					if(ans.length == 2){
-						host.broadCast(new GameMessage(Commands.NORM_PLAYER_ANSWER, ans[0].getParams()[0], ans[0].getSender()));
-						host.broadCast(new GameMessage(Commands.NORM_PLAYER_ANSWER, ans[1].getParams()[0], ans[1].getSender()));
-						String ansAttacker;
-						String ansDef; 
-						if(attacker.equals(ans[0].getSender()) ){
-							ansAttacker = ans[0].getParams()[0];
-							ansDef = ans[1].getParams()[0];
-						} else {
-							ansAttacker = ans[1].getParams()[0];					
-							ansDef = ans[0].getParams()[0];
-						}
-						//both answers are right
-						if( ansAttacker.equals( ansDef ) && rightAnswer.equals(ansAttacker)){
-							//another raceQuestion round
-							RaceQuestion rQuestion = RaceQuestions.pop();
-							int rightRQAnswer = rQuestion.getRightAnswer();
-							rQuestion.setRightAnswer(Integer.MIN_VALUE); 
-							String serializedRQuestion = StringSerializer.serialize(rQuestion);
-							host.sendMessage(target, new GameMessage(Commands.RACE_QUESTION, Commands.PARAM_YOURS, serializedRQuestion));
-							host.sendMessage(attacker, new GameMessage(Commands.RACE_QUESTION, Commands.PARAM_YOURS, serializedRQuestion));
-							for(Player p : settings.PLAYERS){
-								if( !attacker.equals(p.getUser().getUsername()) && !target.equals(p.getUser().getUsername())){
-									host.sendMessage(attacker, new GameMessage(Commands.RACE_QUESTION, Commands.PARAM_NOT_YOURS, serializedRQuestion));					
-								}
-							}
-							//should have recieved 2 answers...
-							GameMessage[] RQans =  waitForMsg(Commands.RQ_ANSWER, settings.raceTime);
-							host.broadCast(new GameMessage(Commands.RQ_ANSWER, rightAnswer));
-							if (RQans.length == 2){
-								host.broadCast(new GameMessage(Commands.RQ_PLAYER_ANSWER, RQans[0].getParams()[0], RQans[0].getSender()));
-								host.broadCast(new GameMessage(Commands.RQ_PLAYER_ANSWER, RQans[1].getParams()[0], RQans[1].getSender()));
-								double attAns;
-								double defAns;
-								if(attacker.equals(RQans[0].getSender()) ){
-									attAns = Double.parseDouble(RQans[0].getParams()[0]);
-									defAns = Double.parseDouble(RQans[1].getParams()[0]);
-								} else {
-									attAns = Double.parseDouble(RQans[1].getParams()[0]);					
-									defAns = Double.parseDouble(RQans[0].getParams()[0]);
-								}
-								if(Double.compare(attAns, defAns) == 0){ //a gyorsabbik nyer
-									host.broadCast(new GameMessage(Commands.NEW_OWNER, RQans[0].getSender(), String.valueOf(targetTerritoryID)));
-								} else {
-									if(Math.abs(rightRQAnswer-attAns) < Math.abs(rightRQAnswer-defAns)){
-										host.broadCast(new GameMessage(Commands.NEW_OWNER, attacker, String.valueOf(targetTerritoryID)));
-									} else {
-										//nothin changes
-									}
-								}
-							} else {
-								host.broadCast(new GameMessage(Commands.RQ_PLAYER_ANSWER, RQans[0].getParams()[0], RQans[0].getSender()));
-								if(attacker.equals(RQans[0].getSender())){
-									host.broadCast(new GameMessage(Commands.NEW_OWNER, attacker, String.valueOf(targetTerritoryID)));
-								} else {
-									//nothin happens
-								}
-							}
-						} else {
-							//only one right answer
-							if(rightAnswer.equals(ansAttacker)){
-								host.broadCast(new GameMessage(Commands.NEW_OWNER, attacker, String.valueOf(targetTerritoryID)));
-							}
-							if(rightAnswer.equals(ansDef)){
-								//nothin changes
-							}
-						}
-					} else { 
-						host.broadCast(new GameMessage(Commands.NORM_PLAYER_ANSWER, ans[0].getParams()[0], ans[0].getSender()));
-						if(attacker.equals(ans[0].getSender()) && rightAnswer.equals(ans[0].getParams()[0])){
-							host.broadCast(new GameMessage(Commands.NEW_OWNER, attacker, String.valueOf(targetTerritoryID)));
-						} else {
-							//nothin happens
-						}
-					}
-				} else {
-				};
+				Thread.currentThread().setName("server-Msg-listener");
+				try{
+					if(msg.getMessage().equals(Commands.ATTACK)) {
+						manageAttack(msg);
+					} else if(msg.getMessage().equals(Commands.GAMEBOARD_REQUEST)) {
+						if(!gameReady) return;
+						System.out.println("sending gameboard");
+						String s =  StringSerializer.serialize(board);
+						host.sendMessage(msg.getSender(), new GameMessage(Commands.GAMEBOARD, s));
+					} else if(msg.getMessage().equals(Commands.SETTINGS_REQUEST)) { 
+						if(!gameReady) return;
+						System.out.println("sending settings");
+						String s =  StringSerializer.serialize(settings);
+						host.sendMessage(msg.getSender(), new GameMessage(Commands.SETTINGS, s));
+					} else if(msg.getMessage().equals(Commands.IS_STARTED)) { 
+						host.sendMessage(msg.getSender(), new GameMessage(Commands.START));
+					};
+				}catch(InterruptedException e){
+					e.printStackTrace();
+				}
 			}		
 		}.start();
 		
 	}
 	
+	private void gameboard_changeOwner(String uname, int territoryID){
+		Player newOwner = settings.getPlayerByUname(uname);
+		board.getTerrytoryById(territoryID).setOwner(newOwner); 
+		host.broadCast(new GameMessage(Commands.NEW_OWNER, uname, String.valueOf(territoryID)));
+		
+	}
 	
 	
 	/**
-	 * Hangs the thread until all clients send a certain msg.
-	 * @param msg
+	 * Hangs the thread until "number of all clients" ammount of a certain msg is recieved.
+	 * @param msg String message type
 	 * @return the first n {@link GameMessage}s of type msg that were recieved (n = num of clients) 
 	 */
 	public GameMessage[] waitForMsg(String msg){
-		return waitForMsg(msg, 0);
+		return waitForMsg(msg, 0, settings.PLAYERS.size());
 	}
 	/**
-	 * Hangs the thread until all clients send a certain msg.
+	 * Hangs the thread until all clients send a certain msg or maxTime is up.
 	 * @param msg
 	 * @param maxTime the maximal time the thread will wait.
-	 * @return the first n {@link GameMessage}s of type msg that were recieved (n = num of clients) 
+	 * @return the first n {@link GameMessage}s of type msg that were recieved (n = num of clients) in due time
 	 */
 	public GameMessage[] waitForMsg(String msg, long maxTime){
-		lastMsg.clear();
-		
-		interruptCounter = settings.PLAYERS.size();
-		
-		//check if msg was recieved already
-		for (GameMessage gm : msgStack){
-			if(gm.getMessage().equals(msg)){
-				lastMsg.push(gm);
-				msgStack.remove(gm);
-				System.out.println( msg + " pulled from stack");
-			
-				if(--interruptCounter == 0){ 
-					return lastMsg.toArray(new GameMessage[0]);
-				}
-			}
-		}
-		
-		interruptThread = Thread.currentThread();
+		return waitForMsg(msg, maxTime, settings.PLAYERS.size());
+	}
+	/**
+	 * Hangs the thread until specified ammount of a certain msg is recieved.
+	 * @param msg
+	 * @param maxTime the maximal time the thread will wait.
+	 * @param numberOfMessages the ammount of messages expected during maxTime
+	 * @return the first n {@link GameMessage}s of type msg that were recieved (n = num of clients) 
+	 */
+	public GameMessage[] waitForMsg(String msg, long maxTime, int numberOfMessages){
+		System.out.println("server waiting for "+String.valueOf(numberOfMessages)+ "x " +msg+ " maxtime: "+ String.valueOf(maxTime));
 		try{
-			interrupt = msg; // start listening-collecting-interrupting for "msg" messages
+			lastMsg.clear();
+		
+			interruptCounter = numberOfMessages;
+			//check if msg was recieved already
+			synchronized (msgStack) {
+				for (Iterator<GameMessage> iterator = msgStack.iterator(); iterator.hasNext();) {
+					GameMessage gm = iterator.next();
+					if(gm.getMessage().equals(msg)){
+						lastMsg.push(gm);
+						iterator.remove();
+						System.out.println( msg + " pulled from stack");
+						
+						interruptCounter--;
+						if(interruptCounter == 0){ 
+							return lastMsg.toArray(new GameMessage[0]);
+						}
+					}
+					
+				} 
 			
+				interruptThread = Thread.currentThread();
+				interrupt = msg; // start listening-collecting-interrupting for "msg" messages
+			}
 			System.out.println("server waiting for " + msg);
 			if(maxTime != 0){
 				Thread.sleep(maxTime);
@@ -375,7 +424,7 @@ public class GameServer implements GameInputListener {
 			interrupt = null; // stop special listening
 		}
 		//if time ran out:
-		return null;
+		return lastMsg.toArray(new GameMessage[0]);
 	}
 
 	/**
@@ -395,27 +444,32 @@ public class GameServer implements GameInputListener {
 	 * @return the first n {@link GameMessage}s of type msg that were recieved (n = num of clients) 
 	 */
 	public GameMessage waitForClientMsg(String clientName, String msg, long maxTime){
-		//check if msg was recieved already
-		for (GameMessage gm : msgStack){
-			if(gm.getMessage().equals(msg)){
-				msgStack.remove(gm);
-				System.out.println( msg + " pulled from stack");
-				return gm;
-			}
-		}
-		
-		interruptCounter = 1;
-		interruptThread = Thread.currentThread();
+		System.out.println("server waiting for " +msg+ "from "+ clientName +", maxtime: "+ String.valueOf(maxTime));
 		try {
-			interrupt = msg;
-			if(maxTime != 0){
+
+			// check if msg was recieved already
+			synchronized (msgStack) {
+				for (Iterator<GameMessage> iterator = msgStack.iterator(); iterator.hasNext();) {
+					GameMessage gm = iterator.next();
+					if (gm.getMessage().equals(msg)) {
+						iterator.remove();
+						System.out.println(msg + " pulled from stack");
+						return gm;
+					}
+				}
+
+				interruptCounter = 1;
+				interruptThread = Thread.currentThread();
+				interrupt = msg; //start listening for this kind of msg
+			}
+			if (maxTime != 0) {
 				System.out.println("server waiting for " + msg);
 				Thread.sleep(maxTime);
 			} else {
-				while(true){
+				while (true) {
 					System.out.println("server waiting for " + msg);
 					Thread.sleep(10000);
-				}				
+				}
 			}
 		} catch (InterruptedException e) {
 			GameMessage ret = lastMsg.pop();

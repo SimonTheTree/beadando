@@ -120,7 +120,7 @@ public class Cell extends TileHex<Cell> {
         }
         if (highlighted){
         	g.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-            g.setColor(new Color(255, 255, 255, 180));
+            g.setColor(new Color(255, 255, 255, 50));
         } else {        	
         	g.setColor(getOwner().getOwner().getColor());
         	g.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
