@@ -65,7 +65,11 @@ public final class Labels {
 	public static final String MSG_ENTER_IP_ADDRESS = "Enter the server IP:";
 	public static final String MSG_GAME_STARTED = "The game has already started";
 	public static final String MSG_BAD_IP_ADDRESS = "The game has already started";
-	 	
+	public static final String MSG_PLEASE_SET_EVERYTHING = "Please set everything!";
+	public static final Object MSG_NEGATIVE_VALUE_GIVEN = "Negative value was given";
+	public static final String MSG_ERROR = "Error";
+	public static final String MSG_ADDING_QUESTION_FAILED = "Something went wrong while adding the question";
+	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
 	//--------------------------------------------------------------//
@@ -104,6 +108,7 @@ public final class Labels {
 	//--------------------------------------------------------------//
 	public static final String MAIN_WINDOW_TITLE = "Quiz! Ojee!!";
 	public static final String LOGIN_WINDOW_TITLE = "Login";
+	public static final String ADD_QUESTION_DIALOG_TITLE = "Add new Question";
 	
 	//--------------------------------------------------------------//
 	//MODEL TITLES                                                  //
@@ -123,7 +128,11 @@ public final class Labels {
 	public static final String M_MAP_NAME = "Map name";
 	public static final String M_QUESTION = "Question";
 	public static final String M_RIGHT_ANSWER = "Right answer";
-	
+	public static final String M_ANSWER1 = "Answer1";
+	public static final String M_ANSWER2 = "Answer2";
+	public static final String M_ANSWER3 = "Answer3";
+	public static final String M_AUTHOR = "Author";
+	public static final String M_DIFFICULTY = "Difficulty";
 	//--------------------------------------------------------------//
 	//TABLE THINGS                                                  //
 	//--------------------------------------------------------------//

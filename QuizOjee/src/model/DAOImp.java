@@ -26,6 +26,8 @@ public class DAOImp implements DAO {
 	//Question
 	private static final String SQL_GET_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, answer1, answer2, answer3, topic_id, difficulty, author, dbms_random.value AS rand FROM NORMAL_QUESTIONS WHERE difficulty BETWEEN ? and ? ";
 	private static final String SQL_GET_RACE_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, topic_id, author, dbms_random.value AS rand FROM RACE_QUESTIONS ";
+	private static final String SQL_GET_QUESTIONS = "SELECT question, right_answer, answer1, answer2, answer3, name, difficulty, author FROM NORMAL_QUESTIONS, QUESTION_TOPICS WHERE NORMAL_QUESTIONS.topic_id = QUESTION_TOPICS.topic_id ORDER BY DIFFICULTY";
+    private static final String SQL_ADD_QUESTION = "INSERT INTO NORMAL_QUESTIONS (question_id, question, right_answer, answer1, answer2, answer3, difficulty, topic_id, author) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
 	//User
 	private static final String SQL_CHECK_USER = "SELECT uname, password FROM USERS WHERE uname = ? and password = ?";
@@ -42,9 +44,14 @@ public class DAOImp implements DAO {
 	//tudom hogy ronda,de nem ment preparedStatement-tel:
 	private static final String SQL_MAX_DIFFICULTY = "SELECT MAX(difficulty) FROM NORMAL_QUESTIONS";
 	private static final String SQL_MAX_TOPIC_ID = "SELECT MAX(topic_id) FROM NORMAL_QUESTIONS";
+	private static final String SQL_MAX_QUESTION_ID = "SELECT MAX(question_id) FROM NORMAL_QUESTIONS";
 	
 	//Topic
 	private static final String SQL_GET_TOPICS_WITH_NUMBERS = "select T1.topic_id, normalDB, NVL(raceDBnull,0) AS raceDB, T1.difficulty, name FROM ( select count(*) AS normalDB, difficulty, topic_id FROM NORMAL_QUESTIONS group by topic_id, difficulty order by topic_id, difficulty ) T1 LEFT JOIN ( select count(*) AS raceDBnull, topic_id FROM RACE_QUESTIONS group by topic_id order by topic_id ) T2 ON T1.topic_id = T2.topic_id, QUESTION_TOPICS where T1.topic_id = question_topics.topic_ID";
+	private static final String SQL_GET_TOPICS = "SELECT * FROM QUESTION_TOPICS";
+
+	//Map
+	private static final String SQL_GET_MAP_NAMES = "SELECT NAME FROM MAPS";
 	
 	//Lekerdezesek:
 	private static final String SQL_GET_QUESTION_QUANTITY_BY_CATEGORY = "SELECT T1.NAME AS \"temakor\", (T1.\"count\" + T2.\"count\") AS \"kerdesek_szama\" FROM ( SELECT QT.NAME, COUNT(NQ.TOPIC_ID) AS \"count\" FROM QUESTION_TOPICS QT LEFT JOIN NORMAL_QUESTIONS NQ ON QT.TOPIC_ID=NQ.TOPIC_ID GROUP BY QT.NAME ) T1 LEFT JOIN (SELECT QT.NAME, COUNT(RQ.TOPIC_ID) AS \"count\" FROM QUESTION_TOPICS QT LEFT JOIN RACE_QUESTIONS RQ ON QT.TOPIC_ID=RQ.TOPIC_ID GROUP BY QT.NAME ) T2 ON T1.NAME = T2.NAME ORDER BY \"kerdesek_szama\" DESC";
@@ -270,8 +277,10 @@ public class DAOImp implements DAO {
 			ResultSet rs;
 			if (column.equals("difficulty")) {
 				rs = pst.executeQuery(SQL_MAX_DIFFICULTY);
-			} else if (column.equals("topic_id")) {
+			} else if(column.equals("topic_id")) {
 				rs = pst.executeQuery(SQL_MAX_TOPIC_ID);
+			} else if(column.equals("question_id")) {
+				rs = pst.executeQuery(SQL_MAX_QUESTION_ID);
 			} else {
 				return 0;
 			}
@@ -319,6 +328,41 @@ public class DAOImp implements DAO {
 			session.disconnect();
 		}
 		return false;
+	}
+	
+	public synchronized boolean addQuestion(Question question) {
+	System.out.println("add Question " + question.getQuestion());
+		int questionId = getMax("question_id") + 1;
+
+		Session session = openSSHTunnel();
+		if (session == null) return false;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo"); 
+			PreparedStatement pst = conn.prepareStatement(SQL_ADD_QUESTION);
+		) {
+//question_id, question, right_answer, answer1, answer2, answer3, difficulty, topic_id, author
+			int index = 1;
+			pst.setInt(index++, questionId);
+			pst.setString(index++,question.getQuestion());
+			pst.setString(index++,question.getRightAnswer());
+			pst.setString(index++,question.getAnswer1());
+			pst.setString(index++,question.getAnswer2());
+			pst.setString(index++,question.getAnswer3());
+			pst.setInt(index++,question.getDifficulty());
+			pst.setInt(index++,question.getTopicId());
+			pst.setString(index++,question.getAuthor());
+			int rowsAffected = pst.executeUpdate();
+			if(rowsAffected > 0) {
+				return true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return false;
+	
 	}
 
 	public synchronized boolean addUser(User user) throws UserAlreadyExistsException {
@@ -572,6 +616,33 @@ public class DAOImp implements DAO {
 	public synchronized List<Topic> getTopics() {
 		System.out.println("get Topics");
 			
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_TOPICS);
+			List<Topic> topics = new ArrayList<Topic>();
+			while(rs.next()) {
+				Topic topic = new Topic();
+				topic.setName(rs.getString("name"));
+				topic.setTopicId(rs.getInt("topic_id"));
+				topics.add(topic);
+			}
+			return topics;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+	
+	public synchronized List<Topic> getTopicsWithQuestionNumbers() {
+		System.out.println("get Topics");
+			
 			Session session = openSSHTunnel();
 			if (session == null) return null;
 			
@@ -611,6 +682,61 @@ public class DAOImp implements DAO {
 			return null;
 		}
 
+	
+	public synchronized List<String[]> getQuestions() {
+		System.out.println("getQuestions");
+		List<String[]> re = new ArrayList<String[]>();
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_QUESTIONS);
+			while(rs.next()) {
+				String[] str = new String[8];
+				for(int i=0;i<8;++i) {
+					str[i] = rs.getString(i+1);
+				}
+				re.add(str);
+			}
+			return re;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+	
+	public synchronized List<String> getMapNames() {
+	System.out.println("7.lekerdezes");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			
+			ResultSet rs = st.executeQuery(SQL_GET_MAP_NAMES);
+			List<String> re = new ArrayList<>();
+			while(rs.next()) {
+				re.add(rs.getString(1));
+			}
+			return re;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+	
 	//TODO lekerdezes
 	
 	public synchronized Map<String,Integer> getQuestionQuantityByCategory() {
@@ -843,6 +969,5 @@ public class DAOImp implements DAO {
 		}
 		return null;
 	}
-	
 	
 }

@@ -14,6 +14,7 @@ import javax.swing.GroupLayout.Alignment;
 import view.components.GLabel;
 import view.components.KDialog;
 import view.components.GButton;
+import view.components.AddQuestionDialog;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class StatsState extends DefaultState {
@@ -27,7 +28,7 @@ public class StatsState extends DefaultState {
 		
 		GButton btnListQuestions = new GButton(Labels.BTN_LIST_QUESTIONS);
 			btnListQuestions.addActionListener((e) -> {
-				//new KDialog(root,true,root.controller.getUserQuestions(root.getLoggedUser().getUsername()),Labels.QUESTION,Labels.RIGHT_ANSWER,Labels.TOPIC_NAME);
+				new KDialog(root,true,root.controller.getQuestionsTable());
 			});	
 		GButton btnListMyQuestions = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
 			btnListMyQuestions.addActionListener((e) -> {
@@ -35,7 +36,7 @@ public class StatsState extends DefaultState {
 			});
 		GButton btnListMaps = new GButton(Labels.BTN_LIST_MAPS);
 			btnListMaps.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getMapNamesTable());
 			});
 		GButton btnListGlobalFavoriteMaps = new GButton(Labels.BTN_LIST_GLOB_FAV_MAPS);
 			btnListGlobalFavoriteMaps.addActionListener((e) -> {
@@ -51,7 +52,7 @@ public class StatsState extends DefaultState {
 			});
 		GButton btnListTopics = new GButton(Labels.BTN_LIST_TOPICS);
 			btnListTopics.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getTopicsTable());				
 			});
 		GButton btnTopTen = new GButton(Labels.BTN_LIST_TOP_TEN);
 			btnTopTen.addActionListener((e) -> {
@@ -59,7 +60,7 @@ public class StatsState extends DefaultState {
 			});
 		GButton btnAddQuestion = new GButton(Labels.BTN_ADD_QUESTION);
 			btnAddQuestion.addActionListener((e) -> {
-				
+				new AddQuestionDialog(root, true, root.getLoggedUser().getUsername());
 			});
 		GButton btnAddMap = new GButton(Labels.BTN_ADD_MAP);
 			btnAddMap.addActionListener((e) -> {

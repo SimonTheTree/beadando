@@ -2,6 +2,8 @@ package model;
 
 import java.util.Map;
 
+import view.Labels;
+
 public class Topic {
 
 	private int topicId;
@@ -42,5 +44,19 @@ public class Topic {
 	}
 	public String toString() {
 		return "[(Topic"+topicId+") "+name+" "+numberOfRaceQuestions+" "+numberOfQuestionsByDifficulty+"]";
+	}
+	public String[] convertToStringArray() {
+		if(numberOfQuestionsByDifficulty == null) {
+			String[] re = {topicId+"", name}; 
+			return re;
+		}
+		return null;
+	}
+	public String[] sequence() {
+		if(numberOfQuestionsByDifficulty == null) {
+			String[] re = {Labels.M_TOPIC_ID, Labels.M_TOPIC_NAME}; 
+			return re;
+		}
+		return null;
 	}
 }

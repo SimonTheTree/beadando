@@ -26,6 +26,7 @@ public class Question implements Serializable{
 	private String answer2;
 	private String answer3;
 	private int topicId;
+	private String topicName;
 	private int difficulty;
 	private String author;
 	
@@ -83,7 +84,12 @@ public class Question implements Serializable{
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	
+	public String getTopicName() {
+		return topicName;
+	}
+	public void setTopicName(String topicName) {
+		this.topicName = topicName;
+	}
 	public String toString() {
 		return "[(Question"+questionId+") "+question+"]";
 	}

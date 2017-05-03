@@ -72,4 +72,12 @@ public interface DAO {
 	
 	Map<String,Integer> getFavMaps(String uname);
 
+	List<Topic> getTopicsWithQuestionNumbers();
+
+	List<String[]> getQuestions();
+
+	List<String> getMapNames();
+
+	boolean addQuestion(Question question);
+
 }

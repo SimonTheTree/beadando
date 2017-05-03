@@ -162,4 +162,15 @@ public class Statistics {
     	};
     }
     
+    public Statistics add(Statistics stat) {
+		points += stat.points;
+    	wins += stat.wins;
+    	defeats += stat.defeats;
+    	rightAnswers += stat.rightAnswers;
+    	wrongAnswers += stat.wrongAnswers;
+    	rightTips += stat.rightTips;
+    	wrongTips += stat.wrongTips;
+    	return this;
+    }
+    
 }

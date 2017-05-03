@@ -38,6 +38,8 @@ public class Controller {
 	private List<RaceQuestion> raceQuestions;
 	private Object topicListKey = new Object();
 	private List<Topic> topicList = null;
+	private Object fullTopicListKey = new Object();
+	private List<Topic> fullTopicList = null;
 	
 	//lekerdezesekhez
 	private Object questionQuantityByCategoryKey = new Object();
@@ -169,7 +171,10 @@ public class Controller {
     }
     
 	public boolean updateStatistics(Statistics stat) throws UserNotFoundException {
-		return db.updateStatistics(stat);
+		Statistics added = getUserStatistics(stat.getUname());
+		if(added == null) throw new UserNotFoundException();
+		added.add(stat);
+		return db.updateStatistics(added);
 	}
     
     /**
@@ -261,6 +266,14 @@ public class Controller {
 		}
     }
 
+    public List<Topic> getTopicsWithQuestionNumbers() {
+		synchronized(fullTopicListKey) {
+	    	if(fullTopicList == null)
+	    	fullTopicList = db.getTopicsWithQuestionNumbers();
+	    	return fullTopicList;
+		}
+    }
+    
     public List<Topic> getTopics() {
 		synchronized(topicListKey) {
 	    	if(topicList == null)
@@ -268,6 +281,16 @@ public class Controller {
 	    	return topicList;
 		}
     }
+    
+    public List<String[]> getTopicsTable() {
+    	List<Topic> topList = getTopics();
+    	List<String[]> re = convertTopic(topList);
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = topList.get(0).sequence();
+    	re.add(0, head);
+    	return re;
+    }
+    
 /*
     public List<String[]> getTopicsTable() {
 		synchronized(topicListKey) {
@@ -278,17 +301,17 @@ public class Controller {
     }
 */    
     public int getNumOfQuestions(int minDiff, int maxDiff, List<Integer> topicIdList) {
-		synchronized(topicListKey) {
-			if(topicList == null) topicList = db.getTopics();
+		synchronized(fullTopicListKey) {
+			if(fullTopicList == null) fullTopicList = db.getTopics();
 	    	int re = 0;
 	    	if(minDiff < 0) minDiff = 0;
 	    	if(maxDiff < minDiff) return 0;
 	    	if(maxDiff > maxDifficulty) maxDiff = maxDifficulty;
 	    	for(int i : topicIdList) {
-	    		Topic good = topicList.get(i);
+	    		Topic good = fullTopicList.get(i);
 	    		if(good.getTopicId() != i) {
-	    			for(int j=0;j<topicList.size();++j) {
-	    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
+	    			for(int j=0;j<fullTopicList.size();++j) {
+	    				if(fullTopicList.get(j).getTopicId() == i) good = fullTopicList.get(j);  
 	    			}
 	    		}
 				re+=good.getNumberOfQuestions(minDiff, maxDiff);
@@ -298,14 +321,14 @@ public class Controller {
     }
     
     public int getNumOfRaceQuestions(List<Integer> topicIdList) {
-		synchronized(topicListKey) {
-	    	if(topicList == null) topicList = db.getTopics();
+		synchronized(fullTopicListKey) {
+	    	if(fullTopicList == null) fullTopicList = db.getTopics();
 	    	int re = 0;
 	    	for(int i : topicIdList) {
-	    		Topic good = topicList.get(i);
+	    		Topic good = fullTopicList.get(i);
 	    		if(good.getTopicId() != i) {
-	    			for(int j=0;j<topicList.size();++j) {
-	    				if(topicList.get(j).getTopicId() == i) good = topicList.get(j);  
+	    			for(int j=0;j<fullTopicList.size();++j) {
+	    				if(fullTopicList.get(j).getTopicId() == i) good = fullTopicList.get(j);  
 	    			}
 	    		}
 				re+=good.getNumberOfRaceQuestions();
@@ -341,6 +364,8 @@ public class Controller {
 					questions = null;
 				} synchronized(raceQuestionsKey) {
 					raceQuestions = null;
+				} synchronized(fullTopicListKey) {
+					fullTopicList = null;
 				} synchronized(topicListKey) {
 					topicList = null;
 				}
@@ -370,6 +395,34 @@ public class Controller {
 		});
 		t.setDaemon(true);
 		t.start();
+	}
+	
+	public List<String[]> getQuestions() {
+		return db.getQuestions();
+	}
+	
+	public List<String[]> getQuestionsTable() {
+    	List<String[]> re = getQuestions();
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.M_QUESTION,Labels.M_RIGHT_ANSWER,Labels.M_ANSWER1,Labels.M_ANSWER2,Labels.M_ANSWER3,Labels.M_TOPIC_NAME, Labels.M_DIFFICULTY,Labels.M_AUTHOR, };
+    	re.add(0, head);
+    	return re;
+	}
+	
+	public List<String> getMapNames() {
+		return db.getMapNames();
+	}
+	
+	public List<String[]> getMapNamesTable() {
+    	List<String[]> re = convert(getMapNames());
+    	if(re == null) re = new ArrayList<>();
+    	String[] head = {Labels.M_MAP_NAME, };
+    	re.add(0, head);
+    	return re;
+    }
+	
+	public boolean addQuestion(Question question) {
+		return db.addQuestion(question);
 	}
 	
 	//TODO lekerdezesek
@@ -419,7 +472,7 @@ public class Controller {
      * Elso sor a title.
      */
     public List<String[]> getTopTenPlayersStatisticsTable() {
-    	List<String[]> re = convert(getTopTenPlayersStatistics());
+    	List<String[]> re = convertStatistics(getTopTenPlayersStatistics());
     	if(re == null) re = new ArrayList<>();
     	re.add(0, Statistics.getSequence());
     	return re;
@@ -499,7 +552,7 @@ public class Controller {
 	
     /** 
      * 5. lekerdezes<p>
-     *@return Az 5 leggyakrabban hasznalt map nevet. <br>
+	 *@return A user altal felrakott kerdesek topicnevvel kiirva. vagy null
      * Elso sor a title
      */
     public List<String[]> getUserQuestionsTable(String uname) {
@@ -524,7 +577,7 @@ public class Controller {
 	}
 	
     /** 
-     * 5. lekerdezes<p>
+     * 6. lekerdezes<p>
 	 * @return kilistazza a befejezett jatekok nyerteseit, a nevuket, a nyero pontszamot, es a csatateret (terkep)
      * Elso sor a title
      */
@@ -590,10 +643,28 @@ public class Controller {
 		return re;
 	}
 	
-	private static List<String[]> convert(List<Statistics> in) {
+	private static List<String[]> convert(List<String> in) {
+		List<String[]> re = new ArrayList<>();
+		for(String elem : in) {
+			String[] str = new String[1];
+			str[0] = elem;
+			re.add(str);
+		}
+		return re;
+	}
+	
+	private static List<String[]> convertStatistics(List<Statistics> in) {
 		List<String[]> re = new ArrayList<>();
 		for(Statistics st : in) {
 			re.add(st.convertToStringArray());
+		}
+		return re;
+	}
+	
+	private static List<String[]> convertTopic(List<Topic> in) {
+		List<String[]> re = new ArrayList<>();
+		for(Topic tp : in) {
+			re.add(tp.convertToStringArray());
 		}
 		return re;
 	}

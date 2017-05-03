@@ -34,14 +34,14 @@ public class Login extends JDialog {
 	private GButton btnRegister;
 	private JPanel panelMsg;
 	private List<GLabel> msg = new ArrayList<>();
-
+	public static final Color BACKGROUND = new Color(80,40,0);  
 	/**
 	 * Create the dialog.
 	 */
 	public Login() {
 		panelMsg = new JPanel();
 		panelMsg.setOpaque(false);
-		getContentPane().setBackground(new Color(80, 40, 0));
+		getContentPane().setBackground(BACKGROUND);
 		
 		GLabel lblUsername = new GLabel(Labels.USERNAME);
 		GLabel lblPassword = new GLabel(Labels.PASSWORD);
