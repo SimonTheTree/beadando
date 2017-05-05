@@ -1,12 +1,16 @@
 package controller;
 
+import java.io.Serializable;
+
+import game.StringSerializer;
+
 /** A {@link GameClient} - {@link GameHost} kozotti uzenetekre vonatkozo JavaBean.<p>
  * 4 adattagja van:<br>
  *  - <b>automatic</b>: Ha ez false, akkor a {@link GameClient} es {@link GameHost} osztalyok meghivjak a {@link GameInputListener}ek {@link GameInputListener#gotMessage(GameMessage) gotMessage} metodusait <br>
  *  - <b>sender</b>: Az uzenet kuldoje.<br>
  *  - <b>message</b>: A {@link Commands} egyik uzenete.<br>
  *  - <b>params</b>: Az adott uzenethez tartozo parameterek.*/
-public class GameMessage {
+public class GameMessage implements Serializable {
 
 	private String sender;
 	private String message;
@@ -35,7 +39,7 @@ public class GameMessage {
 	 * @param arg : az osszes adattagot tartalmazo String
 	 * @param basedOnCode : teljesen lenyegtelen, az osszeakadas elkerulesekepp van itt.
 	 */
-	public GameMessage(String arg, boolean basedOnCode) {
+	/*public GameMessage(String arg, boolean basedOnCode) {
 		String[] args = arg.split(SPLIT);
 		automatic = args[0].equals("true")?true:false;
 		sender = args[1];
@@ -44,9 +48,10 @@ public class GameMessage {
 			params = new String[args.length-3];
 			for(int i=0;i<params.length;++i) {
 				params[i] = args[i+3];
+			
 			}
 		}
-	}
+	}*/
 	/** 
 	 * {@link GameMessage} konstruktor.<p>
 	 * @param message : {@link Commands}-beli uzenet.
@@ -59,7 +64,7 @@ public class GameMessage {
 	}
 	
 	public String toString() {
-		String re = "";
+		/*String re = "";
 		re+=automatic+SPLIT;
 		re+=sender+SPLIT;
 		re+=message;
@@ -71,7 +76,8 @@ public class GameMessage {
 			}
 			re+=params[params.length-1];
 		}
-		return re;
+		return re;*/
+		return StringSerializer.serialize(this);
 	}
 	
 	public String getSender() {

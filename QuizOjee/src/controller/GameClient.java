@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 import controller.exceptions.GameIsStartedException;
 import controller.exceptions.HostDoesNotExistException;
+import game.StringSerializer;
 
 /**
  * <b>GameClient</b> osztaly.
@@ -116,7 +117,7 @@ public class GameClient {
 			t.cancel();
 			if (!tooMuchWaiting) {
 				String asd = in.readLine();
-				GameMessage msg = new GameMessage(asd, true);
+				GameMessage msg = (GameMessage)StringSerializer.deSerialize(asd);
 				// System.out.println(userName +": Host said:
 				// "+msg.getMessage());
 				if (msg.getMessage().equals(Commands.WHO_ARE_YOU)) {
@@ -125,7 +126,7 @@ public class GameClient {
 						Thread.sleep(10);
 					}
 					String predicate = in.readLine();
-					msg = new GameMessage(predicate, true);
+					msg = (GameMessage)StringSerializer.deSerialize(predicate);
 					// System.out.println(userName +": Host said: "+
 					// msg.getMessage());
 					if (msg.getMessage().equals(Commands.JOINED)) {
@@ -231,7 +232,7 @@ public class GameClient {
 	private void decode(String msg) {
 		if (msg == null)
 			return;
-		GameMessage message = new GameMessage(msg, true);
+		GameMessage message = (GameMessage)StringSerializer.deSerialize(msg);
 		if (message.getMessage().equals(Commands.PING))
 			return;
 		// System.out.print(userName + ": "+ message.getSender() +" said: ");
