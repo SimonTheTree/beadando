@@ -46,7 +46,8 @@ public final class Labels {
 	public static final String LBL_NUMBER = "number";
 	public static final String LBL_TERRITORIES_WON = "territories won";
 	public static final String LBL_TERRITORIES_LOST = "territories lost";
-	
+	public static final String LBL_MEHET = "Mehet!";	
+	public static final String LBL_NUMBER_OF_PLAYERS = "player num: ";
 	
 	public static final String MSG_FIELD_EMPTY = " field is was empty.";
 	public static final String MSG_UNAME_FIELD_EMPTY = "No username was given";
@@ -64,7 +65,8 @@ public final class Labels {
 	public static final String MSG_TITLE_CONFIRM = "Are you sure?";
 	public static final String MSG_ENTER_IP_ADDRESS = "Enter the server IP:";
 	public static final String MSG_GAME_STARTED = "The game has already started";
-	public static final String MSG_BAD_IP_ADDRESS = "The game has already started";
+	public static final String MSG_BAD_IP_ADDRESS = "Bad IP address";
+	public static final String MSG_NO_SERVER_RUNNING_THERE = "No server is running on that IP";
 	public static final String MSG_PLEASE_SET_EVERYTHING = "Please set everything!";
 	public static final Object MSG_NEGATIVE_VALUE_GIVEN = "Negative value was given";
 	public static final String MSG_ERROR = "Error";

@@ -83,7 +83,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
     public void generateTerritories(final int TPP){
         System.out.println("generating gameboard... ");
         
-        final int territoryNum = TPP * GameSettings.getInstance().PLAYERS.size();
+        final int territoryNum = TPP * GameSettings.getInstance().players.size();
         
         if(this.values().size() < territoryNum) throw new AssertionError("There is not enough tiles on the map for the players!");
         
@@ -110,7 +110,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
         }
         
         for(int i = 0; i< territories.length; i++){
-            territories[i].setOwner(GameSettings.getInstance().PLAYERS.get(i%GameSettings.getInstance().PLAYERS.size()));
+            territories[i].setOwner(GameSettings.getInstance().players.get(i%GameSettings.getInstance().players.size()));
         }
         
         
@@ -209,7 +209,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
         
         unSelectTarget();
         
-        for(Player pp : GameSettings.getInstance().PLAYERS){
+        for(Player pp : GameSettings.getInstance().players){
             if(pp.getTerritoryNum() == 0)
                 pp.kill();
         }

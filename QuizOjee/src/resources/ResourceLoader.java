@@ -16,10 +16,10 @@ public class ResourceLoader {
     
     private static final ResourceLoader rl = new ResourceLoader();
     
-    public static URL getURL(String fileName){
+    public static URL getURL(String fileName) throws NullPointerException{
         URL url = rl.getClass().getResource(fileName);
         if (url == null){
-        	System.out.println("resource "+fileName+" not found");
+        	throw new NullPointerException();
         };
         return url;
     }
@@ -36,9 +36,11 @@ public class ResourceLoader {
     		File f = new File(getURL(fileName).toURI());
             System.out.println("OK");
     		return f;
-        } catch (NullPointerException | URISyntaxException ex) {
-            System.out.println("exception when loading file "+fileName);
-        }
+        } catch (NullPointerException ex) {
+            System.out.println("resource "+fileName+" not found");
+        } catch (URISyntaxException ex) {
+			System.out.println("exception when loading file "+fileName);
+		}
         return null;
     }
     
@@ -53,9 +55,11 @@ public class ResourceLoader {
         	BufferedImage i =ImageIO.read(getURL(fileName)); 
         	System.out.println("OK");            
         	return i;
-        } catch (IOException | NullPointerException ex) {
+        } catch (IOException ex) {
             System.out.println("exception when loading image "+fileName);
-        }
+        } catch (NullPointerException ex) {
+        	System.out.println("resource "+fileName+" not found");
+		}
         return null;
     }
     

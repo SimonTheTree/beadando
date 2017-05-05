@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class GameClient {
 	private boolean failedToConnect = false;
 	private boolean gameIsStarted = false;
 	private boolean tooMuchWaiting = false;
+	private ConnectException connectException = null;
 	private boolean started = false;
 	private int waitingTime = 1000;
 
@@ -66,24 +68,25 @@ public class GameClient {
 	public GameClient() {
 	}
 
-	public void start(String ip, String userName) throws GameIsStartedException, HostDoesNotExistException {
+	public void start(String ip, String userName) throws GameIsStartedException, HostDoesNotExistException, ConnectException {
 		this.userName = userName;
 		Thread t = new Thread(() -> {
 			buildConnection(ip, userName);
 		});
 		t.start();
-		while (!initialized && !failedToConnect && !gameIsStarted && !end) {
+		while (!initialized && !failedToConnect && !gameIsStarted && !end && connectException != null) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			;
 		}
 		if (failedToConnect)
 			throw new HostDoesNotExistException();
 		if (gameIsStarted)
 			throw new GameIsStartedException();
+		if (connectException != null)
+			throw connectException;
 		// else //System.out.println(userName + ": initialized ");
 	}
 
@@ -144,6 +147,10 @@ public class GameClient {
 			abort();
 			// System.out.println(userName + ": You can't reach the server");
 			e.printStackTrace();
+		} catch (ConnectException e) {
+			// System.err.println(userName + ": Something went wrong :P");
+			e.printStackTrace();
+			connectException = e;
 		} catch (IOException e) {
 			// System.err.println(userName + ": Something went wrong :P");
 			e.printStackTrace();

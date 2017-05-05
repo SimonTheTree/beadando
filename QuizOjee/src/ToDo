@@ -2,21 +2,29 @@
 * -> bug
 + -> addition feature
 - -> remove something
+? -> tesztelni kell, elvileg jó
 )
 
 GUI
 
+* noramasnwert ír ki a rq dialog
+?* enterre rq-dialog küldjön
+?* a régi entryt törölni rqDialogból
+
+
 * coundowntimer bugos
 * RacequestionDialog
 + racequestion into the game
-+ játék körökre osztása
 + kiírja h server launching | waiting for others
-+ kiírja, h ki van körön
-
-
 + ha vki kilép, pause
-
+* ha a játéktábla mellett van az egér, nem tűnik el a kijelölés
 ¤ multicolor buttons
+* a támadó és védő játékoson kívül másnál nem jelenik meg kérdés
+* a helyes válasz sokszor nem jelenik meg, mert a saját szí átszínezi
++ játék vége észlelése
++ játék pontozása
+* default font őöüóúűí
++ ha a server kifogy a kérdésekből kerítsen újakat
 
 + Fórum
 + Stats-state
@@ -29,6 +37,9 @@ CONTROLLER
 MODEL
 
 DONE
-+ játék re-join works
-+ kiírja a questionnél, kitől várja a válaszokat (player1 vs player2)
-+ Támadási korlátozások(szomszéd, nem én)
++ játék körökre osztása
++ multithreaded waitFor-messages
++ vhogy megjelölni, melyik játékos vagyok én (szürke háttér)
++ vhogy megjelölni, ki van körön épp (nyilacska a név előtt)
+* a questiondialog nem fagyasztja le a gui-t
++ játék előtt playernum állítás

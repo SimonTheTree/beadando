@@ -30,6 +30,7 @@ public abstract class Player implements Serializable{
     protected ArrayList<Territory> territories;
     protected boolean isAlive;
     protected User user;
+    public double points;
     
     public Player(){
         this(null, 0);
@@ -45,6 +46,7 @@ public abstract class Player implements Serializable{
         this.user = u;
     	this.color = color;
         this.team = team;
+        points = 0;
         territories = new ArrayList<>();
     }
 
@@ -60,7 +62,7 @@ public abstract class Player implements Serializable{
     }
 
     public int getId() {
-        return GameSettings.getInstance().PLAYERS.indexOf(this);
+        return GameSettings.getInstance().players.indexOf(this);
     }
     
     public int getTerritoryNum(){
@@ -91,7 +93,7 @@ public abstract class Player implements Serializable{
     }
     
     public void dispose(){
-        GameSettings.getInstance().PLAYERS.remove(this);
+        GameSettings.getInstance().players.remove(this);
     }
 
     public void setTeam(int team) {

@@ -43,19 +43,21 @@ public class Commands {
 	public static final String GAME = "[game]";
 	
 	/**
-	 * A Cliens alsőre ezt kérdi a szervertől. Ha valaki másodjára
+	 * A Cliens elsőre ezt kérdi a szervertől. Ha valaki másodjára
 	 *  lép be, és lemaradt a START utasításról, ezzel kérhet újra 
-	 *  START-ot a szervertől, hogy beindíthassa a játékot.
+	 *  START-ot a szervertől, hogy beindíthassa a játékot. A szerver
+	 *  csak akkor küld startot, ha felkészült a játék vezénylésére, 
+	 *  és ha nem küld azonnal, biztosan fog küldeni amint felkészült. 
 	 *  <br>Nincs paramétere.
 	 *  @sender kliens
 	 */
-	public static final String IS_STARTED = "[start]";
+	public static final String ARE_YOU_READY = "[játszani akarok]";
 	/**
-	 * A szerver kuldi mindenkinek, ha csatlakoztak es elindult.
+	 * A szerver kuldi mindenkinek, ha felkészült és indulhta a játék.
 	 * <br> Nincs parametere.
 	 * @sender server 
 	 */
-	public static final String START = "[start]";
+	public static final String START = "[akkor játssz]";
 	/** 
 	 * Egyetlen parametere egy serializalt gameboard
 	 * @sender server
@@ -92,7 +94,7 @@ public class Commands {
 	 * @sender kliens
 	 * @param0 {@link String} username
 	 */
-	public static final String END_TURN = "[I'm done]";
+	public static final String END_TURN = "[jöjjön más]";
 		/**
 		 * A server kuldi egy jatekosnak, amikor o van soron, es lejart az ideje, vege a korenek
 		 * nincs parametere
@@ -142,12 +144,27 @@ public class Commands {
 	 */
 	public static final String RQ_ANSWER = "[rq-answer]";
 	/**
-	 * Valasz egy {@link RaceQuestion}-re. Ezt a server broadcastolja, hogy informalja a jatekosokat masok valaszairol.
+	 * Valasz egy {@link RaceQuestion}-re. Ezt a server broadcastolja, hogy informalja a 
+	 * jatekosokat masok valaszairol.
 	 * @sender server
-	 * @param0 {@link Number}, a valasz
-	 * @param1 {@link String}, a kuldo jatekos username-je 
+	 * @param0 a valasz (int)
+	 * @param1 a kuldo jatekos username-je 
+	 * @param2 amennyi dő múltán érkezett a válasz (double)
+	 * @param3 helyezés (1, 2, 3...)
 	 */
 	public static final String RQ_PLAYER_ANSWER = "[rq-answer-player]";
+	/**
+	 * A játék végét jelenti, valaki nyert.
+	 * <br> nincs paramétere
+	 * @sender server
+	 */
+	public static final String END_GAME = "[thats it for today]";
+	/**
+	 * Az aktuális pontszámok
+	 * @sender server
+	 * @param0 double[] serialized settings.points
+	 */
+	public static final String POINTS = "[points]";
 //	/**
 //	 * A szerver kerdesek kikuldese utan masodpercenkent kuldi, h mennyi ido van meg vissza. Ha param1=0, akkor lejart
 //	 * @sender server

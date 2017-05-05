@@ -1,6 +1,7 @@
 package view.components;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.awt.Color;
@@ -19,9 +20,17 @@ import view.Settings;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 
-public class DialogQuestion extends JDialog {	
+public class DialogQuestion extends JDialog {
 	public DialogQuestion() {
-		
+		this(null, false);
+	}
+
+	public DialogQuestion(JFrame root) {
+		this(root,false);
+	}
+	
+	public DialogQuestion(JFrame root, boolean modality) {
+		super(root, modality);
 		setSize(750, 500);
 		
 		panelNorth = new JPanel();

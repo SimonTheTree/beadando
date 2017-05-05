@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -25,9 +26,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
 
+import javax.annotation.Resource;
 import javax.print.DocFlavor.STRING;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import controller.Commands;
@@ -47,10 +52,13 @@ import gameTools.map.Layout;
 import gameTools.map.Orientation;
 import gameTools.state.State;
 import model.Question;
+import model.RaceQuestion;
+import resources.Resources;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
 import view.components.DialogQuestion;
+import view.components.DialogRaceQuestion;
 import view.components.GButton;
 import view.components.GButtonUI;
 import view.components.GLabel;
@@ -66,17 +74,28 @@ public class GameState extends State implements GameInputListener {
 	//  SERVER-CLIENT COMMUNICATION			   //
 	//-----------------------------------------//
 	private GameClient client;
-	private String interrupt = "";
-	private Thread interruptThread;
-	private GameMessage lastMsg = null;
+						//	private String interrupt = "";
+						//	private Thread interruptThread;
+	// mapkey is in every case the threads name
+	/** the commands to wait for with {@link #waitForMsg(String)}  per thread*/
+	private Map<String, String> interrupt = new HashMap<>();
+	/** the threads (objects) that are sleeping while waiting for the messages*/
+	private Map<String, Thread> interruptThread = new HashMap<>();
+	/** the message already recieved using {@link #waitForMsg(String)}  per thread*/
+	private Map<String, GameMessage> lastMsg = new HashMap<>();
+	/**messages that were reciewed, but not processed*/
 	private Stack<GameMessage> msgStack = new Stack<>();
+	/**logged users username*/
 	private String uname;
+
 	
 	//-----------------------------------------//
 	//  GAME - GUI                             //
 	//-----------------------------------------//
 	MainWindow root;
 	private DialogQuestion qDialog;
+	private DialogRaceQuestion rqDialog;
+	JLabel[][] rqAnsLabels;
 	private GButton selectedQButton = new GButton();
 	private GButtonUI baseUI = new GButtonUI(
 			Settings.color_GButton_inGame, 
@@ -93,14 +112,13 @@ public class GameState extends State implements GameInputListener {
 			Settings.FONT_GBUTTON_DEFAULT, 
 			Settings.color_GButtonFont_inGame
 			);
-	private ActionListener onClick = new ActionListener() {
-		
+	private ActionListener qDialogOnClick = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			qDialog.btnAnswerA.removeActionListener(onClick);
-			qDialog.btnAnswerB.removeActionListener(onClick);
-			qDialog.btnAnswerC.removeActionListener(onClick);
-			qDialog.btnAnswerD.removeActionListener(onClick);
+			qDialog.btnAnswerA.removeActionListener(qDialogOnClick);
+			qDialog.btnAnswerB.removeActionListener(qDialogOnClick);
+			qDialog.btnAnswerC.removeActionListener(qDialogOnClick);
+			qDialog.btnAnswerD.removeActionListener(qDialogOnClick);
 			selectedQButton.setUI(baseUI);
 			GButton btn = (GButton) e.getSource();
 			selectedQButton = btn;
@@ -109,6 +127,22 @@ public class GameState extends State implements GameInputListener {
 			client.sendMessage(new GameMessage(Commands.NORM_ANSWER, selectedQButton.getText()));
 		}
 	};
+	private boolean rqSent; 
+	private ActionListener rqDialogOnClick = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			rqSent = true;
+			rqDialog.btnGo.removeActionListener(rqDialogOnClick);
+			rqDialog.setInputEnabled(false);
+			System.out.println("button clicked, sendin message");
+			client.sendMessage(new GameMessage(Commands.RQ_ANSWER, rqDialog.getAnswer()));
+		}
+	};
+	JPanel infoPanel;
+	JScrollPane scrPane;
+	JLabel[] unames;
+	JLabel[] territories;
+	JLabel[] points;
 	
 	//-----------------------------------------//
 	//  GAME - LOGIC                           //
@@ -120,7 +154,6 @@ public class GameState extends State implements GameInputListener {
 	private GameSettings settings;
 	private GameBoard gameboard;
 	private Timer countDownTimer = new Timer();
-	private Thread playerThread;
 	private Thread questionTh = null; 
 	private Player player;
 	
@@ -149,20 +182,112 @@ public class GameState extends State implements GameInputListener {
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g.setRenderingHints(rh);
-		qDialog = new DialogQuestion();
+		qDialog = new DialogQuestion(root);
+		rqDialog = new DialogRaceQuestion(root);
+		initRQAnsPanel(3, 3); //ez azér van így külön, mer hátha majd nem csak 2-en fognak így küzdeni egymás ellen...
+		
 	}
 
 	private void gameOver() {
 		System.out.println("GAME OVER!");
 	}
+	
+	public void initRQAnsPanel(int rows, int cols) {
+		rqAnsLabels = new JLabel[rows][cols];
+		rqDialog.answersPanel.setLayout(new GridLayout(3, 2, 5, 5));
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				rqAnsLabels[i][j] = new JLabel();
+				rqAnsLabels[i][j].setForeground(Color.BLACK);
+				rqAnsLabels[i][j].setFont(Settings.FONT_DEFAULT);
+				rqDialog.answersPanel.add(rqAnsLabels[i][j]);
+			}			
+		}
+	}
+	public void clearRQAnsPanel() {
+		for (int i = 0; i < rqAnsLabels.length; i++) {
+			for (int j = 0; j < rqAnsLabels[i].length; j++) {
+				rqAnsLabels[i][j].setText("");
+			}			
+		}
+		rqDialog.clearAnswer();
+	}
 
+	public void initInfoPanel() {
+		removeAll();
+		setLayout(null);
+		infoPanel = new JPanel();
+		scrPane = new JScrollPane(infoPanel);
+		add(infoPanel);
+//		infoPanel.setBounds(0, settings.GAME_HEIGHT, settings.SCREEN_WIDTH ,settings.SCREEN_HEIGHT);
+		infoPanel.setBounds(0, settings.GAME_HEIGHT, settings.SCREEN_WIDTH, settings.GAME_INFOLABEL_HEIGHT);
+
+		
+		int nRows = settings.players.size()+1;
+		infoPanel.setLayout(new GridLayout(nRows, 3));
+		unames = new JLabel[nRows];     
+		territories = new JLabel[nRows];
+		points = new JLabel[nRows];  
+		
+		unames[0] = new JLabel("Username", SwingConstants.CENTER);
+		territories[0] = new JLabel("Territories", SwingConstants.CENTER);
+		points[0] = new JLabel("Points", SwingConstants.CENTER);
+		infoPanel.add(unames[0]);
+		infoPanel.add(territories[0]);
+		infoPanel.add(points[0]);
+		unames[0].setFont(Settings.FONT_TITLE);
+		territories[0].setFont(Settings.FONT_TITLE);
+		points[0].setFont(Settings.FONT_TITLE);
+		unames[0].setForeground(Color.BLACK);
+		territories[0].setForeground(Color.BLACK);
+		points[0].setForeground(Color.BLACK);
+		for(int i = 1; i < nRows; i++) {
+			unames[i] = new JLabel("", SwingConstants.CENTER);
+			territories[i] = new JLabel("", SwingConstants.CENTER);
+			points[i] = new JLabel("", SwingConstants.CENTER);
+			if(uname.equals(settings.players.get(i-1).getUser().getUsername())) {
+				unames[i].setBackground(Settings.color_lightGray);
+				territories[i].setBackground(Settings.color_lightGray);
+				points[i].setBackground(Settings.color_lightGray);
+				unames[i].setOpaque(true);
+				territories[i].setOpaque(true);
+				points[i].setOpaque(true);
+			}
+			infoPanel.add(unames[i]);
+			infoPanel.add(territories[i]);
+			infoPanel.add(points[i]);
+			unames[i].setFont(Settings.FONT_TITLE);
+			territories[i].setFont(Settings.FONT_TITLE);
+			points[i].setFont(Settings.FONT_TITLE);
+			unames[i].setForeground(settings.players.get(i-1).getColor());
+			territories[i].setForeground(settings.players.get(i-1).getColor());
+			points[i].setForeground(settings.players.get(i-1).getColor());
+		}
+
+		updateInfoPanel();
+	}
+	public void updateInfoPanel() {
+		int nPlayers = settings.players.size();
+		for(int i = 0; i < nPlayers; i++) {
+			String username = settings.players.get(i).getUser().getUsername();
+			unames[i+1].setText(username);
+			territories[i+1].setText(String.valueOf(settings.players.get(i).getTerritories().size()));
+			points[i+1].setText(String.valueOf(settings.players.get(i).points));
+			if(username.equals(currentPlayer)) {
+				unames[i+1].setIcon(new ImageIcon(Resources.scaleImage(Resources.ARROW_RIGHT[i], 20, 20)));
+			} else {
+				unames[i+1].setIcon(null);
+			}
+		}
+	}
+	
 	@Override
 	public void onStart() {
 		System.out.println("starting gamestate ");
 		gameOver = false;
 		gameStarted = false;
 		uname = MainWindow.getInstance().getLoggedUser().getUsername();
-		interruptThread =  new Thread() {
+		new Thread() {
 			public void run() {
 				try {
 					Thread.currentThread().setName("GameClient");
@@ -176,7 +301,7 @@ public class GameState extends State implements GameInputListener {
 						Thread.sleep(1000);
 					};
 					System.out.println("	[GO]   "+uname + "done waiting");
-					client.sendMessage(new GameMessage(Commands.IS_STARTED));
+					client.sendMessage(new GameMessage(Commands.ARE_YOU_READY));
 					waitForMsg(Commands.START);
 					
 					client.sendMessage(new GameMessage(Commands.SETTINGS_REQUEST));
@@ -184,6 +309,7 @@ public class GameState extends State implements GameInputListener {
 
 					client.sendMessage(new GameMessage(Commands.GAMEBOARD_REQUEST));
 					manageGameboard(waitForMsg(Commands.GAMEBOARD));
+					manageYourTurn(waitForMsg(Commands.YOUR_TURN));
 					
 					gameStarted = true;
 
@@ -196,15 +322,19 @@ public class GameState extends State implements GameInputListener {
 				} catch (HostDoesNotExistException e) {
 					JOptionPane.showMessageDialog(root, Labels.MSG_BAD_IP_ADDRESS, Labels.MSG_SERVER_ERROR, JOptionPane.ERROR_MESSAGE);
 					root.setState(MainWindow.STATE_MAIN);
+				} catch (ConnectException e) {
+					JOptionPane.showMessageDialog(root, Labels.MSG_NO_SERVER_RUNNING_THERE, Labels.MSG_SERVER_ERROR, JOptionPane.ERROR_MESSAGE);
+					root.setState(MainWindow.STATE_MAIN);
 				} finally {
 				}
 			}
-		};
-		interruptThread.start();
+		}.start();
+		
 	}
 	
 	@Override
 	public void onStop() {
+		System.out.println("client disconnects");
 		gameOver= true;
 		client.abort();
 	}
@@ -213,13 +343,14 @@ public class GameState extends State implements GameInputListener {
 		String newOwner = msg.getParams()[0];
 		int terrId = Integer.parseInt(msg.getParams()[1]);
 		Territory terr = gameboard.getTerrytoryById(terrId);
-		for(Player p : settings.PLAYERS){
+		for(Player p : settings.players){
 			if(newOwner.equals(p.getUser().getUsername())){
 				terr.setOwner(p);
 				return;
 			}
 		}
 		calcNeighbors();
+		updateInfoPanel();
 	}
 	public void manageAttack(GameMessage msg) {
 		attacker = settings.getPlayerByUname(msg.getParams()[0]);
@@ -232,31 +363,33 @@ public class GameState extends State implements GameInputListener {
 		boolean isItMine = msg.getParams()[0].equals(Commands.PARAM_YOURS);
 		Question question = (Question) StringSerializer.deSerialize(msg.getParams()[1]);
 		questionTh = Thread.currentThread();
-		String ans;
 		if(isItMine){
-			ans = displayNormalQuestionAndGetAnswer(question, attackerUname, defenderUname);
+			displayNormalQuestionAndGetAnswer(question, attackerUname, defenderUname);
 		} else {
 			displayNormalQuestion(question, attackerUname, defenderUname);
 		}
 	}
 	public void manageNormQuestionRightAnswer(GameMessage msg) {
-		String rightAns = msg.getParams()[0];
-		//helyes valasz bejelolese
-		if(qDialog.btnAnswerA.getText().equals(rightAns)){
-			qDialog.btnAnswerA.setUI(successUI);
-		} else if(qDialog.btnAnswerB.getText().equals(rightAns)){
-			qDialog.btnAnswerB.setUI(successUI);
-		} else if(qDialog.btnAnswerC.getText().equals(rightAns)){
-			qDialog.btnAnswerC.setUI(successUI);
-		} else if(qDialog.btnAnswerD.getText().equals(rightAns)){
-			qDialog.btnAnswerD.setUI(successUI);
-		}
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1000); //kb megvárjuk, hogy előbb a manageNormQuestionPlayerAnswer fusson le
+			String rightAns = msg.getParams()[0];
+			//helyes valasz bejelolese
+			if(qDialog.btnAnswerA.getText().equals(rightAns)){
+				qDialog.btnAnswerA.setUI(successUI);
+			} else if(qDialog.btnAnswerB.getText().equals(rightAns)){
+				qDialog.btnAnswerB.setUI(successUI);
+			} else if(qDialog.btnAnswerC.getText().equals(rightAns)){
+				qDialog.btnAnswerC.setUI(successUI);
+			} else if(qDialog.btnAnswerD.getText().equals(rightAns)){
+				qDialog.btnAnswerD.setUI(successUI);
+			}
+			Thread.sleep(settings.showRightAnswerDelay);
+			if (questionTh != null) questionTh.interrupt();
+			System.out.println("AREYOURREADY???!!");
+			client.sendMessage(new GameMessage(Commands.ARE_YOU_READY));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		if (questionTh != null) questionTh.interrupt();
 	}
 	public void manageNormQuestionPlayerAnswer(GameMessage msg) {
 		String uname = msg.getParams()[1];
@@ -280,7 +413,37 @@ public class GameState extends State implements GameInputListener {
 		}
 	}
 	public void manageRaceQuestion(GameMessage msg) {
-		
+		boolean isItMine = msg.getParams()[0].equals(Commands.PARAM_YOURS);
+		RaceQuestion question = (RaceQuestion) StringSerializer.deSerialize(msg.getParams()[1]);
+		questionTh = Thread.currentThread();
+		String ans;
+		if(isItMine){
+			ans = displayRaceQuestionAndGetAnswer(question, attackerUname, defenderUname);
+		} else {
+			displayRaceQuestion(question, attackerUname, defenderUname);
+		}
+	}
+	public void manageRaceQuestionRightAnswer(GameMessage msg) {
+		try {
+			String rightAns = msg.getParams()[0];
+			//helyes valasz bejelolese
+			rqAnsLabels[0][0].setText("Helyes válasz: ");
+			rqAnsLabels[0][1].setText(rightAns);
+			Thread.sleep(2 * settings.showRightAnswerDelay);
+			if (questionTh != null) questionTh.interrupt();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	public void manageRaceQuestionPlayerAnswer(GameMessage msg) {
+		String uname = msg.getParams()[1];
+		String ans = msg.getParams()[0];
+		String time = msg.getParams()[2];
+		int place = Integer.parseInt(msg.getParams()[3]);
+		Color color = settings.getPlayerByUname(uname).getColor();
+		rqAnsLabels[place][0].setText(uname+": ");
+		rqAnsLabels[place][1].setText(ans);
+		rqAnsLabels[place][2].setText(time);
 	}
 	public void manageGameboard(GameMessage msg) {
 		System.out.println("recieved gameboard");
@@ -298,62 +461,112 @@ public class GameState extends State implements GameInputListener {
 				Settings.FONT_GBUTTON_DEFAULT, 
 				Settings.color_GButtonFont_inGame
 		);
+		Resources.loadGameIcons(settings);
+		initInfoPanel();
 	}
 	public void manageYourTurn(GameMessage msg) {
 		currentPlayer = msg.getParams()[0];
-		if(uname.equals(currentPlayer)) {
-			myTurn = true;
+		System.out.println("current player: "+currentPlayer);
+		myTurn = uname.equals(currentPlayer);
+		if(myTurn) {
+			calcNeighbors();
+		}
+		updateInfoPanel();
+	}
+	public void managePoints(GameMessage msg) {
+		settings.players = (List) StringSerializer.deSerialize(msg.getParams()[0]);
+		updateInfoPanel();
+	}
+	public void manageAll(GameMessage msg) {
+		boolean caught = false;
+		if(msg.getMessage().equals(Commands.NEW_OWNER)) {
+			caught = true;
+			manageNewOwner(msg);
+		} else if(msg.getMessage().equals(Commands.ATTACK)){
+			caught = true;
+			manageAttack(msg);
+		} else if(msg.getMessage().equals(Commands.NORMAL_QUESTION)){
+			caught = true;
+			manageNormQuestion(msg);					
+		} else if(msg.getMessage().equals(Commands.NORM_ANSWER)){
+			caught = true;
+			manageNormQuestionRightAnswer(msg);
+		} else if(msg.getMessage().equals(Commands.NORM_PLAYER_ANSWER)){
+			caught = true;
+			manageNormQuestionPlayerAnswer(msg);
+		} else if(msg.getMessage().equals(Commands.RACE_QUESTION)){
+			caught = true;
+			manageRaceQuestion(msg);					
+		} else if(msg.getMessage().equals(Commands.RQ_ANSWER)){
+			caught = true;
+			manageRaceQuestionRightAnswer(msg);
+		} else if(msg.getMessage().equals(Commands.RQ_PLAYER_ANSWER)){
+			caught = true;
+			manageRaceQuestionPlayerAnswer(msg);
+		} else if(msg.getMessage().equals(Commands.GAMEBOARD)){
+			caught = true;
+			manageGameboard(msg);
+		} else if(msg.getMessage().equals(Commands.SETTINGS)){
+			caught = true;
+			manageSettings(msg);
+		} else if(msg.getMessage().equals(Commands.YOUR_TURN)){
+			caught = true;
+			manageYourTurn(msg);
+		} else if(msg.getMessage().equals(Commands.POINTS)){
+			caught = true;
+			managePoints(msg);
+		}
+		if (caught) {
+			synchronized(msgStack){
+				msgStack.remove(msg); 
+			}
 		}
 	}
 	public void manage(GameMessage msg) {
 		
 	}
-	
 	@Override
 	public void gotMessage(GameMessage msg) {
-		System.out.println("client GotMessage:" +msg.toString());
-		synchronized(msgStack){
-			msgStack.push(msg);			
-		}
-		
-		if(msg.getMessage().equals(interrupt)) {
-			System.out.println("interrupt-watcher caught the message" );
-			interrupt = "";
-			lastMsg = msg;
-			interruptThread.interrupt();
-			//when we wait for something we handle the message separately
-			return; 
-		};
-		if(!gameStarted) return;
 		new Thread(){
 			@Override
 			public void run(){
 				Thread.currentThread().setName("client-gotMessage");
-				if(msg.getMessage().equals(Commands.NEW_OWNER)) {
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageNewOwner(msg);
-				} else if(msg.getMessage().equals(Commands.ATTACK)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageAttack(msg);
-				} else if(msg.getMessage().equals(Commands.NORMAL_QUESTION)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageNormQuestion(msg);					
-				} else if(msg.getMessage().equals(Commands.NORM_ANSWER)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageNormQuestionRightAnswer(msg);
-				} else if(msg.getMessage().equals(Commands.NORM_PLAYER_ANSWER)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageNormQuestionPlayerAnswer(msg);
-				} else if(msg.getMessage().equals(Commands.GAMEBOARD)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageGameboard(msg);
-				} else if(msg.getMessage().equals(Commands.SETTINGS)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageSettings(msg);
-				} else if(msg.getMessage().equals(Commands.SETTINGS)){
-					synchronized(msgStack){ msgStack.remove(msg); }
-					manageYourTurn(msg);
+				System.out.print("client "+uname+" GotMessage: " +msg.getMessage());
+				if(msg.getParams() != null)
+					for(String s : msg.getParams()) {
+						System.out.print("\t" + s);
+					}
+				System.out.println();
+				
+				synchronized (msgStack) {
+					boolean caught = false;
+					for(String key : interrupt.keySet()) {
+						if(msg.getMessage().equals(interrupt.get(key))) {
+							caught = true;
+							System.out.println("interrupt-watcher caught the message" );
+							lastMsg.put(key, msg);
+							
+							interruptThread.get(key).interrupt(); //this one should interrupt the waitFor... method
+						};
+					}
+					
+					if(caught) {
+						return;
+					}
+					
+					msgStack.push(msg);						
+				}		
+				
+				while(!gameStarted) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
+				
+				manageAll(msg);
+				
 			}
 		}.start();
 		
@@ -368,38 +581,77 @@ public class GameState extends State implements GameInputListener {
 		qDialog.btnAnswerB.setText(quest.getAnswer2());
 		qDialog.btnAnswerC.setText(quest.getAnswer3());
 		qDialog.btnAnswerD.setText(quest.getRightAnswer());
-		qDialog.lblQuestionText.setText("<html><body style='margin:10px;'>" +quest.getQuestion()+"</body></html>");
-		qDialog.lblNorth.setText("<html><body style='margin:10px;'>" + attacker + " vs " + defender);
+		qDialog.lblQuestionText.setText("<html><div style='margin:10px;'>" +quest.getQuestion()+"</div></html>");
+		qDialog.lblNorth.setText("<html><div style='margin:10px;'>" + attacker + " vs " + defender);
 		qDialog.lblNorth.setHorizontalAlignment(SwingConstants.CENTER);				
 		TimerTask countdown = displayCountdown(qDialog.lblSouth, settings.questionTime);
-		qDialog.setLocationRelativeTo(MainWindow.getInstance());
+		qDialog.setLocationRelativeTo(root);
 		qDialog.setVisible(true);
 		respondingToInput = false;
 		try {
-			Thread.sleep(settings.questionTime + 2000);
+			Thread.sleep(settings.questionTime + settings.showRightAnswerDelay + 1000);
 		} catch (InterruptedException e) {
 			//everyone answered early
 		}
 		countdown.cancel();
 		respondingToInput = true;
-		qDialog.setVisible(false);
+		qDialog.dispose();
 	}
-
 	public String displayNormalQuestionAndGetAnswer(Question quest, String attacker, String defender){
-		qDialog.btnAnswerA.addActionListener(onClick);
-		qDialog.btnAnswerB.addActionListener(onClick);
-		qDialog.btnAnswerC.addActionListener(onClick);
-		qDialog.btnAnswerD.addActionListener(onClick);
+		qDialog.btnAnswerA.addActionListener(qDialogOnClick);
+		qDialog.btnAnswerB.addActionListener(qDialogOnClick);
+		qDialog.btnAnswerC.addActionListener(qDialogOnClick);
+		qDialog.btnAnswerD.addActionListener(qDialogOnClick);
 		
 		displayNormalQuestion(quest, attacker, defender);
 		
-		qDialog.btnAnswerA.removeActionListener(onClick);
-		qDialog.btnAnswerB.removeActionListener(onClick);
-		qDialog.btnAnswerC.removeActionListener(onClick);
-		qDialog.btnAnswerD.removeActionListener(onClick);
+		qDialog.btnAnswerA.removeActionListener(qDialogOnClick);
+		qDialog.btnAnswerB.removeActionListener(qDialogOnClick);
+		qDialog.btnAnswerC.removeActionListener(qDialogOnClick);
+		qDialog.btnAnswerD.removeActionListener(qDialogOnClick);
 		return selectedQButton.getText();
 	}
 
+	public void displayRaceQuestion(RaceQuestion quest, String attacker, String defender){
+		rqDialog.lblQuestionText.setText("<html><body style='margin:10px;'>" +quest.getQuestion()+"</body></html>");
+		rqDialog.lblNorth.setText("<html><body style='margin:10px;'>" + attacker + " vs " + defender);
+		rqDialog.lblNorth.setHorizontalAlignment(SwingConstants.CENTER);
+		clearRQAnsPanel();
+		TimerTask countdown = displayCountdown(rqDialog.lblSouth, settings.raceTime);
+		rqDialog.setLocationRelativeTo(root);
+		rqDialog.setVisible(true);
+		respondingToInput = false;
+		rqDialog.focus();
+		rqSent = false;
+
+		try {
+			Thread.sleep(settings.raceTime -200);
+		} catch (InterruptedException e) {
+			//everyone answered early or time's up
+		}
+			
+		countdown.cancel();
+		if(myTurn && !rqSent) {
+			rqDialogOnClick.actionPerformed(null);
+		}
+		try {
+			Thread.sleep(2*settings.showRightAnswerDelay + 1000);
+		} catch (InterruptedException e) {}
+		respondingToInput = true;
+		rqDialog.dispose();
+	}
+	public String displayRaceQuestionAndGetAnswer(RaceQuestion quest, String attacker, String defender){
+		rqDialog.btnGo.addActionListener(rqDialogOnClick);
+
+		rqDialog.setInputEnabled(true);
+		displayRaceQuestion(quest, attacker, defender);
+		rqDialog.setInputEnabled(false);
+		
+		rqDialog.btnGo.removeActionListener(qDialogOnClick);
+		return rqDialog.getAnswer();
+	}
+
+	
 	/**
 	 * This function displays a timer countdown onto the specified {@link JLabel}. 
 	 * The labels original content is erased. The method creates a new {@link TimerTask} and registers it on the 
@@ -446,10 +698,6 @@ public class GameState extends State implements GameInputListener {
 		if (ticks % 15 == 1)
 			redraw();
 			gameboard.render(g);	
-		
-		//print info
-			g.setFont(Settings.FONT_DEFAULT);
-			
 
 		if (settings.dbg) {
 			// fps
@@ -470,18 +718,22 @@ public class GameState extends State implements GameInputListener {
 
 	private void redraw() {
 		// clear screen
-		g.setColor(new Color(230, 230, 230));
+		g.setColor(Settings.color_lightGray3);
 		g.fillRect(0, 0, settings.GAME_WIDTH, settings.GAME_INFOLABEL_HEIGHT);
-		g.setColor(new Color(210, 210, 210));
+		g.setColor(Settings.color_lightGray2);
 		g.fillRect(0, 0, settings.GAME_WIDTH, settings.GAME_HEIGHT);
-		// mark all territories to be repainted
+//		 mark all territories to be repainted
 		for (Territory t : gameboard.territories) {
 			t.touch();
 		}
-		// for(int i = 0; i < COLORS.length+1; i++){
-		// g.drawImage(ATTACK_ICON[i], i*50, GameSettings.GAME_HEIGHT,45,45,this);
-		// }
 		gameboard.needsRender = true;
+		
+		//print info
+		g.setFont(Settings.FONT_DEFAULT);
+		for(Player p : settings.players) {
+			g.setColor(p.getColor());
+			
+		}
 	}
 
 	@Override
@@ -498,10 +750,9 @@ public class GameState extends State implements GameInputListener {
 			}
 		}
 		
-		if(respondingToInput){
+		if(respondingToInput && myTurn){
 			if (inputManager.isKeyTyped("Enter")) {
-				myTurn=false;
-				client.sendMessage(new GameMessage(Commands.END_TURN));
+				client.sendMessage(new GameMessage(Commands.END_TURN, uname));
 			}
 			if (inputManager.isClicked("ButtonLeft") && !gameOver) {
 				if(!gameStarted) return;
@@ -549,36 +800,61 @@ public class GameState extends State implements GameInputListener {
 	 * Hangs the thread until the server sends a certain command.
 	 * Calling this method will also skip any eventhandling 
 	 * code for the first message of specified Command in {@link #gotMessage(GameMessage)}
-	 * @param command
+	 * @param msg
 	 * @return the first {@link GameMessage} of type command that was recieved 
 	 */ 
-	public GameMessage waitForMsg(String command){
-		
+	public GameMessage waitForMsg(String msg){
+		return waitForMsg(msg, 0);
+	}
+	
+	/**
+	 * Hangs the thread until the server sends a certain command.
+	 * Calling this method will also skip any eventhandling 
+	 * code for the first message of specified type in {@link #gotMessage(GameMessage)}
+	 * @param msg
+	 * @param maxTime the maximal time the thread will wait.
+	 * @return the first {@link GameMessage} of type command that was recieved 
+	 */ 
+	public GameMessage waitForMsg(String msg, int maxTime){
+		String threadName = Thread.currentThread().getName();
 		try {
 			//check if msg was recieved already
 			synchronized (msgStack) {
 				for (Iterator<GameMessage> iterator = msgStack.iterator(); iterator.hasNext();) {
 					GameMessage gm = iterator.next();
-					if(gm.getMessage().equals(command)){
+					if(gm.getMessage().equals(msg)){
+						GameMessage ret = gm;
 						iterator.remove();
-						System.out.println( command + " pulled from stack");
-						return gm;
+						System.out.println( msg + " pulled from stack");
+						return ret;
 					}
 				}
 			
-				interruptThread = Thread.currentThread();
+				//register this thread for interruption
+				interruptThread.put(threadName, Thread.currentThread());
+				/**request interrupt, when msg is reciewed by #gotMessage(GameMessage) */
+				interrupt.put(threadName, msg);
+			}
+			if (maxTime != 0) {
+				System.out.println("client waiting for " + msg);
+				Thread.sleep(maxTime);
+			} else {
+				while (true){
+					System.out.println("client waiting for " + msg);
+					Thread.sleep(10000);
+				}
+			}
 			
-				interrupt = command;
-			}
-			while (true){
-				System.out.println("client waiting for " + command);
-				Thread.sleep(10000);
-			}
 		} catch (InterruptedException e) {
-			GameMessage ret = lastMsg;
-			lastMsg = null;
-			System.out.println("client reciewed " + command);
-			return ret;
+			System.out.println("client reciewed " + msg);
+			return lastMsg.get(threadName);
+		} finally {
+			//do cleanup
+			lastMsg.remove(threadName);
+			interrupt.remove(threadName);
+			interruptThread.remove(threadName);
 		}
+		return null;
 	}
+
 }

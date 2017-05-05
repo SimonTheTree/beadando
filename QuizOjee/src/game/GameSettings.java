@@ -45,7 +45,8 @@ public class GameSettings implements Serializable{
       new Color(0,0,0)
   };
   public final int questionTime = 20000; //in microseconds
-  public final int raceTime = 10000; //in microseconds
+  public final int raceTime = 20000; //in microseconds
+  public int showRightAnswerDelay = 2000; //ms
   
   /* ----- GAME DIMENSIONS ----- */
   public final int SCREEN_WIDTH = Settings.MAIN_WINDOW_WIDTH;
@@ -55,9 +56,11 @@ public class GameSettings implements Serializable{
   public final int GAME_HEIGHT = SCREEN_HEIGHT-GAME_INFOLABEL_HEIGHT;
   
   /* ----- GAME VARIABLES ----- */
-  public final List<Player> PLAYERS = new ArrayList<>();
+  public int numOfRounds;
+  public String gameType;
+  public List<Player> players = new ArrayList<>();
   public int getNumOfPlayers(){
-      return PLAYERS.size();
+      return players.size();
   }
   /**
    * Finds player with specified username in PLAYERS
@@ -65,7 +68,7 @@ public class GameSettings implements Serializable{
    * @return the {@link Player} or null if not found
    */
   public Player getPlayerByUname(String uname){
-	  for (Player p : PLAYERS){
+	  for (Player p : players){
 		  if(uname.equals(p.getUser().getUsername())){
 			  return p;
 		  }

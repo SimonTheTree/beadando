@@ -53,6 +53,10 @@ public class Settings {
 	public static Color color_GButton_inGame = new Color(50, 50, 50);
 	public static Color color_GButtonHover_inGame =  new Color(70, 70,70);
 	public static Color color_GButtonClick_inGame = new Color(60, 60,100);
+	public static Color color_lightGray = new Color(190, 190, 190);
+	public static Color color_lightGray2 = new Color(210, 210, 210);
+	public static Color color_lightGray3 = new Color(230, 230, 230);
+	
 	
 	// --------------------------------------------------------------//
 	// QUIZ SETTINGS                                                 //
@@ -62,7 +66,14 @@ public class Settings {
 //	public static List<Topic> quiz_topicList;
 	public static int game_difficulity;
 	public static String gameServer; //connection string, {GameCreatorState} -> {GameState}
+
+	public static int game_numOfPlayers;
+	public static String game_type;
 	
+	public static final String GAME_TYPE_BLITZKRIEG = "blitzkrieg";
+	public static final String GAME_TYPE_10_ROUNDS = "30 rounds";
+	public static final String GAME_TYPE_LAST_MAN_STAND = "last man";
+
 	// --------------------------------------------------------------//
 	// FORUM SETTINGS                                                //
 	// --------------------------------------------------------------//

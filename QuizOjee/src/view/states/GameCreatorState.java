@@ -19,6 +19,8 @@ import view.components.GButton;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
 
 public class GameCreatorState extends DefaultState {
 	MainWindow root;
@@ -27,6 +29,10 @@ public class GameCreatorState extends DefaultState {
 	GButton btnNextMap;
 	GButton btnStart;
 	GButton btnCancel;
+	
+	GameServer gs;
+	
+	private JSpinner spinner;
 	
 	public GameCreatorState(MainWindow r) {
 		super(MainWindow.STATE_GAME_SETTINGS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
@@ -48,23 +54,24 @@ public class GameCreatorState extends DefaultState {
 		btnNextMap = new GButton(">");
 		btnStart = new GButton(Labels.BTN_START);
 			btnStart.addActionListener((e) -> {
-				GameServer gs = new GameServer();
-				gs.createGame();
-				System.out.println("game created switching to gamestate");
-				int counter = 0;
-				while(!gs.isLyukendzsoint()){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					//System.out.print("!");
-					//if(counter++%100 == 0) System.out.println();
-				};
-				
-				Settings.gameServer = "localhost";
-				root.setState(MainWindow.STATE_GAME);
+					Settings.game_numOfPlayers = (Integer) spinner.getValue();
+					gs = new GameServer();
+					gs.createGame();
+					System.out.println("game created switching to gamestate");
+					int counter = 0;
+					while(!gs.isLyukendzsoint()){
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						//System.out.print("!");
+						//if(counter++%100 == 0) System.out.println();
+					};
+					
+					Settings.gameServer = "localhost";
+					root.setState(MainWindow.STATE_GAME);
 			});
 		btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
@@ -77,6 +84,10 @@ public class GameCreatorState extends DefaultState {
 		JRadioButton rdbtn30rounds = new JRadioButton(Labels.LBL_30_ROUNDS);
 		JRadioButton rdbtnBlitzkrieg = new JRadioButton(Labels.LBL_BLITZKIREG);
 		
+		GLabel lblPlayerNum = new GLabel(Labels.LBL_NUMBER_OF_PLAYERS);
+		
+		spinner = new JSpinner();
+			spinner.setValue(2);
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -84,7 +95,7 @@ public class GameCreatorState extends DefaultState {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(38)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblTitle)
+						.addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -103,17 +114,22 @@ public class GameCreatorState extends DefaultState {
 											.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 												.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE)
 												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-													.addComponent(lblType)
+													.addComponent(lblType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 													.addGroup(groupLayout.createSequentialGroup()
-														.addComponent(lblMap)
+														.addComponent(lblMap, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 														.addPreferredGap(ComponentPlacement.RELATED)
 														.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-															.addComponent(rdbtn1LastOneStanding)
-															.addComponent(rdbtn30rounds)
-															.addComponent(rdbtnBlitzkrieg)
-															.addComponent(cbSelectMap, GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE))))
+															.addComponent(cbSelectMap, GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE)
+															.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+																.addComponent(rdbtnBlitzkrieg, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																.addComponent(rdbtn30rounds, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																.addComponent(rdbtn1LastOneStanding, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+													.addGroup(groupLayout.createSequentialGroup()
+														.addComponent(lblPlayerNum)
+														.addPreferredGap(ComponentPlacement.UNRELATED)
+														.addComponent(spinner, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)))
 												.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE)))))
-								.addComponent(lblTopics))))
+								.addComponent(lblTopics, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -122,7 +138,7 @@ public class GameCreatorState extends DefaultState {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(35)
-							.addComponent(lblTitle)
+							.addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGap(77)
@@ -132,10 +148,10 @@ public class GameCreatorState extends DefaultState {
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 										.addGroup(groupLayout.createSequentialGroup()
 											.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblMap)
+												.addComponent(lblMap, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addComponent(cbSelectMap, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 											.addGap(18)
-											.addComponent(lblType))
+											.addComponent(lblType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addComponent(paneMapDisplay, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)))))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(121)
@@ -145,12 +161,16 @@ public class GameCreatorState extends DefaultState {
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(rdbtn30rounds)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(rdbtnBlitzkrieg))
+									.addComponent(rdbtnBlitzkrieg)
+									.addGap(18)
+									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblPlayerNum)
+										.addComponent(spinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 								.addComponent(btnNextMap, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))))
-					.addPreferredGap(ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblTopics)
+							.addComponent(lblTopics, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
@@ -164,6 +184,12 @@ public class GameCreatorState extends DefaultState {
 		// TODO Auto-generated constructor stub
 	}
 
+	public void onStart(){
+		if(gs != null && gs.host != null) {
+			gs.host.abort();
+		}
+	}
+	
 	@Override
 	public void update() {
 		if(inputManager.isKeyTyped("s")){btnStart.doClick();}

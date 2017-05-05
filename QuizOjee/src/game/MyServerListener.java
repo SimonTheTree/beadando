@@ -41,7 +41,7 @@ public class MyServerListener implements GameInputListener{
 	public GameMessage[] waitForMsg(String msg, long maxTime){
 		lastMsg.clear();
 		
-		interruptCounter = settings.PLAYERS.size();
+		interruptCounter = settings.players.size();
 		
 		//check if msg was recieved already
 		for (GameMessage gm : msgStack){
