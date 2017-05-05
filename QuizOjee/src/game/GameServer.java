@@ -143,7 +143,7 @@ public class GameServer implements GameInputListener {
 					}
 					System.out.println("	[GO]   server");
 					
-					//a logolt usereket hozzáadjuk a playerlistához a játékban
+					//a logolt usereket hozzaadjuk a playerlistahoz a jatekban
 					int i = 0;
 					int c = -1;
 					//#bot players not supported yet
@@ -285,7 +285,7 @@ public class GameServer implements GameInputListener {
 			
 			if(msg.length == 1) {
 				String a = Commands.RQ_PLAYER_ANSWER;
-				//adjuk hozzá a recieve time infót
+				//adjuk hozza a recieve time infot
 				String[] newParams = new String[4];
 				newParams[0] = msg[0].getParams()[0];
 				newParams[1] = msg[0].getSender();
@@ -437,9 +437,9 @@ public class GameServer implements GameInputListener {
 						defTime = Integer.parseInt(RQans[0].getParams()[2]);
 					}
 					if(attAns == defAns){ //a gyorsabbik nyer
-						if(attTime < defTime) {//támadó gyorsabb
+						if(attTime < defTime) {//tamado gyorsabb
 							gameboard_newOwner(attacker, targetTerritoryID);							
-						} else { //védő gyorsabb
+						} else { //vedo gyorsabb
 							
 						}
 					} else {

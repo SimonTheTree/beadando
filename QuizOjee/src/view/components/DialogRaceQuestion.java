@@ -69,7 +69,7 @@ public class DialogRaceQuestion extends JDialog {
 			txtfAnswer.setBorder(null);
 			txtfAnswer.setForeground(Color.WHITE);			
 			txtfAnswer.setOpaque(true);		
-			//biztosítjuk, hogy csak számjegyeket, és egy tizedespontot/vesszőt lehessen beírni
+			//biztositjuk, hogy csak szamjegyeket, es egy tizedespontot/vesszot lehessen beirni
 			((AbstractDocument) txtfAnswer.getDocument()).setDocumentFilter(new DocumentFilter() {
 				// Useful for every kind of input validation !
 			    // this is the insert pattern
@@ -97,7 +97,7 @@ public class DialogRaceQuestion extends JDialog {
 			        insertString(fb, offset, string, attr);
 			    }
 			});
-			//enternek hatására nyomódjon le a gomb
+			//enternek hatasara nyomodjon le a gomb
 			txtfAnswer.addActionListener((e) -> {
 				btnGo.doClick();
 			});
@@ -178,7 +178,7 @@ public class DialogRaceQuestion extends JDialog {
 	}
 	/**
 	 * disables/enables the input textfield and the button
-	 * @param bool true -> enabled false -> há érted... 
+	 * @param bool true -> enabled false -> ha erted... 
 	 */
 	public void setInputEnabled(boolean bool) {
 		txtfAnswer.setEditable(bool);

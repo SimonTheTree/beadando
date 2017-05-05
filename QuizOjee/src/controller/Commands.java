@@ -43,21 +43,21 @@ public class Commands {
 	public static final String GAME = "[game]";
 	
 	/**
-	 * A Cliens elsőre ezt kérdi a szervertől. Ha valaki másodjára
-	 *  lép be, és lemaradt a START utasításról, ezzel kérhet újra 
-	 *  START-ot a szervertől, hogy beindíthassa a játékot. A szerver
-	 *  csak akkor küld startot, ha felkészült a játék vezénylésére, 
-	 *  és ha nem küld azonnal, biztosan fog küldeni amint felkészült. 
-	 *  <br>Nincs paramétere.
+	 * A Cliens elsore ezt kerdi a szervertol. Ha valaki masodjara
+	 *  lep be, es lemaradt a START utasitasrol, ezzel kerhet ujra 
+	 *  START-ot a szervertol, hogy beindithassa a jatekot. A szerver
+	 *  csak akkor kuld startot, ha felkeszult a jatek vezenylesere, 
+	 *  es ha nem kuld azonnal, biztosan fog kuldeni amint felkeszult. 
+	 *  <br>Nincs parametere.
 	 *  @sender kliens
 	 */
-	public static final String ARE_YOU_READY = "[játszani akarok]";
+	public static final String ARE_YOU_READY = "[jatszani akarok]";
 	/**
-	 * A szerver kuldi mindenkinek, ha felkészült és indulhta a játék.
+	 * A szerver kuldi mindenkinek, ha felkeszult es indulhta a jatek.
 	 * <br> Nincs parametere.
 	 * @sender server 
 	 */
-	public static final String START = "[akkor játssz]";
+	public static final String START = "[akkor jatssz]";
 	/** 
 	 * Egyetlen parametere egy serializalt gameboard
 	 * @sender server
@@ -71,14 +71,14 @@ public class Commands {
 	 */
 	public static final String SETTINGS = "[settings]";
 	/** 
-	 * A kliens küldi a szervernek, ha le szeretné kérni a szerver aktuális {@link GameBoard} objektumát.<br>
-	 * Nincs paramétere.
+	 * A kliens kuldi a szervernek, ha le szeretne kerni a szerver aktualis {@link GameBoard} objektumat.<br>
+	 * Nincs parametere.
 	 * @sender kliens
 	 */
 	public static final String GAMEBOARD_REQUEST = "[gimme a gameboard]";
 	/** 
-	 * A kliens küldi a szervernek, ha le szeretné kérni a szerver aktuális {@link GameSettings} objektumát.<br>
-	 * Nincs paramétere.
+	 * A kliens kuldi a szervernek, ha le szeretne kerni a szerver aktualis {@link GameSettings} objektumat.<br>
+	 * Nincs parametere.
 	 * @sender kliens
 	 */
 	public static final String SETTINGS_REQUEST = "[gimme a settings]";
@@ -86,7 +86,7 @@ public class Commands {
 	/** 
 	 * A server ezzel broadcastolja ki kerul sorra
 	 * @sender server 
-	 * @param0 {@link String} a játékos username-je aki soron van
+	 * @param0 {@link String} a jatekos username-je aki soron van
 	 */
 	public static final String YOUR_TURN = "[your turn]";	
 	/** 
@@ -94,7 +94,7 @@ public class Commands {
 	 * @sender kliens
 	 * @param0 {@link String} username
 	 */
-	public static final String END_TURN = "[jöjjön más]";
+	public static final String END_TURN = "[jojjon mas]";
 		/**
 		 * A server kuldi egy jatekosnak, amikor o van soron, es lejart az ideje, vege a korenek
 		 * nincs parametere
@@ -149,18 +149,18 @@ public class Commands {
 	 * @sender server
 	 * @param0 a valasz (int)
 	 * @param1 a kuldo jatekos username-je 
-	 * @param2 amennyi dő múltán érkezett a válasz (double)
-	 * @param3 helyezés (1, 2, 3...)
+	 * @param2 amennyi do multan erkezett a valasz (double)
+	 * @param3 helyezes (1, 2, 3...)
 	 */
 	public static final String RQ_PLAYER_ANSWER = "[rq-answer-player]";
 	/**
-	 * A játék végét jelenti, valaki nyert.
-	 * <br> nincs paramétere
+	 * A jatek veget jelenti, valaki nyert.
+	 * <br> nincs parametere
 	 * @sender server
 	 */
 	public static final String END_GAME = "[thats it for today]";
 	/**
-	 * Az aktuális pontszámok
+	 * Az aktualis pontszamok
 	 * @sender server
 	 * @param0 double[] serialized settings.points
 	 */

@@ -165,7 +165,7 @@ public class GameState extends State implements GameInputListener {
 	private Player defender;
 	private String defenderUname;
 	private Territory target;
-	Set<Territory> neighbors = new TreeSet<>(); //ezt a kijelölhetőség teszteléséhez tudni kell az update-ben
+	Set<Territory> neighbors = new TreeSet<>(); //ezt a kijelolhetoseg tesztelesehez tudni kell az update-ben
 	private boolean myTurn = false;
 	private String currentPlayer;
 	
@@ -184,7 +184,7 @@ public class GameState extends State implements GameInputListener {
 		g.setRenderingHints(rh);
 		qDialog = new DialogQuestion(root);
 		rqDialog = new DialogRaceQuestion(root);
-		initRQAnsPanel(3, 3); //ez azér van így külön, mer hátha majd nem csak 2-en fognak így küzdeni egymás ellen...
+		initRQAnsPanel(3, 3); //ez azer van igy kulon, mer hatha majd nem csak 2-en fognak igy kuzdeni egymas ellen...
 		
 	}
 
@@ -371,7 +371,7 @@ public class GameState extends State implements GameInputListener {
 	}
 	public void manageNormQuestionRightAnswer(GameMessage msg) {
 		try {
-			Thread.sleep(1000); //kb megvárjuk, hogy előbb a manageNormQuestionPlayerAnswer fusson le
+			Thread.sleep(1000); //kb megvarjuk, hogy elobb a manageNormQuestionPlayerAnswer fusson le
 			String rightAns = msg.getParams()[0];
 			//helyes valasz bejelolese
 			if(qDialog.btnAnswerA.getText().equals(rightAns)){
@@ -427,7 +427,7 @@ public class GameState extends State implements GameInputListener {
 		try {
 			String rightAns = msg.getParams()[0];
 			//helyes valasz bejelolese
-			rqAnsLabels[0][0].setText("Helyes válasz: ");
+			rqAnsLabels[0][0].setText("Helyes valasz: ");
 			rqAnsLabels[0][1].setText(rightAns);
 			Thread.sleep(2 * settings.showRightAnswerDelay);
 			if (questionTh != null) questionTh.interrupt();
@@ -757,7 +757,7 @@ public class GameState extends State implements GameInputListener {
 			if (inputManager.isClicked("ButtonLeft") && !gameOver) {
 				if(!gameStarted) return;
 				Territory lit = gameboard.getHighlitTerritory();
-				if (lit.equals(Territory.NULL_TERRITORY)) return; //ezt sehogse támadjuk!
+				if (lit.equals(Territory.NULL_TERRITORY)) return; //ezt sehogse tamadjuk!
 				client.sendMessage(new GameMessage(
 						Commands.ATTACK, 
 						player.getUser().getUsername(), 
@@ -773,12 +773,12 @@ public class GameState extends State implements GameInputListener {
 					Territory toBeLit = gameboard.fromPixel(inputManager.getMousePos().x, inputManager.getMousePos().y).getOwner();
 //					Territory toBeLit = gameboard.getHighlitTerritory();
 					if (toBeLit.equals(Territory.NULL_TERRITORY)) {
-						valid = false; //ezt ne támadjuk... 
+						valid = false; //ezt ne tamadjuk... 
 //					} else if(valid && lit.getOwner().getTeam() == player.getTeam()) {
 					} else if(valid && toBeLit.getOwner().getUser().getUsername().equals(uname)) {
-						valid = false; //magunkat ne támadjuk
+						valid = false; //magunkat ne tamadjuk
 					} else if(valid && !neighbors.contains(toBeLit)) {
-						valid = false; //ne támadjunk olyat aki nem szomszéd
+						valid = false; //ne tamadjunk olyat aki nem szomszed
 					}
 				
 					if(valid) {
