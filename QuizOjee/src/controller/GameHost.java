@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import game.StringSerializer;
+
 /* Tenyleges debug modhoz: Ctrl +F search: //System replace with ////System
  *                   majd: Ctrl +F search: //////System replace with //System
  */
@@ -249,7 +251,7 @@ public class GameHost {
 		BufferedReader in = new BufferedReader(new InputStreamReader(potentialClient.getInputStream()));
 		//System.out.println("Na jo talan");
 		while(!in.ready()) {Thread.sleep(10);};
-		GameMessage msg = new GameMessage(in.readLine(),true);
+		GameMessage msg = (GameMessage)StringSerializer.deSerialize(in.readLine());
 		//System.out.println(msg.isAutomatic());
 		String userName = msg.getSender();
 		//System.out.println("Host: �: "+userName);
@@ -347,7 +349,7 @@ public class GameHost {
 			////System.err.println("decode END");
 			return;
 		}
-		GameMessage msg = new GameMessage(message,true);
+		GameMessage msg = (GameMessage)StringSerializer.deSerialize(message);
 	//System.out.print("Host: "+ msg.getSender() + " said: " + msg.getMessage());
 		if(Commands.IM_LISTENING.equals(msg.getMessage()) && msg.isAutomatic()) {
 			joinedClients++;
@@ -379,7 +381,7 @@ public class GameHost {
 				out.println(new GameMessage(true,host,Commands.WHO_ARE_YOU));
 				out.flush();
 				while(!in.ready());
-				GameMessage msg = new GameMessage(in.readLine(),true);
+				GameMessage msg = (GameMessage)StringSerializer.deSerialize(in.readLine());
 				//System.out.println("Host: �: "+msg.getSender());
 				if(msg.getMessage().equals(Commands.LOG_IN)) {
 					clients.put(msg.getSender(),client);
