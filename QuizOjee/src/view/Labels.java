@@ -69,6 +69,9 @@ public final class Labels {
 	public static final Object MSG_NEGATIVE_VALUE_GIVEN = "Negative value was given";
 	public static final String MSG_ERROR = "Error";
 	public static final String MSG_ADDING_QUESTION_FAILED = "Something went wrong while adding the question";
+	public static final String MSG_ADDING_FORUM_ENTRY_FAILED = "Something went wrong while adding the comment";
+	public static final String MSG_EMPTY_COMMENT = "You can't send an empty comment!";
+	
 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
@@ -101,6 +104,8 @@ public final class Labels {
 	public static final String BTN_ADD_QUESTION = "Add new question"; 
 	public static final String BTN_ADD_TOPIC = "Add topic"; 
 	public static final String BTN_ADD_COMMENT = "Comment"; 
+	public static final String BTN_ANSWER = "Answer";
+	public static final String BTN_RESET = "Reset";
 
 	
 	//--------------------------------------------------------------//
@@ -139,4 +144,5 @@ public final class Labels {
 	public static final String TBL_POPULARITY = "Popularity";
 	public static final String TBL_QUESTIONS_NUMBER = "Questions Number";
 	public static final String TBL_WINNER_SCORE = "Winner Score";
+	
 }

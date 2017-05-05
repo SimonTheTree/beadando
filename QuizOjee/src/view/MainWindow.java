@@ -33,18 +33,18 @@ public class MainWindow extends JFrame{
     private User user = null;
     private Statistics stat = null;
     
-    public State main = new view.states.MainState(this);
-    public State gameCreator = new view.states.GameCreatorState(this);
-    public State game = new view.states.GameState(this);
-    public State quizCreator = new view.states.QuizCreatorState(this);
-    public State quiz = new view.states.QuizState(this);
-    public State stats = new view.states.StatsState(this);
-    public State forum = new view.states.ForumState(this);
-    public State forumTopic = new view.states.ForumTopicState(this);
-    public State profile = new view.states.ProfileState(this);
-    public State login = new view.states.LoginState(this);
-    public State registration = new view.states.RegistrationState(this);
-    public State report = new view.states.ReportState();
+    public State main;
+    public State gameCreator;
+    public State game;
+    public State quizCreator;
+    public State quiz;
+    public State stats;
+    public State forum;
+    public State forumTopic;
+    public State profile;
+    public State login;
+    public State registration;
+    public State report;
 // forum    
     
     private static MainWindow self = null;
@@ -62,6 +62,7 @@ public class MainWindow extends JFrame{
     
     private MainWindow(Controller c){
     	controller = c;
+    	initStates();
     	Thread loader = new Thread(() -> {
     		Resources.load();
     		Settings.init();
@@ -90,6 +91,21 @@ public class MainWindow extends JFrame{
         sm.startCurrentState();
         
         loader.start();
+    }
+    
+    private void initStates() {
+    	main = new view.states.MainState(this);
+    	gameCreator = new view.states.GameCreatorState(this);
+    	game = new view.states.GameState(this);
+    	quizCreator = new view.states.QuizCreatorState(this);
+    	quiz = new view.states.QuizState(this);
+    	stats = new view.states.StatsState(this);
+    	forum = new view.states.ForumState(this);
+    	forumTopic = new view.states.ForumTopicState(this);
+    	profile = new view.states.ProfileState(this);
+    	login = new view.states.LoginState(this);
+    	registration = new view.states.RegistrationState(this);
+    	report = new view.states.ReportState();
     }
     
     public void setState(String s){

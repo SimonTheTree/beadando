@@ -80,4 +80,14 @@ public interface DAO {
 
 	boolean addQuestion(Question question);
 
+	List<ForumEntry> getForumEntries(ForumTopic forum_currentTopic, int minNum, int maxNum);
+
+	int getForumEntriesCount(ForumTopic forumTopic);
+
+	List<ForumTopic> getForumTopics();
+
+	boolean addForumEntry(ForumEntry forumEntry);
+
+	boolean addForumTopic(ForumTopic forumTopic);
+
 }

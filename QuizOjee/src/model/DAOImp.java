@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,9 @@ public class DAOImp implements DAO {
 	private static final String SQL_MAX_DIFFICULTY = "SELECT MAX(difficulty) FROM NORMAL_QUESTIONS";
 	private static final String SQL_MAX_TOPIC_ID = "SELECT MAX(topic_id) FROM NORMAL_QUESTIONS";
 	private static final String SQL_MAX_QUESTION_ID = "SELECT MAX(question_id) FROM NORMAL_QUESTIONS";
-	
+	private static final String SQL_MAX_FORUM_TOPIC_ID = "SELECT MAX(topic_id) FROM FORUM_TOPICS";
+	private static final String SQL_MAX_FORUM_ENTRY_ID = "SELECT MAX(comment_id) FROM FORUM_ENTRIES";
+
 	//Topic
 	private static final String SQL_GET_TOPICS_WITH_NUMBERS = "select T1.topic_id, normalDB, NVL(raceDBnull,0) AS raceDB, T1.difficulty, name FROM ( select count(*) AS normalDB, difficulty, topic_id FROM NORMAL_QUESTIONS group by topic_id, difficulty order by topic_id, difficulty ) T1 LEFT JOIN ( select count(*) AS raceDBnull, topic_id FROM RACE_QUESTIONS group by topic_id order by topic_id ) T2 ON T1.topic_id = T2.topic_id, QUESTION_TOPICS where T1.topic_id = question_topics.topic_ID";
 	private static final String SQL_GET_TOPICS = "SELECT * FROM QUESTION_TOPICS";
@@ -63,6 +66,14 @@ public class DAOImp implements DAO {
 	private static final String SQL_GET_WINNERS = "SELECT CASE GREATEST(PLAYER1_SCORE,PLAYER2_SCORE,PLAYER3_SCORE) WHEN PLAYER1_SCORE THEN PLAYER1 WHEN PLAYER2_SCORE THEN PLAYER2 WHEN PLAYER3_SCORE THEN PLAYER3 END AS winner, GREATEST(PLAYER1_SCORE,PLAYER2_SCORE,PLAYER3_SCORE) AS winnerScore FROM MAPS M LEFT JOIN GAMES G ON M.MAP_ID = G.MAP_ID WHERE M.NAME LIKE ?";
 	private static final String SQL_GET_FAV_MAPS = "SELECT \"terkep\", count(\"terkep\") AS \"jatekok_szama\" FROM (SELECT ? AS \"jatekos_neve\", M.NAME AS \"terkep\", G.PLAYER1 AS \"p1\", G.PLAYER2 AS \"p2\", G.PLAYER3 AS \"p3\" FROM GAMES G LEFT JOIN MAPS M ON G.MAP_ID = M.MAP_ID WHERE M.NAME IS NOT NULL ) T WHERE (T.\"p1\" = T.\"jatekos_neve\" OR T.\"p2\" = T.\"jatekos_neve\" OR T.\"p3\" = T.\"jatekos_neve\") GROUP BY \"terkep\" ORDER BY \"jatekok_szama\" DESC";
 
+	//forum
+	private static final String SQL_GET_FORUM_ENTRIES = "SELECT * FROM(SELECT * FROM FORUM_ENTRIES WHERE TOPIC_ID = ? ORDER BY COMMENT_ID) WHERE ROWNUM BETWEEN ? AND ?";
+	private static final String SQL_ADD_FORUM_ENTRY = "INSERT INTO FORUM_ENTRIES (COMMENT_ID, TEXT, AUTHOR,\"DATE\", TOPIC_ID, REF_COMMENT) VALUES (?, ?, ?, TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS.FF'), ?, ?)";
+	private static final String SQL_ADD_FORUM_ENTRY_WITHOUT_REF = "INSERT INTO FORUM_ENTRIES (COMMENT_ID, TEXT, AUTHOR,\"DATE\", TOPIC_ID) VALUES (?, ?, ?, TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS.FF'), ?)";
+	private static final String SQL_GET_FORUM_ENTRIES_COUNT = "SELECT COUNT(*) FROM FORUM_ENTRIES WHERE TOPIC_ID = ?";
+	private static final String SQL_GET_FORUM_TOPICS = "SELECT * FROM FORUM_TOPICS ORDER BY TOPIC_ID";
+	private static final String SQL_ADD_FORUM_TOPIC = "INSERT INTO FORUM_TOPICS (topic_id, name) VALUES (?, ?)";
+	
 	
 	public DAOImp() {
 		/*
@@ -281,6 +292,10 @@ public class DAOImp implements DAO {
 				rs = pst.executeQuery(SQL_MAX_TOPIC_ID);
 			} else if(column.equals("question_id")) {
 				rs = pst.executeQuery(SQL_MAX_QUESTION_ID);
+			} else if(column.equals("forum_topic_id")) {
+				rs = pst.executeQuery(SQL_MAX_FORUM_TOPIC_ID);
+			}  else if(column.equals("comment_id")) {
+				rs = pst.executeQuery(SQL_MAX_FORUM_ENTRY_ID);
 			} else {
 				return 0;
 			}
@@ -642,45 +657,45 @@ public class DAOImp implements DAO {
 	
 	public synchronized List<Topic> getTopicsWithQuestionNumbers() {
 		System.out.println("get Topics");
-			
-			Session session = openSSHTunnel();
-			if (session == null) return null;
-			
-			try (
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
-				Statement st = conn.createStatement();
-			) {
-				ResultSet rs = st.executeQuery(SQL_GET_TOPICS_WITH_NUMBERS);
-				List<Topic> topics = new ArrayList<Topic>();
-				if(rs.next()) {
-					while(!rs.isAfterLast()) {
-						Topic topic = new Topic();
-						topic.setName(rs.getString("name"));
-						topic.setNumberOfRaceQuestions(rs.getInt("raceDB"));
-						int id = rs.getInt("topic_ID");
-						topic.setTopicId(id);
-						
-						Map<Integer,Integer> normals = new HashMap<Integer,Integer>();
-						normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_TOPICS_WITH_NUMBERS);
+			List<Topic> topics = new ArrayList<Topic>();
+			if(rs.next()) {
+				while(!rs.isAfterLast()) {
+					Topic topic = new Topic();
+					topic.setName(rs.getString("name"));
+					topic.setNumberOfRaceQuestions(rs.getInt("raceDB"));
+					int id = rs.getInt("topic_ID");
+					topic.setTopicId(id);
+					
+					Map<Integer,Integer> normals = new HashMap<Integer,Integer>();
+					normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
 
-						while(rs.next()) {
-							if(rs.getInt("topic_ID") != id) {
-								break;
-							}
-							normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
+					while(rs.next()) {
+						if(rs.getInt("topic_ID") != id) {
+							break;
 						}
-						topic.setNumberOfQuestionsByDifficulty(normals);
-						topics.add(topic);
+						normals.put(rs.getInt("difficulty"), rs.getInt("normalDB"));
 					}
+					topic.setNumberOfQuestionsByDifficulty(normals);
+					topics.add(topic);
 				}
-				return topics;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				session.disconnect();
 			}
-			return null;
+			return topics;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
 		}
+		return null;
+	}
 
 	
 	public synchronized List<String[]> getQuestions() {
@@ -713,7 +728,7 @@ public class DAOImp implements DAO {
 	}
 	
 	public synchronized List<String> getMapNames() {
-	System.out.println("7.lekerdezes");
+		System.out.println("get Map Names");
 		
 		Session session = openSSHTunnel();
 		if (session == null) return null;
@@ -735,6 +750,177 @@ public class DAOImp implements DAO {
 			session.disconnect();
 		}
 		return null;
+	}
+	
+	public List<ForumEntry> getForumEntries(ForumTopic forumTopic, int minNum, int maxNum) {
+		System.out.println("get Forum Entries");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			PreparedStatement pst = conn.prepareStatement(SQL_GET_FORUM_ENTRIES);
+		) {
+			int index = 1;
+			pst.setInt(index++, forumTopic.getTopicId());
+			pst.setInt(index++, minNum);
+			pst.setInt(index++, maxNum);
+			
+			ResultSet rs = pst.executeQuery();
+			List<ForumEntry> re = new ArrayList<>();
+			while(rs.next()) {
+				ForumEntry entry = new ForumEntry();
+				entry.setCommentId(rs.getInt("comment_id"));
+				entry.setText(rs.getString("text"));
+				entry.setAuthor(rs.getString("author"));
+				entry.setTopicId(rs.getInt("topic_id"));
+				String ref = rs.getString("ref_comment");
+				if(ref == null) {
+					entry.setRefComment(-1);	
+				} else {
+					entry.setRefComment(Integer.parseInt(ref));
+				}
+				entry.setDate(rs.getTimestamp("date"));
+				re.add(entry);
+			}
+			return re;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+
+	public int getForumEntriesCount(ForumTopic forumTopic) {
+		System.out.println("get Forum Entries Count");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return 0;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			PreparedStatement pst = conn.prepareStatement(SQL_GET_FORUM_ENTRIES_COUNT);
+		) {
+			
+			pst.setInt(1, forumTopic.getTopicId());
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return 0;
+	}
+
+	public List<ForumTopic> getForumTopics() {
+		System.out.println("get Forum Topics");
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			
+			ResultSet rs = st.executeQuery(SQL_GET_FORUM_TOPICS);
+			List<ForumTopic> re = new ArrayList<>();
+			while(rs.next()) {
+				ForumTopic topic = new ForumTopic();
+				topic.setName(rs.getString("name"));
+				topic.setTopicId(rs.getInt("topic_id"));
+				re.add(topic);
+			}
+			return re;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return null;
+	}
+
+	private String dateZeros(String str) {
+		String re = str;
+		String[] kocka = str.split("\\.");
+		String last = kocka[kocka.length-1];
+		for(int i=last.length();i<9;++i) {
+			re+="0";
+		}
+		return re;
+	}
+	
+	public boolean addForumEntry(ForumEntry forumEntry) {
+		System.out.println("add ForumTopic " + forumEntry.getText());
+		int commentId = getMax("comment_id") + 1;
+		System.out.println("Date " + forumEntry.getDate());
+		String date = dateZeros(forumEntry.getDate().toString());
+
+		Session session = openSSHTunnel();
+		if (session == null) return false;
+		
+		String SQL = SQL_ADD_FORUM_ENTRY;
+		if(forumEntry.getRefComment() == -1) {
+			SQL = SQL_ADD_FORUM_ENTRY_WITHOUT_REF;
+		}
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo"); 
+			PreparedStatement pst = conn.prepareStatement(SQL);
+		) {
+			int index = 1;
+			//(COMMENT_ID, TEXT, AUTHOR,\"DATE\", TOPIC_ID, REF_COMMENT)
+			pst.setInt(index++, commentId);
+			pst.setString(index++,forumEntry.getText());
+			pst.setString(index++,forumEntry.getAuthor());
+			pst.setString(index++,date);
+			pst.setInt(index++,forumEntry.getTopicId());
+			if(forumEntry.getRefComment() != -1) {
+				pst.setInt(index++,forumEntry.getRefComment());
+			}
+			int rowsAffected = pst.executeUpdate();
+			if(rowsAffected > 0) {
+				return true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return false;
+	}
+
+	public boolean addForumTopic(ForumTopic forumTopic) {
+		System.out.println("add ForumTopic " + forumTopic.getName());
+		int forumTopicId = getMax("forum_topic_id") + 1;
+
+		Session session = openSSHTunnel();
+		if (session == null) return false;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo"); 
+			PreparedStatement pst = conn.prepareStatement(SQL_ADD_FORUM_TOPIC);
+		) {
+			int index = 1;
+			pst.setInt(index++, forumTopicId);
+			pst.setString(index++,forumTopic.getName());
+			int rowsAffected = pst.executeUpdate();
+			if(rowsAffected > 0) {
+				return true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return false;
+	
 	}
 	
 	//TODO lekerdezes
@@ -969,5 +1155,5 @@ public class DAOImp implements DAO {
 		}
 		return null;
 	}
-	
+
 }

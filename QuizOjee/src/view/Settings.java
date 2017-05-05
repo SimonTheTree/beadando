@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import game.Cell;
 import game.players.Player;
 import gameTools.map.Tile;
+import model.ForumTopic;
 
 public class Settings {
 
@@ -54,15 +55,19 @@ public class Settings {
 	public static Color color_GButtonClick_inGame = new Color(60, 60,100);
 	
 	// --------------------------------------------------------------//
-	// QUIZ SETTINGS
+	// QUIZ SETTINGS                                                 //
 	// --------------------------------------------------------------//
 	public static int game_numOfQuestions = 10;
 	public static int game_numOfRaceQuestions = 10;
 //	public static List<Topic> quiz_topicList;
 	public static int game_difficulity;
-	
-
 	public static String gameServer; //connection string, {GameCreatorState} -> {GameState}
+	
+	// --------------------------------------------------------------//
+	// FORUM SETTINGS                                                //
+	// --------------------------------------------------------------//
+	public static ForumTopic forum_currentTopic = null;
+	
 	
 	public static void init(){
 		setUIFont(new javax.swing.plaf.FontUIResource(FONT_NAME_ARCHIVE,Font.PLAIN,12));

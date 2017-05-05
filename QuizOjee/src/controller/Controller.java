@@ -11,6 +11,8 @@ import model.Statistics;
 import model.Topic;
 import model.DAO;
 import model.DAOImp;
+import model.ForumEntry;
+import model.ForumTopic;
 import model.Question;
 import model.RaceQuestion;
 import model.User;
@@ -19,7 +21,8 @@ import model.exceptions.UserAlreadyExistsException;
 import model.exceptions.UserNotFoundException;
 import view.Labels;
 import view.MainWindow;
-public class Controller {
+import view.Refreshable;
+public class Controller implements Refreshable {
 	
 	
 	private DAO db;
@@ -40,6 +43,8 @@ public class Controller {
 	private List<Topic> topicList = null;
 	private Object fullTopicListKey = new Object();
 	private List<Topic> fullTopicList = null;
+	private Object forumTopicsKey = new Object();
+	private List<ForumTopic> forumTopics = null;
 	
 	//lekerdezesekhez
 	private Object questionQuantityByCategoryKey = new Object();
@@ -357,44 +362,50 @@ public class Controller {
 					e.printStackTrace();
 				}
 				
-				actualTopicList = null;
-				actualRaceTopicList = null;
-				
-				synchronized(questionsKey) {
-					questions = null;
-				} synchronized(raceQuestionsKey) {
-					raceQuestions = null;
-				} synchronized(fullTopicListKey) {
-					fullTopicList = null;
-				} synchronized(topicListKey) {
-					topicList = null;
-				}
-				
-				//lekerdezesekhez
-				synchronized(questionQuantityByCategoryKey) {
-					questionQuantityByCategory = null;
-				} synchronized(topTenPlayersKey) {
-					topTenPlayers = null;
-				} synchronized(userQuestionQuantityKey) {
-					userQuestionQuantity = null;
-				} synchronized(topFiveMapsKey) {
-					topFiveMaps = null;
-				} synchronized(userQuestionsKey) {
-					userQuestionsUname = null;
-					userQuestions = null;
-				} synchronized(gameWinnersKey) {
-					gameWinners = null;
-				} synchronized(winnersKey) {
-					winnersMap = null;
-					winners = null;
-				} synchronized(favMapsKey) {
-					favMapsUname = null;
-					favMaps = null;
-				}
+				refresh();
 			}
 		});
 		t.setDaemon(true);
 		t.start();
+	}
+	
+	public void refresh() {
+		actualTopicList = null;
+		actualRaceTopicList = null;
+		
+		synchronized(questionsKey) {
+			questions = null;
+		} synchronized(raceQuestionsKey) {
+			raceQuestions = null;
+		} synchronized(fullTopicListKey) {
+			fullTopicList = null;
+		} synchronized(topicListKey) {
+			topicList = null;
+		} synchronized(forumTopicsKey) {
+			forumTopics = null;
+		}
+		
+		//lekerdezesekhez
+		synchronized(questionQuantityByCategoryKey) {
+			questionQuantityByCategory = null;
+		} synchronized(topTenPlayersKey) {
+			topTenPlayers = null;
+		} synchronized(userQuestionQuantityKey) {
+			userQuestionQuantity = null;
+		} synchronized(topFiveMapsKey) {
+			topFiveMaps = null;
+		} synchronized(userQuestionsKey) {
+			userQuestionsUname = null;
+			userQuestions = null;
+		} synchronized(gameWinnersKey) {
+			gameWinners = null;
+		} synchronized(winnersKey) {
+			winnersMap = null;
+			winners = null;
+		} synchronized(favMapsKey) {
+			favMapsUname = null;
+			favMaps = null;
+		}
 	}
 	
 	public List<String[]> getQuestions() {
@@ -423,6 +434,34 @@ public class Controller {
 	
 	public boolean addQuestion(Question question) {
 		return db.addQuestion(question);
+	}
+	//TODO befejezni
+	public List<ForumEntry> getSomeForumEntries(ForumTopic forum_currentTopic, int minNum, int maxNum) {
+		return db.getForumEntries(forum_currentTopic,minNum,maxNum);
+	}
+	
+	public int getForumEntriesCount(ForumTopic forumTopic) {
+		return db.getForumEntriesCount(forumTopic);
+	}
+	
+	public List<ForumTopic> getForumTopics() {
+		synchronized(forumTopicsKey) {
+			if(forumTopics == null) {
+				System.out.println("Read ForumTopics from DB");
+				forumTopics = db.getForumTopics();
+			} else {
+				System.out.println("Read ForumTopics from Memory");
+			}
+			return forumTopics;
+		}
+	}
+	
+	public boolean addForumEntry(ForumEntry forumEntry) {
+		return db.addForumEntry(forumEntry);
+	}
+	
+	public boolean addForumTopic(ForumTopic forumTopic) {
+		return db.addForumTopic(forumTopic);
 	}
 	
 	//TODO lekerdezesek
@@ -558,7 +597,7 @@ public class Controller {
     public List<String[]> getUserQuestionsTable(String uname) {
     	List<String[]> re = getUserQuestions(uname);
     	if(re == null) re = new ArrayList<>();
-    	String[] head = {Labels.M_MAP_NAME, Labels.TBL_POPULARITY, };
+    	String[] head = {Labels.M_QUESTION,Labels.M_RIGHT_ANSWER,Labels.M_TOPIC_NAME,};
     	re.add(0, head);
     	return re;
     }
