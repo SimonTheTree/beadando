@@ -74,7 +74,7 @@ public class ForumTopicState extends DefaultState implements Refreshable {
 		//panelLayout.setVgap(3);
 		//panelLayout.setHgap(3);
 		re.setLayout(panelLayout);
-		for(int i=0;i<forumEntries.size();++i) {
+		for(int i=forumEntries.size()-1;i>=0;--i) {
 			ForumEntry forumEntry = forumEntries.get(i);
 			JPanel forumEntryPanel = commentPanelMaker(forumEntry,i%2==0?false:true);
 			//forumEntryPanel.setBounds(x, y, maxEntriesOnThePage, entriesNumber);

@@ -17,7 +17,8 @@ public final class Labels {
 	public static final String LBL_TITLE_FORUM_TOPIC = "<Topic name load failed>"; 
 	public static final String LBL_TITLE_PROFILE = "Profile"; 
 	public static final String LBL_TITLE_LOGIN = "Login"; 
-	public static final String LBL_TITLE_REGISTER = "Register"; 
+	public static final String LBL_TITLE_REGISTER = "Register";
+	public static final String LBL_TITLE_UPDATE_USER = "Update user"; 
 	public static final String LBL_TITLE_REPORT = "Report @"; 
 	public static final String LBL_DIFFICULITY = "Difficulity"; 
 	public static final String LBL_NUMBER_OF_QUESTIONS = "Number of questions:"; 
@@ -57,6 +58,7 @@ public final class Labels {
 	public static final String MSG_BAD_USERNAME_FORMAT = "Username must not contain @ or something else thats special";
 	public static final String MSG_LOGIN_FAILED = "Login failed. Check your credentials";
 	public static final String MSG_REGISTRATION_FAILED = "Registration failed.";
+	public static final String MSG_UPDATE_FAILED = "Update failed.";
 	public static final String MSG_USER_EXISTS = "Username is taken";
 	public static final String MSG_PASSWORDS_DONT_MATCH = "The passwords don't match";
 	public static final String MSG_YOURE_TOO_YOUNG = "You need to be older than 12";
@@ -68,12 +70,12 @@ public final class Labels {
 	public static final String MSG_BAD_IP_ADDRESS = "Bad IP address";
 	public static final String MSG_NO_SERVER_RUNNING_THERE = "No server is running on that IP";
 	public static final String MSG_PLEASE_SET_EVERYTHING = "Please set everything!";
-	public static final Object MSG_NEGATIVE_VALUE_GIVEN = "Negative value was given";
+	public static final Object MSG_NEGATIVE_OR_ZERO_VALUE_GIVEN = "Negative or zero value was given";
 	public static final String MSG_ERROR = "Error";
 	public static final String MSG_ADDING_QUESTION_FAILED = "Something went wrong while adding the question";
 	public static final String MSG_ADDING_FORUM_ENTRY_FAILED = "Something went wrong while adding the comment";
 	public static final String MSG_EMPTY_COMMENT = "You can't send an empty comment!";
-	
+	public static final Object MSG_TOO_HIGH_DIFFICULTY = "The difficulty value is too high!";
 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
@@ -108,6 +110,7 @@ public final class Labels {
 	public static final String BTN_ADD_COMMENT = "Comment"; 
 	public static final String BTN_ANSWER = "Answer";
 	public static final String BTN_RESET = "Reset";
+	public static final String BTN_CHANGE_DATAS = "Change Datas";
 
 	
 	//--------------------------------------------------------------//

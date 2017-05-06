@@ -92,7 +92,7 @@ public class ForumState extends DefaultState implements Refreshable {
 			});
 			//counter++;
 		}
-		kulso.add(panel,BorderLayout.CENTER);
+		kulso.add(panel,BorderLayout.NORTH);
 		kulso.add(Box.createRigidArea(new Dimension(5,5)), BorderLayout.EAST);
 		kulso.add(Box.createRigidArea(new Dimension(5,5)), BorderLayout.WEST);
 		return kulso;

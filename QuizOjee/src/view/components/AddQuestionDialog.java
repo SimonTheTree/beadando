@@ -39,7 +39,8 @@ public class AddQuestionDialog extends JDialog implements ActionListener {
 	private List<JTextField> textFields = new ArrayList<>();
 	private GButton okButton = new GButton(Labels.BTN_OK);
 	private GButton cancelButton = new GButton(Labels.BTN_CANCEL);
-	public static final Color BACKGROUND = Login.BACKGROUND;  
+	private List<Topic> topics = new  ArrayList<>();
+	public static final Color BACKGROUND = Login.BACKGROUND; 
 	
 	public AddQuestionDialog(MainWindow root, boolean modal, String userName) {
 		super(root,modal);
@@ -48,7 +49,7 @@ public class AddQuestionDialog extends JDialog implements ActionListener {
 	
 	private void init(MainWindow root, String userName) {
 		this.root = root;
-		List<Topic> topics = root.controller.getTopics();
+		topics = root.controller.getTopics();
 		String[] boxItems = new String[topics.size()];
 		for(int i=0;i<boxItems.length;++i) {
 			boxItems[i] = topics.get(i).getName();
@@ -143,13 +144,15 @@ public class AddQuestionDialog extends JDialog implements ActionListener {
 					JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			if(((Integer)difficultySpinner.getValue()) < 0) {
+			if(((Integer)difficultySpinner.getValue()) <= 0) {
 				JOptionPane.showMessageDialog(
 						this,
-						Labels.MSG_NEGATIVE_VALUE_GIVEN,
+						Labels.MSG_NEGATIVE_OR_ZERO_VALUE_GIVEN,
 						Labels.MSG_ERROR,
 						JOptionPane.ERROR_MESSAGE);
 				return;
+			} else if(((Integer)difficultySpinner.getValue()) > root.controller.getMaxDifficulty()) {
+				difficultySpinner.setValue(root.controller.getMaxDifficulty());
 			}
 			Question question = new Question();
 			question.setQuestion(questionTextField.getText());
@@ -157,7 +160,12 @@ public class AddQuestionDialog extends JDialog implements ActionListener {
 			question.setAnswer1(answer1TextField.getText());
 			question.setAnswer2(answer2TextField.getText());
 			question.setAnswer3(answer3TextField.getText());
-			question.setTopicName((String)topicNameCombo.getSelectedItem());
+			for(Topic t : topics) {
+				if(topicNameCombo.getSelectedItem().equals(t.getName())) {
+					question.setTopicId(t.getTopicId());
+					break;
+				}
+			}
 			question.setDifficulty((Integer)difficultySpinner.getValue());
 			question.setAuthor(root.getLoggedUser().getUsername());
 			if(!root.controller.addQuestion(question)) {
@@ -168,6 +176,8 @@ public class AddQuestionDialog extends JDialog implements ActionListener {
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			root.controller.refresh();
+			setVisible(false);
 		} else if(e.getSource().equals(cancelButton)) {
 			setVisible(false);
 		}

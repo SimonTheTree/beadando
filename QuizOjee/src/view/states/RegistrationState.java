@@ -4,6 +4,7 @@ import gameTools.state.State;
 import model.User;
 import controller.PasswordCoder;
 import model.exceptions.BadUsernameFormatException;
+import model.exceptions.UserNotFoundException;
 import view.Labels;
 import view.MainWindow;
 import view.Settings;
@@ -32,13 +33,21 @@ public class RegistrationState extends DefaultState {
 	private JPasswordField txtPwAgain;
 	private List<GLabel> msg = new ArrayList<>();
 	private JPanel panelMsg;
-	public RegistrationState(MainWindow r) {
-		super(MainWindow.STATE_REGISTER, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
+	private boolean changeDatas;
+	
+	public RegistrationState(MainWindow r, boolean changeDatas) {
+		super(changeDatas?MainWindow.STATE_UPDATE_USER:MainWindow.STATE_REGISTER, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
+		this.changeDatas = changeDatas;
 		
 		panelMsg = new JPanel();
 		
-		GLabel lblRegisterTitle = new GLabel(Labels.LBL_TITLE_REGISTER);
+		GLabel lblRegisterTitle;
+			if(!changeDatas) {
+				lblRegisterTitle= new GLabel(Labels.LBL_TITLE_REGISTER);
+			} else {
+				lblRegisterTitle= new GLabel(Labels.LBL_TITLE_UPDATE_USER);
+			}
 			lblRegisterTitle.setFont(Settings.FONT_TITLE);
 		GLabel lblUsername = new GLabel(Labels.USERNAME);
 		GLabel lblPassword = new GLabel(Labels.PASSWORD);
@@ -47,19 +56,20 @@ public class RegistrationState extends DefaultState {
 		
 		txtUname = new JTextField();
 			txtUname.setColumns(10);
-		
+
+			
 		txtPw = new JPasswordField();
 			txtPw.setColumns(10);
 		
 		txtAge = new JSpinner();
-		
+
 		txtPwAgain = new JPasswordField();
 			txtPwAgain.setColumns(10);
 			
 		GButton btnRegister = new GButton(Labels.BTN_OK);
 			btnRegister.addActionListener((e) -> {
 				msg.clear();
-				String uname = txtUname.getText();                         
+				String uname = txtUname.getText();           
 				String password = PasswordCoder.cryptWithMD5(String.valueOf(txtPw.getPassword()));     
 				String password2 = PasswordCoder.cryptWithMD5(String.valueOf(txtPwAgain.getPassword()));     	           
 				int age = (Integer) txtAge.getValue();
@@ -68,9 +78,11 @@ public class RegistrationState extends DefaultState {
 				if("".equals(uname)){
 					msg.add(new GLabel(Labels.MSG_UNAME_FIELD_EMPTY));
 					ok=false;
-				} else if(root.controller.getUser(uname) != null) {
-					msg.add(new GLabel(Labels.MSG_USER_EXISTS));
-					ok=false;
+				} else if(!changeDatas) { 
+					if(root.controller.getUser(uname) != null) {
+						msg.add(new GLabel(Labels.MSG_USER_EXISTS));
+						ok=false;
+					}
 				}
 				if(txtPw.getPassword().length == 0){
 					msg.add(new GLabel(Labels.MSG_PASSWD_FIELD_EMPTY));
@@ -92,7 +104,11 @@ public class RegistrationState extends DefaultState {
 					}
 				}
 				if(!ok){
-					msg.add(new GLabel(Labels.MSG_REGISTRATION_FAILED));
+					if(!changeDatas) {
+						msg.add(new GLabel(Labels.MSG_REGISTRATION_FAILED));
+					} else {
+						msg.add(new GLabel(Labels.MSG_UPDATE_FAILED));
+					}
 				}
 				if(ok){
 					try{
@@ -100,7 +116,16 @@ public class RegistrationState extends DefaultState {
 						u.setUsername(uname);
 						u.setCodedPassword(password);
 						u.setAge(age);
-						ok = root.controller.register(u);
+						if(!changeDatas) {
+							ok = root.controller.register(u);
+						} else {
+							try {
+								ok = root.controller.modifyUser(u);
+							} catch (UserNotFoundException e1) {
+								
+								e1.printStackTrace();
+							}
+						}
 						System.out.println(ok);
 					}catch(BadUsernameFormatException ex){
 						msg.add(new GLabel(Labels.MSG_BAD_USERNAME_FORMAT));
@@ -113,13 +138,21 @@ public class RegistrationState extends DefaultState {
 				}
 				printMsg();
 				if(ok){
-					root.setState(MainWindow.STATE_LOGIN);
+					if(!changeDatas) {
+						root.setState(MainWindow.STATE_LOGIN);
+					} else {
+						root.setState(MainWindow.STATE_MAIN);
+					}
 				}
 			});
 		
 		GButton btnCancel = new GButton(Labels.BTN_CANCEL);
 			btnCancel.addActionListener((e) -> {
-				root.setState(MainWindow.STATE_LOGIN);
+				if(!changeDatas) {
+					root.setState(MainWindow.STATE_LOGIN);
+				} else {
+					root.setState(MainWindow.STATE_MAIN);
+				}
 			});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
@@ -191,6 +224,16 @@ public class RegistrationState extends DefaultState {
 	public void update() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void onStart() {
+		if(changeDatas) {
+			txtUname.setText(root.getLoggedUser().getUsername());
+			txtUname.setEditable(false);
+			txtAge.setValue(root.getLoggedUser().getAge());
+			txtPw.setText("");
+			txtPwAgain.setText("");
+		}
 	}
 	
 	private void printMsg(){

@@ -9,10 +9,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import view.components.GLabel;
+import view.components.KDialog;
+
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import model.Statistics;
+import view.components.AddQuestionDialog;
 import view.components.GButton;
 import javax.swing.JTextField;
 
@@ -32,6 +35,7 @@ public class ProfileState extends DefaultState {
 	private GButton btnDeleteUser;
 	private GButton btnAddQuestions;
 	private GButton btnListMyQuestion;
+	private GButton btnChangeDatas;
 	private GButton btnBack;
 	public ProfileState(MainWindow r) {
 		super(MainWindow.STATE_PROFILE, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
@@ -39,6 +43,7 @@ public class ProfileState extends DefaultState {
 		
 		inputManager.addKeyMapping("a", KeyEvent.VK_A);
 		inputManager.addKeyMapping("l", KeyEvent.VK_L);
+		inputManager.addKeyMapping("c", KeyEvent.VK_C);
 		inputManager.addKeyMapping("esc", KeyEvent.VK_ESCAPE);
 		
 		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_PROFILE);
@@ -80,11 +85,15 @@ public class ProfileState extends DefaultState {
 			});
 		btnAddQuestions = new GButton(Labels.BTN_ADD_QUESTION);
 			btnAddQuestions.addActionListener((e) -> {
-				
+				new AddQuestionDialog(root, true, root.getLoggedUser().getUsername());
 			});
 		btnListMyQuestion = new GButton(Labels.BTN_LIST_MY_QUESTIONS);
 			btnListMyQuestion.addActionListener((e) -> {
-				
+				new KDialog(root,true,root.controller.getUserQuestionsTable(root.getLoggedUser().getUsername()));
+			});
+		btnChangeDatas = new GButton(Labels.BTN_CHANGE_DATAS);
+			btnChangeDatas.addActionListener((e) -> {
+				root.setState(MainWindow.STATE_UPDATE_USER);
 			});
 		btnBack = new GButton(Labels.BTN_BACK);
 			btnBack.addActionListener((e) -> {
@@ -139,7 +148,8 @@ public class ProfileState extends DefaultState {
 									.addGap(67)
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 										.addComponent(btnAddQuestions, GroupLayout.PREFERRED_SIZE, 251, GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnListMyQuestion, GroupLayout.PREFERRED_SIZE, 251, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(btnListMyQuestion, GroupLayout.PREFERRED_SIZE, 251, GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnChangeDatas, GroupLayout.PREFERRED_SIZE, 251, GroupLayout.PREFERRED_SIZE))))
 							.addGap(396)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
@@ -195,6 +205,8 @@ public class ProfileState extends DefaultState {
 					.addComponent(btnListMyQuestion, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnAddQuestions, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnChangeDatas, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
 					.addGap(29))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(39)
@@ -223,14 +235,17 @@ public class ProfileState extends DefaultState {
 	
 	@Override
 	protected void onStop(){
-		root.getLoggedUser().setRealName(txtfRealName.getText());
-		root.pushLoggedUser();
+		if(!root.getLoggedUser().getRealName().equals(txtfRealName.getText())) {
+			root.getLoggedUser().setRealName(txtfRealName.getText());
+			root.pushLoggedUser();
+		}
 	}
 	
 	@Override
 	public void update() {
 		if(inputManager.isKeyTyped("a")){btnAddQuestions.doClick();}
 		if(inputManager.isKeyTyped("l")){btnListMyQuestion.doClick();}
+		if(inputManager.isKeyTyped("c")){btnChangeDatas.doClick();}
 		if(inputManager.isKeyTyped("esc")){btnBack.doClick();}
 
 	}
