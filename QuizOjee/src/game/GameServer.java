@@ -421,19 +421,27 @@ public class GameServer implements GameInputListener {
 				}
 				
 				if (RQans.length == 2){
-					int attAns;
+					double attAns = 0;
 					int attTime; 
-					int defAns;
+					double defAns = 0;
 					int defTime;
 					if(attacker.equals(RQans[0].getSender()) ){
-						attAns = Integer.parseInt(RQans[0].getParams()[0]);
+						try {
+							attAns = Double.parseDouble(RQans[0].getParams()[0]);
+						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
 						attTime = Integer.parseInt(RQans[0].getParams()[2]);
-						defAns = Integer.parseInt(RQans[1].getParams()[0]);
+						try {
+							defAns = Double.parseDouble(RQans[1].getParams()[0]);
+						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
 						defTime = Integer.parseInt(RQans[1].getParams()[2]);
 					} else {
-						attAns = Integer.parseInt(RQans[1].getParams()[0]);					
+						try {
+							attAns = Double.parseDouble(RQans[1].getParams()[0]);
+						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
 						attTime = Integer.parseInt(RQans[1].getParams()[2]);
-						defAns = Integer.parseInt(RQans[0].getParams()[0]);
+						try {
+							defAns = Double.parseDouble(RQans[0].getParams()[0]);
+						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
 						defTime = Integer.parseInt(RQans[0].getParams()[2]);
 					}
 					if(attAns == defAns){ //a gyorsabbik nyer
