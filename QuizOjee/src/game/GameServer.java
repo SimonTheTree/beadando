@@ -398,8 +398,8 @@ public class GameServer implements GameInputListener {
 				settings.getPlayerByUname(defender).points += question.getDifficulty();
 				//another raceQuestion round
 				RaceQuestion rQuestion = fetchRQuestion();
-				int rightRQAnswer = rQuestion.getRightAnswer();
-				rQuestion.setRightAnswer(Integer.MIN_VALUE); 
+				double rightRQAnswer = rQuestion.getRightAnswer();
+				rQuestion.setRightAnswer(Double.MIN_VALUE); 
 				
 				sendRaceQuestion(rQuestion, attacker, defender);
 				
@@ -415,7 +415,7 @@ public class GameServer implements GameInputListener {
 						Commands.RQ_PLAYER_ANSWER, 
 						m.getParams()[0], 
 						m.getParams()[1],   
-						String.format("%05.2f", Integer.parseInt(m.getParams()[2])/1000.0),
+						String.format("%05.4f", Double.parseDouble(m.getParams()[2])/1000.0),
 						m.getParams()[3]
 					));
 				}

@@ -6,7 +6,7 @@ public class RaceQuestion implements Serializable{
 
 	private long questionId;
 	private String question;
-	private int rightAnswer;
+	private double rightAnswer;
 	private int topicId;
 	private String author;
 	
@@ -22,10 +22,10 @@ public class RaceQuestion implements Serializable{
 	public void setQuestion(String question) {
 		this.question = question;
 	}
-	public int getRightAnswer() {
+	public double getRightAnswer() {
 		return rightAnswer;
 	}
-	public void setRightAnswer(int rightAnswer) {
+	public void setRightAnswer(double rightAnswer) {
 		this.rightAnswer = rightAnswer;
 	}
 	public int getTopicId() {

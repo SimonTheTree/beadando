@@ -26,7 +26,7 @@ public class DAOImp implements DAO {
 
 	//Question
 	private static final String SQL_GET_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, answer1, answer2, answer3, topic_id, difficulty, author, dbms_random.value AS rand FROM NORMAL_QUESTIONS WHERE difficulty BETWEEN ? and ? ";
-	private static final String SQL_GET_RACE_QUESTION_BY_DIFFICULTY = "SELECT question_id, question, right_answer, topic_id, author, dbms_random.value AS rand FROM RACE_QUESTIONS ";
+	private static final String SQL_GET_RACE_QUESTION = "SELECT question_id, question, right_answer, topic_id, author, dbms_random.value AS rand FROM RACE_QUESTIONS ";
 	private static final String SQL_GET_QUESTIONS = "SELECT question, right_answer, answer1, answer2, answer3, name, difficulty, author FROM NORMAL_QUESTIONS, QUESTION_TOPICS WHERE NORMAL_QUESTIONS.topic_id = QUESTION_TOPICS.topic_id ORDER BY DIFFICULTY";
     private static final String SQL_ADD_QUESTION = "INSERT INTO NORMAL_QUESTIONS (question_id, question, right_answer, answer1, answer2, answer3, difficulty, topic_id, author) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
@@ -201,7 +201,7 @@ public class DAOImp implements DAO {
 		if (session == null)
 			return null;
 		
-		String epicSQL = SQL_GET_RACE_QUESTION_BY_DIFFICULTY;
+		String epicSQL = SQL_GET_RACE_QUESTION;
 		
 		if(topicList != null) { 
 			epicSQL+=sqlListAdder("WHERE","Topic_ID",topicList.size(),"OR");
@@ -231,7 +231,7 @@ public class DAOImp implements DAO {
 				RaceQuestion q = new RaceQuestion();
 				q.setQuestionId(rs.getInt("question_id"));
 				q.setQuestion(rs.getString("question"));
-				q.setRightAnswer(Integer.parseInt(rs.getString("right_answer")));
+				q.setRightAnswer(Double.parseDouble(rs.getString("right_answer")));
 				q.setTopicId(rs.getInt("topic_id"));
 				q.setAuthor(rs.getString("author"));
 				questions.add(q);
