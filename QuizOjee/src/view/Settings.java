@@ -22,6 +22,13 @@ public class Settings {
 	// --------------------------------------------------------------//
 	public static final int MAIN_WINDOW_WIDTH = 900;
 	public static final int MAIN_WINDOW_HEIGHT = 600;
+	
+	public static final String ENV_KABINET = "Kabinet GNOME3 BUGOS!!!";
+	public static final String ENV_NORMAL = "nem GNOME3";
+	// TODO buug! Kabinetben a question dialognál a gombok kicsúsznak a guiból alul.
+	// TODO rqdialog is túl kicsi, nem fér el az eredmény, kéne +30 per player min +30
+	public static final String ENV = ENV_KABINET;
+	
 
 	// --------------------------------------------------------------//
 	// FONT SETTINGS

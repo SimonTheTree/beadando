@@ -113,8 +113,10 @@ public class DialogRaceQuestion extends JDialog {
 		MainPanel = new JPanel();
 		answersPanel = new JPanel();
 			answersPanel.setBackground(Settings.color_lightGray2);
-			
-		setUndecorated(true);
+		
+			if (!Settings.ENV.equals(Settings.ENV_KABINET)){
+				setUndecorated(true);
+			}
 	}
 
 	private void initLayout() {

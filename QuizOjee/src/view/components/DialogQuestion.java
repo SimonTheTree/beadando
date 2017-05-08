@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.print.DocFlavor.STRING;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
@@ -61,7 +62,9 @@ public class DialogQuestion extends JDialog {
 	
 		initLayout();
 		setVisible(false);
-		setUndecorated(true);
+		if (!Settings.ENV.equals(Settings.ENV_KABINET)){
+			setUndecorated(true);
+		}
 	}
 
 	private void initLayout() {
@@ -105,6 +108,19 @@ public class DialogQuestion extends JDialog {
 		MainPanel.setLayout(gl_MainPanel);
 		
 		
+	}
+	
+	public static void main(String[] args){
+		//teszt this window
+				JFrame frame = new JFrame();
+				frame.setSize(400,400);
+				frame.setVisible(false);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				DialogQuestion rqDialog = new DialogQuestion(frame);
+				rqDialog.setVisible(true);
+				rqDialog.lblNorth.setText("player1 vs player2");
+				rqDialog.lblSouth.setText("10s");
+				
 	}
 	
 	private JPanel AnswerPanel;
