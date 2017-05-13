@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import view.Labels;
@@ -21,7 +22,7 @@ import view.Labels;
  * 
  * <b>Ha resetelni akarsz, mindent allits be 0-ra!</b>
  */
-public class Statistics {
+public class Statistics  implements Serializable{
 	private String uname;
     private int age = 0;
     private int points = -1;

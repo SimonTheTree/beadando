@@ -149,7 +149,7 @@ public class Commands {
 	 * @sender server
 	 * @param0 a valasz (int)
 	 * @param1 a kuldo jatekos username-je 
-	 * @param2 amennyi do multan erkezett a valasz (double)
+	 * @param2 amennyi do multan erkezett a valasz (int, ms)
 	 * @param3 helyezes (1, 2, 3...)
 	 */
 	public static final String RQ_PLAYER_ANSWER = "[rq-answer-player]";

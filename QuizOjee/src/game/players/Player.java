@@ -10,7 +10,10 @@ import game.GameSettings;
 import game.Territory;
 import gameTools.state.InputManager;
 import model.RaceQuestion;
+import model.Statistics;
 import model.User;
+import model.exceptions.UserNotFoundException;
+import view.MainWindow;
 import model.Question;
 
 import java.awt.Color;
@@ -30,7 +33,12 @@ public abstract class Player implements Serializable{
     protected ArrayList<Territory> territories;
     protected boolean isAlive;
     protected User user;
+    protected Statistics globStats;
+    protected Statistics localStats;
+    private int[][] diffN; //number of answered questions in a difficulity
+    private int questionsAsked = 0;
     public double points;
+    public double statsPoints;
     
     public Player(){
         this(null, 0);
@@ -43,13 +51,79 @@ public abstract class Player implements Serializable{
         this.team = getId();
     }
     public Player(User u, int color, int team) {
-        this.user = u;
+        this.user = MainWindow.getInstance().controller.getUser(u.getUsername());
+        this.globStats = MainWindow.getInstance().controller.getUserStatistics(u.getUsername());
     	this.color = color;
         this.team = team;
         points = 0;
+        statsPoints = globStats.getPoints();
         territories = new ArrayList<>();
-    }
+        localStats = new Statistics();
+        	localStats.setUname(u.getUsername());
+        	localStats.setPoints(0);      
+        	localStats.setWins(0);        
+        	localStats.setDefeats(0);     
+        	localStats.setRightAnswers(0);
+        	localStats.setWrongAnswers(0);
+        	localStats.setRightTips(0);   
+        	localStats.setWrongTips(0);
 
+    	//init difficulitycounter array
+		diffN =  new int[15][2];
+		int i = 0;
+		for(int[] arr : diffN){
+			arr[0] = i++;
+			arr[1] = 0;
+		}
+    }
+    
+    public void save() {
+    	try {
+    		globStats.setPoints( (int) (statsPoints + points));
+    		localStats.setPoints( (int) (points));
+			MainWindow.getInstance().controller.updateStatistics(globStats);
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+		}
+    }
+    public void incRAnswer() {
+    	globStats.setRightAnswers(globStats.getRightAnswers()+1);
+    	localStats.setRightAnswers(localStats.getRightAnswers()+1);
+    }
+    public void incWAnswer() {
+    	globStats.setWrongAnswers(globStats.getWrongAnswers()+1);
+    	localStats.setWrongAnswers(localStats.getWrongAnswers()+1);
+    }
+    public void incRTip() {
+    	globStats.setRightTips(globStats.getRightTips()+1);
+    	localStats.setRightTips(localStats.getRightTips()+1);
+    }
+    public void incWTip() {
+    	globStats.setWrongTips(globStats.getWrongTips()+1);
+    	localStats.setWrongTips(localStats.getWrongTips()+1);
+    }
+    public void incWins() {
+    	globStats.setWins(globStats.getWins()+1);
+    }
+    public void incDefeats() {
+    	globStats.setDefeats(globStats.getDefeats()+1);
+    	localStats.setDefeats(localStats.getDefeats()+1);
+    }
+    public void incDiffN(int diff) {
+    	diffN[diff][1]++;
+    }
+    public int[][] getDiffN(){
+    	return diffN;
+    }
+    public void incQuestionsAsked() {
+    	questionsAsked++;
+    }
+    public int getQuestionsAsked() {
+    	return questionsAsked;
+    }
+    public Statistics getGameStats() {
+    	return localStats;
+    }
     public User getUser(){
     	return user;
     }

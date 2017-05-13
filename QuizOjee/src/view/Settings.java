@@ -39,9 +39,9 @@ public class Settings {
 	public static final String FONT_NAME_RHESPECT = "Resphekt";
 	public static final String FONT_NAME_GRAVITY = "Gravity";
 	public static final Font FONT_DEFAULT = new Font(FONT_NAME_GRAVITY, Font.PLAIN, 14);
+	public static final Font FONT_GBUTTON_DEFAULT = new Font(FONT_NAME_GRAVITY, Font.PLAIN, 16);
 	public static final Font FONT_TITLE = new Font(FONT_NAME_ARCHIVE, Font.BOLD, 20);
 	public static final Font FONT_SUB_TITLE = new Font(FONT_NAME_ARCHIVE, Font.BOLD, 15);
-	public static final Font FONT_GBUTTON_DEFAULT = new Font(FONT_NAME_GRAVITY, Font.PLAIN, 16);
 	public static final Font FONT_BUTTON_MAIN = new Font(FONT_NAME_ARCHIVE, Font.BOLD, 18);
 	public static final Font FONT_QUESTION = new Font(FONT_NAME_GRAVITY, Font.ITALIC, 18);
 	public static final Font FONT_ERROR_MSG = new Font(FONT_NAME_GRAVITY, Font.BOLD, 12);
@@ -76,9 +76,11 @@ public class Settings {
 
 	public static int game_numOfPlayers;
 	public static String game_type;
+	public static List<Integer> game_topicList;
+	public static int game_TPP;
 	
 	public static final String GAME_TYPE_BLITZKRIEG = "blitzkrieg";
-	public static final String GAME_TYPE_10_ROUNDS = "30 rounds";
+	public static final String GAME_TYPE_10_ROUNDS = "10 rounds";
 	public static final String GAME_TYPE_LAST_MAN_STAND = "last man";
 
 	// --------------------------------------------------------------//
@@ -88,7 +90,7 @@ public class Settings {
 	
 	
 	public static void init(){
-		setUIFont(new javax.swing.plaf.FontUIResource(FONT_NAME_ARCHIVE,Font.PLAIN,12));
+		setUIFont(new javax.swing.plaf.FontUIResource(FONT_NAME_GRAVITY,Font.PLAIN,12));
 	}
 	
 	public static void setUIFont(javax.swing.plaf.FontUIResource f) {

@@ -57,8 +57,10 @@ public class MainState extends DefaultState {
 		btnJoin = new GButton(Labels.BTN_JOIN_GAME);
 			btnJoin.setFont(Settings.FONT_BUTTON_MAIN);
 			btnJoin.addActionListener((e) -> {
-				Settings.gameServer = JOptionPane.showInputDialog(root, Labels.MSG_ENTER_IP_ADDRESS);
-				root.setState(MainWindow.STATE_GAME);
+				Settings.gameServer = JOptionPane.showInputDialog(root, Labels.MSG_ENTER_IP_ADDRESS, "localhost");
+				if ((Settings.gameServer != null) && (Settings.gameServer.length() > 0)) {
+					root.setState(MainWindow.STATE_GAME);
+				}
 			});
 		btnStats = new GButton(Labels.BTN_STATS);
 			btnStats.setFont(Settings.FONT_BUTTON_MAIN);

@@ -49,6 +49,7 @@ public final class Labels {
 	public static final String LBL_TERRITORIES_LOST = "territories lost";
 	public static final String LBL_MEHET = "Mehet!";	
 	public static final String LBL_NUMBER_OF_PLAYERS = "player num: ";
+	public static final String LBL_TERRITORIES_LOST_PER_PLAYER = "Territories per player: ";	
 	
 	public static final String MSG_FIELD_EMPTY = " field is was empty.";
 	public static final String MSG_UNAME_FIELD_EMPTY = "No username was given";
@@ -75,7 +76,8 @@ public final class Labels {
 	public static final String MSG_ADDING_QUESTION_FAILED = "Something went wrong while adding the question";
 	public static final String MSG_ADDING_FORUM_ENTRY_FAILED = "Something went wrong while adding the comment";
 	public static final String MSG_EMPTY_COMMENT = "You can't send an empty comment!";
-	public static final Object MSG_TOO_HIGH_DIFFICULTY = "The difficulty value is too high!";
+	public static final String MSG_TOO_HIGH_DIFFICULTY = "The difficulty value is too high!";
+	public static final String MSG_NOT_ENOUGH_QUESTIONS_FOR_TOPICS = "There are currently not enough questions in our database for the set of topics you selected, to launch a Quiz. please select more topics to play!";
 	
 	//--------------------------------------------------------------//
 	// BUTTON LABELS
@@ -110,7 +112,9 @@ public final class Labels {
 	public static final String BTN_ADD_COMMENT = "Comment"; 
 	public static final String BTN_ANSWER = "Answer";
 	public static final String BTN_RESET = "Reset";
-	public static final String BTN_CHANGE_DATAS = "Change Datas";
+	public static final String BTN_CHANGE_DATAS = "Edit Profile";
+	public static final String BTN_SELECT_ALL = "Select all";
+	public static final String BTN_DESELECT_ALL = "Deselect all";
 
 	
 	//--------------------------------------------------------------//

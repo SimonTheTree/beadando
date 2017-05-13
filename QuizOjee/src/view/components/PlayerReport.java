@@ -176,11 +176,11 @@ public class PlayerReport extends JPanel{
 	public void setTblDiff(int[][] diffN) {
 		DefaultTableModel tblmodel = new DefaultTableModel();
 		String[][] data = new String[2][diffN.length+1];
-		String[] row = new String[diffN.length+3];
+		String[] row = new String[diffN.length+1];
+		tblmodel.setColumnCount(row.length);
 		
 		row[0] = Labels.LBL_DIFFICULITY;
 		for(int i = 0; i < diffN.length; i++){
-			tblmodel.addColumn(i);
 			row[i+1] = String.valueOf(diffN[i][0]);
 		}
 		tblmodel.addRow(row);

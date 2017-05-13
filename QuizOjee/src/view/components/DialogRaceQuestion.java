@@ -139,14 +139,14 @@ public class DialogRaceQuestion extends JDialog {
 				.addGroup(gl_MainPanel.createSequentialGroup()
 					.addGap(42)
 					.addGroup(gl_MainPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(answersPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
-						.addComponent(lblQuestionText, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
+						.addComponent(answersPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+						.addComponent(lblQuestionText, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
 						.addGroup(Alignment.LEADING, gl_MainPanel.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtfAnswer, GroupLayout.PREFERRED_SIZE, 506, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnGo, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)))
-					.addContainerGap(60, Short.MAX_VALUE))
+							.addComponent(btnGo, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)))
+					.addContainerGap(59, Short.MAX_VALUE))
 		);
 		gl_MainPanel.setVerticalGroup(
 			gl_MainPanel.createParallelGroup(Alignment.LEADING)
@@ -158,7 +158,7 @@ public class DialogRaceQuestion extends JDialog {
 						.addComponent(txtfAnswer, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnGo, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(answersPanel, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+					.addComponent(answersPanel, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		MainPanel.setLayout(gl_MainPanel);
@@ -211,6 +211,9 @@ public class DialogRaceQuestion extends JDialog {
 		rqDialog.setVisible(true);
 		rqDialog.lblNorth.setText("player1 vs player2");
 		rqDialog.lblSouth.setText("10s");
+		rqDialog.pack();
+		rqDialog.answersPanel.add(new GLabel("Hello"));
+		
 		do {
 			try {
 				rqDialog.txtfAnswer.setBackground(new Color(0x000044));

@@ -53,6 +53,7 @@ import gameTools.map.Orientation;
 import gameTools.state.State;
 import model.Question;
 import model.RaceQuestion;
+import model.Statistics;
 import resources.Resources;
 import view.Labels;
 import view.MainWindow;
@@ -62,6 +63,7 @@ import view.components.DialogRaceQuestion;
 import view.components.GButton;
 import view.components.GButtonUI;
 import view.components.GLabel;
+import view.components.PlayerReport;
 
 /**
  * Ez az osztaly a jatek allapotat tartalmazza. sorban megjatszatja a
@@ -192,6 +194,11 @@ public class GameState extends State implements GameInputListener {
 		System.out.println("GAME OVER!");
 	}
 	
+	private void setMyTurnFalse() {
+		gameboard.unLight();
+		myTurn = false;
+	}
+	
 	public void initRQAnsPanel(int rows, int cols) {
 		rqAnsLabels = new JLabel[rows][cols];
 		rqDialog.answersPanel.setLayout(new GridLayout(3, 2, 5, 5));
@@ -203,6 +210,7 @@ public class GameState extends State implements GameInputListener {
 				rqDialog.answersPanel.add(rqAnsLabels[i][j]);
 			}			
 		}
+		rqDialog.pack();
 	}
 	public void clearRQAnsPanel() {
 		for (int i = 0; i < rqAnsLabels.length; i++) {
@@ -337,6 +345,10 @@ public class GameState extends State implements GameInputListener {
 		System.out.println("client disconnects");
 		gameOver= true;
 		client.abort();
+		if(root.gameServer != null && root.gameServer.host != null) {
+			root.gameServer.host.abort();
+			root.gameServer = null;
+		}
 	}
 	
 	public void manageNewOwner(GameMessage msg) {
@@ -358,6 +370,7 @@ public class GameState extends State implements GameInputListener {
 		target = gameboard.getTerrytoryById( Integer.parseInt(msg.getParams()[1]) );
 		defender = target.getOwner();
 		defenderUname = defender.getUser().getUsername();
+		target.markForAttack();
 	}
 	public void manageNormQuestion(GameMessage msg) {
 		boolean isItMine = msg.getParams()[0].equals(Commands.PARAM_YOURS);
@@ -429,7 +442,7 @@ public class GameState extends State implements GameInputListener {
 			//helyes valasz bejelolese
 			rqAnsLabels[0][0].setText("Helyes valasz: ");
 			rqAnsLabels[0][1].setText(rightAns);
-			Thread.sleep(2 * settings.showRightAnswerDelay);
+			Thread.sleep(1 * settings.showRightAnswerDelay);
 			if (questionTh != null) questionTh.interrupt();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -444,6 +457,7 @@ public class GameState extends State implements GameInputListener {
 		rqAnsLabels[place][0].setText(uname+": ");
 		rqAnsLabels[place][1].setText(ans);
 		rqAnsLabels[place][2].setText(time);
+		rqDialog.pack();
 	}
 	public void manageGameboard(GameMessage msg) {
 		System.out.println("recieved gameboard");
@@ -470,12 +484,40 @@ public class GameState extends State implements GameInputListener {
 		myTurn = uname.equals(currentPlayer);
 		if(myTurn) {
 			calcNeighbors();
+		} else {
+			setMyTurnFalse(); //ezáltal, ha netán ki volt highlightolva valamilyen terület, az is unlightolódik.
 		}
 		updateInfoPanel();
 	}
 	public void managePoints(GameMessage msg) {
 		settings.players = (List) StringSerializer.deSerialize(msg.getParams()[0]);
 		updateInfoPanel();
+	}
+	public void manageEndGame(GameMessage msg) {
+		PlayerReport[] pr = new PlayerReport[settings.players.size()];
+		int i = 0;
+		for(Player p : settings.players) {
+			pr[i] =  new PlayerReport(p.getUser());
+			Statistics stat = p.getGameStats();
+			
+			pr[i].setQuestNVal(p.getQuestionsAsked());
+			pr[i].setRAnsVal(stat.getRightAnswers());
+			pr[i].setWAnsVal(stat.getWrongAnswers());
+			pr[i].setPointsVal(stat.getPoints());
+			pr[i].setRTipsVal(stat.getRightTips());
+			pr[i].setWTipsVal(stat.getWrongTips());
+//			pr[i].setTerrLostVal(val); not implemented
+//			pr[i].setTerrWonVal(val);
+			pr[i].setTblDiff(p.getDiffN());
+			i++;
+		}
+		
+		((ReportState)root.report).setReports(pr);
+//		MainWindow.getInstance().setState(MainWindow.STATE_MAIN);
+		MainWindow.getInstance().setState(MainWindow.STATE_REPORT);
+	}
+	public void manage(GameMessage msg) {
+		
 	}
 	public void manageAll(GameMessage msg) {
 		boolean caught = false;
@@ -515,15 +557,15 @@ public class GameState extends State implements GameInputListener {
 		} else if(msg.getMessage().equals(Commands.POINTS)){
 			caught = true;
 			managePoints(msg);
+		} else if(msg.getMessage().equals(Commands.END_GAME)){
+			caught = true;
+			manageEndGame(msg);
 		}
 		if (caught) {
 			synchronized(msgStack){
 				msgStack.remove(msg); 
 			}
 		}
-	}
-	public void manage(GameMessage msg) {
-		
 	}
 	@Override
 	public void gotMessage(GameMessage msg) {
@@ -751,18 +793,20 @@ public class GameState extends State implements GameInputListener {
 		}
 		
 		if(respondingToInput && myTurn){
-			if (inputManager.isKeyTyped("Enter")) {
-				client.sendMessage(new GameMessage(Commands.END_TURN, uname));
-			}
+//			if (inputManager.isKeyTyped("Enter")) { The server controls everything... even the new turn
+//				setMyTurnFalse();
+//				client.sendMessage(new GameMessage(Commands.END_TURN, uname));
+//			}
 			if (inputManager.isClicked("ButtonLeft") && !gameOver) {
 				if(!gameStarted) return;
 				Territory lit = gameboard.getHighlitTerritory();
-				if (lit.equals(Territory.NULL_TERRITORY)) return; //ezt sehogse tamadjuk!
+				if (lit.equals(Territory.NULL_TERRITORY)) return; //ezt sehogyse tamadjuk!
 				client.sendMessage(new GameMessage(
 						Commands.ATTACK, 
 						player.getUser().getUsername(), 
 						String.valueOf(lit.id)
 				));
+				setMyTurnFalse();
 				System.out.println("leftclicked, sent attack from "+ player.getUser().getUsername() +" to " +gameboard.getHighlitTerritory().id);
 				
 			}
@@ -770,6 +814,7 @@ public class GameState extends State implements GameInputListener {
 			try {
 				synchronized (gameboard) {
 					boolean valid = true;
+					// gameboard.fromPixel(inputManager.getMousePos().x, inputManager.getMousePos().y) might be null
 					Territory toBeLit = gameboard.fromPixel(inputManager.getMousePos().x, inputManager.getMousePos().y).getOwner();
 //					Territory toBeLit = gameboard.getHighlitTerritory();
 					if (toBeLit.equals(Territory.NULL_TERRITORY)) {
@@ -782,15 +827,17 @@ public class GameState extends State implements GameInputListener {
 					}
 				
 					if(valid) {
-						//if not valid for attack highlight the territory under the cursor
+						//if valid for attack highlight the territory under the cursor
 						gameboard.setHighlitCell(gameboard.fromPixel(inputManager.getMousePos().x, inputManager.getMousePos().y));
 					} else {
 						//if not valid for attack dont highlight anything
-						gameboard.setHighlitCell(gameboard.fromPixel(-10, -10));
+//						gameboard.setHighlitCell(gameboard.fromPixel(-10, -10));
+						gameboard.unLight();
 					}
 				}
 				
 			} catch (NullPointerException ignore) {
+				gameboard.unLight();
 			}
 		}
 

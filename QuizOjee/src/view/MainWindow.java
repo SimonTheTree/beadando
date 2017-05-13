@@ -1,8 +1,10 @@
 package view;
 
 import javax.swing.JFrame;
-import controller.Controller;
+import javax.swing.JOptionPane;
 
+import controller.Controller;
+import game.GameServer;
 import gameTools.state.State;
 import gameTools.state.StateManager;
 import model.Statistics;
@@ -28,11 +30,14 @@ public class MainWindow extends JFrame{
 	public static final String STATE_PROFILE = "6";
 	public static final String STATE_REPORT = "7";
 	
+	private boolean doneLoading = false;
 	
     private StateManager sm = new StateManager(this);
     public Controller controller;
     private User user = null;
     private Statistics stat = null;
+    
+    public GameServer gameServer = null;
     
     public State main;
     public State gameCreator;
@@ -59,21 +64,47 @@ public class MainWindow extends JFrame{
     }
     
     public static MainWindow getInstance(){
+    	while(self == null) {
+    		try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
     	return self;
     }
     
     private MainWindow(Controller c){
     	controller = c;
-    	initStates();
-    	Thread loader = new Thread(() -> {
-    		Resources.load();
-    		Settings.init();
-    	});
+    	new Thread(){
+    		@Override
+    		public void run() {
+	    		Thread.currentThread().setName("resource-loader");
+	    		Resources.load();
+	    		Settings.init();
+	    		doneLoading = true;
+    		}
+    	}.start();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
         this.setTitle(Labels.MAIN_WINDOW_TITLE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+        
+        login = new view.states.LoginState(this);
+        sm.addState(login);
+        sm.setCurrentState(STATE_LOGIN);
+        sm.startCurrentState();
+        
+        while(!doneLoading) {
+        	try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        }
+        
+        initStates();
         
         sm.addState(main);
         sm.addState(gameCreator);
@@ -84,21 +115,13 @@ public class MainWindow extends JFrame{
         sm.addState(forum);
         sm.addState(forumTopic);
         sm.addState(profile);
-        sm.addState(login);
         sm.addState(registration);
         sm.addState(report);
         sm.addState(updateUser);
-
         
-        
-        sm.setCurrentState(STATE_LOGIN);
-        sm.startCurrentState();
-        
-        loader.start();
     }
     
     private void initStates() {
-    	main = new view.states.MainState(this);
     	gameCreator = new view.states.GameCreatorState(this);
     	game = new view.states.GameState(this);
     	quizCreator = new view.states.QuizCreatorState(this);
@@ -107,10 +130,10 @@ public class MainWindow extends JFrame{
     	forum = new view.states.ForumState(this);
     	forumTopic = new view.states.ForumTopicState(this);
     	profile = new view.states.ProfileState(this);
-    	login = new view.states.LoginState(this);
     	registration = new view.states.RegistrationState(this,false);
     	updateUser = new view.states.RegistrationState(this,true);
     	report = new view.states.ReportState();
+    	main = new view.states.MainState(this);
     }
     
     public void setState(String s){
@@ -160,5 +183,16 @@ public class MainWindow extends JFrame{
 		}
 	}
     
+	public void displayError(String title, String msg) {
+		JOptionPane.showMessageDialog(
+			this, 
+			msg,
+			title,
+			JOptionPane.ERROR_MESSAGE
+		);
+	}
+	public void displayError(String msg) {
+		displayError("Error", msg);
+	}
     
 }

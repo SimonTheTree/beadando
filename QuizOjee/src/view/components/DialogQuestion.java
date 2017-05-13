@@ -91,9 +91,9 @@ public class DialogQuestion extends JDialog {
 			gl_MainPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_MainPanel.createSequentialGroup()
 					.addGap(42)
-					.addGroup(gl_MainPanel.createParallelGroup(Alignment.TRAILING, false)
+					.addGroup(gl_MainPanel.createParallelGroup(Alignment.TRAILING)
 						.addComponent(AnswerPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblQuestionText, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE))
+						.addComponent(lblQuestionText, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 648, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(58, Short.MAX_VALUE))
 		);
 		gl_MainPanel.setVerticalGroup(
@@ -102,8 +102,8 @@ public class DialogQuestion extends JDialog {
 					.addGap(31)
 					.addComponent(lblQuestionText, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(AnswerPanel, GroupLayout.PREFERRED_SIZE, 301, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(42, Short.MAX_VALUE))
+					.addComponent(AnswerPanel, GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		MainPanel.setLayout(gl_MainPanel);
 		

@@ -64,6 +64,10 @@ public class GameBoard extends Map<Cell> implements Graphical{
     	return mouseOver;
     }
     
+    public synchronized void unLight() {
+    	mouseOver=Territory.NULL_TERRITORY;
+    }
+    
     public void setCurrentPlayer(Player p){
         if(move[0] != null){
             move[0].attPlayer = p;

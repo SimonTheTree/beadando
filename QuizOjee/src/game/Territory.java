@@ -48,8 +48,32 @@ public class Territory implements Serializable, Comparable<Territory> {
 	private Player owner;
 	private boolean highlighted;
 	private boolean needsRender = true;
+	
+	public void markForAttack() {
+		for (Cell c : cells) {
+			c.setMarkedForAttack(true);
+		}
+		
+		new Thread() {
+			@Override
+			public void run() {
+				Thread.currentThread().setName("Territory.markForAttack");
+				try {
+					Thread.sleep(5000);
+					for (Cell c : cells) {
+						c.setMarkedForAttack(false);
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}.start();
+		
+	}
+	
 
-	public Territory() {
+ 	public Territory() {
 		cells = new ArrayList<>();
 	}
 

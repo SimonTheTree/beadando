@@ -33,6 +33,17 @@ public class Map<T extends Tile>
         layout = l;
     }
     
+    public Map(Layout l){
+        super();
+        List<T> tiles = new ArrayList<>();
+        int i;
+        for(i = 0; i<tiles.size(); i++){
+            addTile(tiles.get(i));
+        }
+        tile = tiles.get(i-1);
+        layout = l;
+    }
+    
     public final int addTile(T c){
         List<Integer> a = new ArrayList<>();
         a.add(c.x);
@@ -146,7 +157,7 @@ public class Map<T extends Tile>
     }
     
     public T fromPixel(int x, int y){
-            return getTile(tile.fromPixel(x, y, layout));
+        return getTile(tile.fromPixel(x, y, layout));
     }
     
     @Override

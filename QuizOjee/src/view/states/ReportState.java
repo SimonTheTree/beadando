@@ -54,7 +54,7 @@ public class ReportState extends DefaultState {
 		int i = 0;
 		for(int[] arr : diffN){
 			arr[0] = i++;
-			arr[1] = 0;
+			arr[1] = 15-i+1;
 		}
 
 		p[0] =  new PlayerReport(u);

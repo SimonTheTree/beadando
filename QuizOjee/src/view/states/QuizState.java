@@ -192,7 +192,6 @@ public class QuizState extends DefaultState {
 				PlayerReport[] p = new PlayerReport[1];
 				p[0] = rp;
 				((ReportState)root.report).setReports(p);
-				System.out.println("im here");
 //				MainWindow.getInstance().setState(MainWindow.STATE_MAIN);
 				MainWindow.getInstance().setState(MainWindow.STATE_REPORT);
 			}
@@ -208,7 +207,7 @@ public class QuizState extends DefaultState {
 		questions = new ArrayList<>();
 		int diff = Settings.game_difficulity;
 		for(int i = 0; i<Settings.game_numOfQuestions; i++){
-			questions.add(root.controller.getQuestion(diff*5,diff*5+5, null, Settings.game_numOfQuestions));
+			questions.add(root.controller.getQuestion(diff*5,diff*5+5, Settings.game_topicList, Settings.game_numOfQuestions));
 		}
 
 		currentQuestionIndex = 0;
@@ -217,7 +216,7 @@ public class QuizState extends DefaultState {
 		lblWrongN.setText(String.valueOf(wrongN));
 
 		//init difficulitycounter array
-		diffN =  new int[root.controller.getMaxDifficulty()][2];
+		diffN =  new int[root.controller.getMaxDifficulty()+1][2];
 		int i = 0;
 		for(int[] arr : diffN){
 			arr[0] = i++;

@@ -1,6 +1,7 @@
 package game;
 
 import gameTools.map.TileHex;
+import view.Settings;
 import gameTools.PointHD;
 import gameTools.LineHD;
 import gameTools.map.Layout;
@@ -53,6 +54,11 @@ public class Cell extends TileHex<Cell> {
     private boolean updated = true;
     private final int id; 
     private static int CURRENT_ID = 0;
+    private boolean markedForAttack = false;
+    
+    public void setMarkedForAttack(boolean v) {
+    	this.markedForAttack = v;
+    }
     
     public Cell( int q, int r) {
     	this(q, r, -q-r);
@@ -125,6 +131,11 @@ public class Cell extends TileHex<Cell> {
         	g.setColor(getOwner().getOwner().getColor());
         	g.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         	g.draw(polygonCorners(layout));
+        }
+        if (markedForAttack) {
+        	if(Settings.RANDOM.nextBoolean()){
+        		g.setColor(Color.WHITE);
+        	}
         }
         
         g.fillPolygon(polygonCorners(layout));

@@ -93,14 +93,14 @@ public class GameServer implements GameInputListener {
 	
 	public void createGame(){
 		for(int i =  0; i < Settings.game_numOfQuestions; i++){
-			questions.push( MainWindow.getInstance().controller.getQuestion(Settings.game_difficulity*5, Settings.game_difficulity*5 +5, null, Settings.game_numOfQuestions) ); 
+			questions.push( MainWindow.getInstance().controller.getQuestion(Settings.game_difficulity*5, Settings.game_difficulity*5 +5, Settings.game_topicList, Settings.game_numOfQuestions) ); 
 		}
 		for(int i =  0; i < Settings.game_numOfRaceQuestions; i++){
 			raceQuestions.push( MainWindow.getInstance().controller.getRaceQuestion(null, Settings.game_numOfRaceQuestions) ); 
 		}
 		
 		settings = GameSettings.getInstance();
-		settings.TerrPerPlayer = 5;
+		settings.TerrPerPlayer = Settings.game_TPP;
 		settings.setMapGenerator("Rectangular Hexmap");
 		// settings.setMapGenerator("Paralelloid Hexmap Pointy");
 		// settings.setMapGenerator("Hexshaped Hexmap Pointy");
@@ -123,6 +123,7 @@ public class GameServer implements GameInputListener {
 		settings.centerLayout();
 		settings.gameType = Settings.game_type;
 		
+		gameFinished = false;
 		new Thread() {
 			public void run() {
 				try {
@@ -152,13 +153,11 @@ public class GameServer implements GameInputListener {
 						System.out.print(uname + ", ");
 						c++; i++;
 						if(! uname.startsWith("[bot")){
-							User u = MainWindow.getInstance().controller.getUser(uname);
+							User u = new User();
+							u.setUsername(uname);
 							settings.players.add(new PlayerHuman(u, c));
 						} else {
-							User u = MainWindow.getInstance().controller.getUser("bot");
-							if(u == null){
-								u = new User();
-							}
+							User u = new User();
 							u.setUsername("bot" + String.valueOf(i));
 							settings.players.add(new PlayerAI(u, c));							
 						}
@@ -174,16 +173,22 @@ public class GameServer implements GameInputListener {
 							currentPlayer = p.getUser().getUsername();
 							host.broadCast(new GameMessage(Commands.YOUR_TURN, currentPlayer));
 							// ...meanwhile a serverlistener kezeli a kliens uzeneteit
-							GameMessage msg  = waitForMsgFrom(currentPlayer, Commands.END_TURN);
+							GameMessage msg  = waitForMsgFrom(currentPlayer, Commands.ATTACK);
+							manageAttack(msg);
 							
-							System.out.println("server: " + msg.getParams()[0] + "said he's done");
 							if(Settings.GAME_TYPE_10_ROUNDS.equals(settings.gameType)) {
 								checkGameOver30Rounds();
 							} else if(Settings.GAME_TYPE_BLITZKRIEG.equals(settings.gameType)) {
 								checkGameOver30Rounds();								
-							} else { //default lastmasstanding
+							} else { //default lastmanstanding
 								checkGameOverLastOneStand();
 							}
+							if (gameFinished) {
+								break;
+							}
+						}
+						for(Player p : settings.players){
+							p.save(); //push stats/points
 						}
 						calcPoints();
 					}
@@ -198,8 +203,6 @@ public class GameServer implements GameInputListener {
 				}
 			}
 		}.start();
-		
-		gameFinished = false;
 		
 	
 	}
@@ -349,24 +352,29 @@ public class GameServer implements GameInputListener {
 	
 	private void manageAttack(GameMessage msg){
 		//remove this attack from msgStack
-		
 		String attacker = msg.getSender();
+		Player attPlayer = settings.getPlayerByUname(attacker);
 		int targetTerritoryID = Integer.parseInt(msg.getParams()[1]);
 		String defender = board.getTerrytoryById(targetTerritoryID).getOwner().getUser().getUsername();
-
+		Player defPlayer = settings.getPlayerByUname(defender);
 		//inform everyone
 		host.broadCast(new GameMessage(Commands.ATTACK, msg.getSender(), String.valueOf(targetTerritoryID)));
 		//Wait for the clients to process the news
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		attPlayer.incQuestionsAsked();
+		defPlayer.incQuestionsAsked();
+		
 		Question question = fetchQuestion();
 		String rightAnswer = question.getRightAnswer();
 		shuffleQuestion(question);
 		broadcastNormQuestion(question, attacker, defender);
+		attPlayer.incDiffN(question.getDifficulty());
+		defPlayer.incDiffN(question.getDifficulty());
+		
 		//should recieve 2 answers... wait for settings.questionTime max before continuing
 		GameMessage[] ans =  waitForMsg(Commands.NORM_ANSWER, settings.questionTime);
 
@@ -394,8 +402,10 @@ public class GameServer implements GameInputListener {
 			}
 			//both answers are right
 			if( ansAttacker.equals( ansDefender ) && rightAnswer.equals(ansAttacker)){
-				settings.getPlayerByUname(attacker).points += question.getDifficulty();
-				settings.getPlayerByUname(defender).points += question.getDifficulty();
+				attPlayer.points += question.getDifficulty();
+				attPlayer.incRAnswer();
+				defPlayer.points += question.getDifficulty();
+				defPlayer.incRAnswer();
 				//another raceQuestion round
 				RaceQuestion rQuestion = fetchRQuestion();
 				double rightRQAnswer = rQuestion.getRightAnswer();
@@ -421,74 +431,96 @@ public class GameServer implements GameInputListener {
 				}
 				
 				if (RQans.length == 2){
+					// extract answers of players....
 					double attAns = 0;
-					int attTime; 
+					int attTime = 0; 
 					double defAns = 0;
-					int defTime;
-					if(attacker.equals(RQans[0].getSender()) ){
-						try {
+					int defTime = 0;
+					try {
+						if(attacker.equals(RQans[0].getSender()) ){
 							attAns = Double.parseDouble(RQans[0].getParams()[0]);
-						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
-						attTime = Integer.parseInt(RQans[0].getParams()[2]);
-						try {
+							attTime = Integer.parseInt(RQans[0].getParams()[2]);
 							defAns = Double.parseDouble(RQans[1].getParams()[0]);
-						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
-						defTime = Integer.parseInt(RQans[1].getParams()[2]);
-					} else {
-						try {
+							defTime = Integer.parseInt(RQans[1].getParams()[2]);
+						} else {
 							attAns = Double.parseDouble(RQans[1].getParams()[0]);
-						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
-						attTime = Integer.parseInt(RQans[1].getParams()[2]);
-						try {
+							attTime = Integer.parseInt(RQans[1].getParams()[2]);
 							defAns = Double.parseDouble(RQans[0].getParams()[0]);
-						} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
-						defTime = Integer.parseInt(RQans[0].getParams()[2]);
-					}
-					if(attAns == defAns){ //a gyorsabbik nyer
+							defTime = Integer.parseInt(RQans[0].getParams()[2]);
+						}
+					} catch(NullPointerException | NumberFormatException e) {e.printStackTrace();}
+					// END OF extract answers of players....
+					
+					if( (attAns - defAns) < 0.001){ // "=" --> a gyorsabbik nyer
 						if(attTime < defTime) {//tamado gyorsabb
 							gameboard_newOwner(attacker, targetTerritoryID);							
+							attPlayer.points += 5;
+							attPlayer.incRTip();
+							defPlayer.incWTip();
 						} else { //vedo gyorsabb
-							
+							defPlayer.points += 5;
+							defPlayer.incRTip();
+							attPlayer.incWTip();
 						}
-					} else {
+					} else { //the one who guessed closer, wins
+						//if equal, that counts as a successful defense
 						if(Math.abs(rightRQAnswer-attAns) < Math.abs(rightRQAnswer-defAns)){
 							gameboard_newOwner(attacker, targetTerritoryID);
-							settings.getPlayerByUname(attacker).points += 5;
+							attPlayer.points += 7;
+							attPlayer.incRTip();
+							defPlayer.incWTip();
 						} else {
-							//nothin changes
+							defPlayer.points += 7;
+							defPlayer.incRTip();
+							attPlayer.incWTip();
 						}
 					}
 				} else {
 					if(attacker.equals(RQans[0].getSender())){
 						gameboard_newOwner(attacker, targetTerritoryID);
-						settings.getPlayerByUname(attacker).points += 5;
+						attPlayer.points += 5;
+						attPlayer.incRTip();
 					} else {
-						settings.getPlayerByUname(defender).points += 5;
+						defPlayer.points += 5;
+						defPlayer.incRTip();
 						//nothin happens
 					}
 				}
 			} else { //not both answers were right
 				//only one right answer
 				if(rightAnswer.equals(ansAttacker)){
-					settings.getPlayerByUname(attacker).points += question.getDifficulty() * 2;
-					settings.getPlayerByUname(defender).points += question.getDifficulty() * 0.5;
+					attPlayer.points += question.getDifficulty() * 2;
+					defPlayer.points += question.getDifficulty() * 0.5;
+					attPlayer.incRAnswer();
+					defPlayer.incWAnswer();
 					gameboard_newOwner(attacker, targetTerritoryID);
 				}
 				if(rightAnswer.equals(ansDefender)){
-					settings.getPlayerByUname(attacker).points += question.getDifficulty() * 0.5;
-					settings.getPlayerByUname(defender).points += question.getDifficulty() * 2;
+					attPlayer.points += question.getDifficulty() * 0.5;
+					defPlayer.points += question.getDifficulty() * 2;
+					defPlayer.incRAnswer();
+					attPlayer.incWAnswer();
 					//nothin changes
 				}
 			}
 		} else { //less than two answers were submitted
 			if(ans.length == 1){
-				if(attacker.equals(ans[0].getSender()) && rightAnswer.equals(ans[0].getParams()[0])){
-					settings.getPlayerByUname(attacker).points += question.getDifficulty() * 2;
-					gameboard_newOwner(attacker, targetTerritoryID);
-				} else {
-					settings.getPlayerByUname(attacker).points += question.getDifficulty() * 0.5;
-					//nothin happens
-				}								
+				if(attacker.equals(ans[0].getSender())){
+					if(rightAnswer.equals(ans[0].getParams()[0])) {
+						attPlayer.points += question.getDifficulty() * 2;
+						attPlayer.incRAnswer();
+						gameboard_newOwner(attacker, targetTerritoryID);						
+					} else {
+						attPlayer.incWAnswer();
+					}
+				} else if(defender.equals(ans[0].getSender())){
+					if(rightAnswer.equals(ans[0].getParams()[0])) {
+						defPlayer.points += question.getDifficulty() * 0.5;
+						defPlayer.incRAnswer();						
+					} else {
+						defPlayer.incWAnswer();
+					}
+				}							
 			}
 		}
 		System.out.println("sending points");
@@ -525,8 +557,10 @@ public class GameServer implements GameInputListener {
 	private void checkGameOverLastOneStand() { //ha mindenkinek ugyanaz az ownerje
 		String uname = board.territories[0].getOwner().getUser().getUsername();
 		gameFinished = true;
+		//if every terrytory is owned by the same user, -> true which is the same as:
+		//if exists territory with owner different than uname, then -> false
 		for(int i = 1; i < board.territories.length; i++) {
-			if(uname.equals(board.territories[i].getOwner().getUser().getUsername())) {
+			if(!uname.equals(board.territories[i].getOwner().getUser().getUsername())) {
 				gameFinished = false;
 				break;
 			}
