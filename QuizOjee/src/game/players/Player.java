@@ -50,24 +50,32 @@ public abstract class Player implements Serializable{
         this(u, color, 0);
         this.team = getId();
     }
+    public void setUser(User u) {
+    	if (u == null) return;
+    	this.user = MainWindow.getInstance().controller.getUser(u.getUsername());
+        this.globStats =MainWindow.getInstance().controller.getUserStatistics(u.getUsername());
+        statsPoints = globStats.getPoints();
+        localStats = new Statistics();
+	    	localStats.setUname(u.getUsername());
+	    	localStats.setPoints(0);      
+	    	localStats.setWins(0);        
+	    	localStats.setDefeats(0);     
+	    	localStats.setRightAnswers(0);
+	    	localStats.setWrongAnswers(0);
+	    	localStats.setRightTips(0);   
+	    	localStats.setWrongTips(0);
+    }
+    
     public Player(User u, int color, int team) {
-        this.user = MainWindow.getInstance().controller.getUser(u.getUsername());
-        this.globStats = MainWindow.getInstance().controller.getUserStatistics(u.getUsername());
+        
     	this.color = color;
         this.team = team;
         points = 0;
-        statsPoints = globStats.getPoints();
         territories = new ArrayList<>();
+        user = null;
+        globStats = new Statistics();
         localStats = new Statistics();
-        	localStats.setUname(u.getUsername());
-        	localStats.setPoints(0);      
-        	localStats.setWins(0);        
-        	localStats.setDefeats(0);     
-        	localStats.setRightAnswers(0);
-        	localStats.setWrongAnswers(0);
-        	localStats.setRightTips(0);   
-        	localStats.setWrongTips(0);
-
+        setUser(u);
     	//init difficulitycounter array
 		diffN =  new int[15][2];
 		int i = 0;
@@ -204,4 +212,16 @@ public abstract class Player implements Serializable{
         board.finishRound(this);
     }
     
+    public static void main(String[] args) {
+    	//teszt function
+    	
+    	GameSettings settings = GameSettings.getInstance();
+    	settings.players.clear();
+    	settings.players.add(new PlayerHuman());
+    	settings.players.add(new PlayerHuman());
+    	settings.players.add(new PlayerHuman());
+    	settings.players.add(new PlayerAI());
+    	settings.players.add(new PlayerAI());
+    	System.out.println(settings.players.get(2));
+    }
 }
