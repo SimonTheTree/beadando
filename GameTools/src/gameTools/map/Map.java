@@ -33,14 +33,14 @@ public class Map<T extends Tile>
         layout = l;
     }
     
-    public Map(Layout l){
+    public Map(Layout l, T tile){
         super();
-        List<T> tiles = new ArrayList<>();
+        /*List<T> tiles = new ArrayList<>();
         int i;
         for(i = 0; i<tiles.size(); i++){
             addTile(tiles.get(i));
         }
-        tile = tiles.get(i-1);
+        tile = tiles.get(i-1);*/
         layout = l;
     }
     

@@ -7,6 +7,10 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.w3c.dom.Document;
+
+import game.GameBoard;
+import game.GameSettings;
 import model.Statistics;
 import model.Topic;
 import model.DAO;
@@ -462,6 +466,20 @@ public class Controller implements Refreshable {
 	
 	public boolean addForumTopic(ForumTopic forumTopic) {
 		return db.addForumTopic(forumTopic);
+	}
+	
+	public List<GameBoard> getMaps() {
+		List<GameBoard> re = new ArrayList<>();
+		List<Document> docs = db.getMapXMLs();
+		for(Document doc : docs) {
+			GameBoard map = new GameBoard(doc,GameSettings.getInstance().layout);
+			re.add(map);
+		}
+		return re;
+	}
+	
+	public boolean addMap(GameBoard map) {
+		return db.addMapXML(map.getName(),map.toXMLString());
 	}
 	
 	//TODO lekerdezesek

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +12,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import com.jcraft.jsch.*;
 
 import model.exceptions.UserAlreadyExistsException;
@@ -48,6 +57,7 @@ public class DAOImp implements DAO {
 	private static final String SQL_MAX_QUESTION_ID = "SELECT MAX(question_id) FROM NORMAL_QUESTIONS";
 	private static final String SQL_MAX_FORUM_TOPIC_ID = "SELECT MAX(topic_id) FROM FORUM_TOPICS";
 	private static final String SQL_MAX_FORUM_ENTRY_ID = "SELECT MAX(comment_id) FROM FORUM_ENTRIES";
+	private static final String SQL_MAX_MAP_ID = "SELECT MAX(map_id) FROM MAPS";
 
 	//Topic
 	private static final String SQL_GET_TOPICS_WITH_NUMBERS = "select T1.topic_id, normalDB, NVL(raceDBnull,0) AS raceDB, T1.difficulty, name FROM ( select count(*) AS normalDB, difficulty, topic_id FROM NORMAL_QUESTIONS group by topic_id, difficulty order by topic_id, difficulty ) T1 LEFT JOIN ( select count(*) AS raceDBnull, topic_id FROM RACE_QUESTIONS group by topic_id order by topic_id ) T2 ON T1.topic_id = T2.topic_id, QUESTION_TOPICS where T1.topic_id = question_topics.topic_ID ORDER BY name";
@@ -73,6 +83,9 @@ public class DAOImp implements DAO {
 	private static final String SQL_GET_FORUM_ENTRIES_COUNT = "SELECT COUNT(*) FROM FORUM_ENTRIES WHERE TOPIC_ID = ?";
 	private static final String SQL_GET_FORUM_TOPICS = "SELECT * FROM FORUM_TOPICS ORDER BY TOPIC_ID";
 	private static final String SQL_ADD_FORUM_TOPIC = "INSERT INTO FORUM_TOPICS (topic_id, name) VALUES (?, ?)";
+
+	private static final String SQL_GET_MAP_XMLs = "SELECT name, terrain FROM MAPS order by name";
+	private static final String SQL_ADD_MAP = "INSERT INTO MAPS (map_id, name, terrain) VALUES (?, ?, ?)";
 	
 	
 	public DAOImp() {
@@ -294,8 +307,10 @@ public class DAOImp implements DAO {
 				rs = pst.executeQuery(SQL_MAX_QUESTION_ID);
 			} else if(column.equals("forum_topic_id")) {
 				rs = pst.executeQuery(SQL_MAX_FORUM_TOPIC_ID);
-			}  else if(column.equals("comment_id")) {
+			} else if(column.equals("comment_id")) {
 				rs = pst.executeQuery(SQL_MAX_FORUM_ENTRY_ID);
+			} else if(column.equals("map_id")) {
+				rs = pst.executeQuery(SQL_MAX_MAP_ID);
 			} else {
 				return 0;
 			}
@@ -921,6 +936,69 @@ public class DAOImp implements DAO {
 		}
 		return false;
 	
+	}
+	
+	public List<Document> getMapXMLs() {
+		System.out.println("get Map XMLs");
+		List<Document> re = new ArrayList<Document>();
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_MAP_XMLs);
+			while(rs.next()) {
+				try {
+					String xml = rs.getString("terrain");
+					DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder dBuilder;
+					dBuilder = dbFactory.newDocumentBuilder();
+					Document doc = dBuilder.parse(xml);
+					doc.getDocumentElement().normalize();
+					re.add(doc);
+				} catch (ParserConfigurationException | SAXException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return re;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		
+		return re;
+	}
+
+	public boolean addMapXML(String mapName, String xmlString) {
+		System.out.println("Add Map XML");
+		int mapId = getMax("map_id") + 1;
+
+		Session session = openSSHTunnel();
+		if (session == null) return false;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo"); 
+			PreparedStatement pst = conn.prepareStatement(SQL_ADD_MAP);
+		) {
+			int index = 1;
+			pst.setInt(index++, mapId);
+			pst.setString(index++,mapName);
+			pst.setString(index++,xmlString);
+			int rowsAffected = pst.executeUpdate();
+			if(rowsAffected > 0) {
+				return true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		return false;
 	}
 	
 	//TODO lekerdezes

@@ -205,9 +205,9 @@ public abstract class Player implements Serializable{
     public abstract double askRaceQuestion(RaceQuestion quest);
     
     public void play(GameBoard board, InputManager input) throws EndOfTurnException{
-        board.setCurrentPlayer(this);
+        //board.setCurrentPlayer(this); move kiveve
         selectTarget(board, input);
-        board.evaluateMove();
+        //board.evaluateMove();         move kiveve
 
         board.finishRound(this);
     }

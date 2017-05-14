@@ -6,22 +6,47 @@
 package game;
 
 import game.players.Player;
+import game.players.PlayerAI;
+import game.players.PlayerHuman;
 import gameTools.Graphical;
 import gameTools.map.Layout;
 import gameTools.map.Map;
+import gameTools.map.Tile;
 import gameTools.map.generators.MapGenerator;
 import model.Question;
 import model.RaceQuestion;
+import model.User;
+import view.Settings;
 
 import java.awt.Graphics2D;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import org.w3c.dom.Node;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *  ez az osztal a jatek jatektablaja. ezen kell kijelolni az orszagokat, es ez
  * az osztaly (peldanyositott obj.) felelos a lepesek kiertekeleseert.<br>
- * Ő a gameClient, es kommunikal a szerverrel
+ *  a gameClient, es kommunikal a szerverrel
  * @author ganter
  */
 public class GameBoard extends Map<Cell> implements Graphical{
@@ -37,19 +62,7 @@ public class GameBoard extends Map<Cell> implements Graphical{
     public boolean needsRender = false;
     //play-variables
     private Territory mouseOver = Territory.NULL_TERRITORY;
-    
-    private class Move implements Serializable{
-        public QuestionType type;
-    	public Player attPlayer;
-        public Player defPlayer;
-        public Territory selectedTarget = Territory.NULL_TERRITORY;
-        public Question question;
-        public RaceQuestion rQuestion;
-        public String answerString;
-        public double answerValue;     
-    }
-    
-    private final Move[] move;
+    private String name = "";
     
     public synchronized void setHighlitCell(Cell c){
         synchronized (mouseOver) {
@@ -68,16 +81,17 @@ public class GameBoard extends Map<Cell> implements Graphical{
     	mouseOver=Territory.NULL_TERRITORY;
     }
     
-    public void setCurrentPlayer(Player p){
-        if(move[0] != null){
-            move[0].attPlayer = p;
-        }
-    }
-    
     public GameBoard(MapGenerator<Cell> g, Layout layout){
         super(g, layout);
-        move = new Move[2];
-        move[0] = new Move();
+    }
+    
+    public GameBoard(Document xml,Layout layout) {
+    	this(xml,layout,new Cell(0,0));
+    }
+    
+    public GameBoard(Document xml,Layout layout,Cell t) {
+        super(layout,t);
+        initFromXML(xml);
     }
     
     /**
@@ -168,14 +182,12 @@ public class GameBoard extends Map<Cell> implements Graphical{
 //            t.calcBoundary(layout);
 //        }
         System.out.println("done generating");
+        toXMLString();
     }
 
-    public Territory getSelectedTarget(){
-        return move[0].selectedTarget;
-    }
     
     /**
-     * Selects the terrytory with specified id on the {@link GameBoard}
+     * Selects the territory with specified id on the {@link GameBoard}
      * @param id
      * @return the {@link Territory} with the specified id or {@link Territory#NULL_TERRITORY} if none found
      */
@@ -190,29 +202,13 @@ public class GameBoard extends Map<Cell> implements Graphical{
     
     public void selectTarget(Territory t){
         if(t != null){
-            move[0].selectedTarget = t;
-            move[0].selectedTarget.highlight();
-            move[0].defPlayer = t.getOwner();
             System.out.printf("Player%d selecting TARGET territory%d%n",t.getOwner().getId(), t.id);
         }
     }
-    public void unSelectTarget(){
-        if(move[0].selectedTarget != null) move[0].selectedTarget.unLight();
-        move[0].selectedTarget = null;
-    }
-    
-    public void evaluateMove(){   	
-        unSelectTarget();
-        //swich moves
-        move[0] = new Move();
-        needsRender = true;
-    }
-    
+
     public void finishRound(Player p){
         int num = (int) Math.round(p.getTerritoryNum()/2.0);
-        
-        unSelectTarget();
-        
+                
         for(Player pp : GameSettings.getInstance().players){
             if(pp.getTerritoryNum() == 0)
                 pp.kill();
@@ -239,15 +235,13 @@ public class GameBoard extends Map<Cell> implements Graphical{
     		mouseOver.unLight();				
 		}
         
-        if(needsRender && move[1] != null){
+        if(needsRender){
             int x0 = 0;
             int y0 = GameSettings.getInstance().GAME_HEIGHT;
             int cellHeight = (int) ((GameSettings.getInstance().SCREEN_HEIGHT-GameSettings.getInstance().GAME_HEIGHT) / 2.0);
             int cellWidth =  cellHeight;
             int padding = 5;
             
-            int attCol = move[1].attPlayer.getColorID()+1;
-            int defCol = move[1].defPlayer.getColorID()+1;
 //            System.out.println(attc);
 //            System.out.println(move[1].selectedBase.id);
             int y = y0;
@@ -276,4 +270,140 @@ public class GameBoard extends Map<Cell> implements Graphical{
             needsRender = false;            
         }
     }
+    
+    public String toXMLString() {
+    	String re = "";
+    	try {
+	    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	    	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	    	Document doc = dBuilder.newDocument();
+	    	// root element
+	    	Element rootElement = doc.createElement("Map");
+	    	rootElement.setAttribute("name", name);
+	    	doc.appendChild(rootElement);
+	    	for(Player player : GameSettings.getInstance().players) {
+	    		addPlayersXML(doc,rootElement,player);
+	    	}
+	    	TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	    	Transformer transformer = transformerFactory.newTransformer();
+	    	DOMSource source = new DOMSource(doc);
+	    	StreamResult consoleResult = new StreamResult(System.out);
+	    	transformer.transform(source, consoleResult);
+	    	StreamResult fileResult = new StreamResult(re);
+	    	transformer.transform(source, fileResult);
+    	} catch(ParserConfigurationException e) {
+    		e.printStackTrace();
+    	} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+    	
+    	return re;
+    }
+        
+    private void addPlayersXML(Document doc, Element parentElement, Player player) {
+    	Element playerElement = doc.createElement("Player");
+    	parentElement.appendChild(playerElement);
+    	for(Territory territory : player.getTerritories()) {
+    		addTerritoryXML(doc,playerElement,territory);
+    	}
+    }
+    
+    private void addTerritoryXML(Document doc, Element parentElement, Territory territory) {
+    	Element territoryElement = doc.createElement("Territory");
+    	parentElement.appendChild(territoryElement);
+    	for(Cell cell : territory.cells) {
+    		addCellXML(doc,territoryElement,cell);
+    	}
+    }
+    
+    private void addCellXML(Document doc, Element parentElement, Cell cell) {
+    	Element cellElement = doc.createElement("Cell");
+    	parentElement.appendChild(cellElement);
+    	Attr attr = doc.createAttribute("x");
+    	attr.setValue(cell.x+"");
+    	cellElement.setAttributeNode(attr);
+    	Attr attr2 = doc.createAttribute("y");
+    	attr2.setValue(cell.y+"");
+    	cellElement.setAttributeNode(attr2);
+    }
+
+ 
+    /*
+    Cell, cell.owner (Territory)
+    Territory (Gameboard.territories tomb)
+    Territory.cells tomb <-- cellák referenciái
+    Territory.owner (Player)
+    GameSettings.players
+    Settings.game_numOfPlayers
+    
+    Cell ---> Territory ---> Player
+         <--- array[i]  <--- array[i]             
+     * */
+    
+    private void initFromXML(Document doc) {
+    	doc.getDocumentElement().normalize();
+        System.out.print("Root element: ");
+        Element rootElement = doc.getDocumentElement();
+        name = rootElement.getAttribute("name");
+        System.out.println(rootElement.getNodeName());
+        NodeList nodeList = doc.getElementsByTagName("Player");
+        System.out.println("----------------------------");
+        initPlayersFromXML(nodeList);
+    }
+    
+    private void initPlayersFromXML(NodeList nodeList) {
+    	List<Player> re = new ArrayList<>();
+    	Settings.game_numOfPlayers = re.size();
+    	for(int i=0;i<nodeList.getLength();++i) {
+    		Node playerNode = nodeList.item(i);
+    		if(playerNode.getNodeType() != Node.ELEMENT_NODE) System.err.println("Hibas XML file.");
+    		Element playerElement = (Element) playerNode;
+    		NodeList territoriesNodeList = playerElement.getElementsByTagName("Territory");
+    		User u = new User();
+    		u.setUsername("nyomi");
+    		Player player = new PlayerHuman(u,0);
+    		initTerritoriesFromXML(territoriesNodeList,player);
+    		re.add(player);
+    	}
+    	GameSettings.getInstance().players = re;
+    }
+
+    private void initTerritoriesFromXML(NodeList nodeList, Player player) {
+    	territories = new Territory[nodeList.getLength()];
+    	System.out.println("-----------------Territories:"+nodeList.getLength());
+    	for(int i=0;i<nodeList.getLength();++i) {
+    		Node territoryNode = nodeList.item(i);
+    		if(territoryNode.getNodeType() != Node.ELEMENT_NODE) System.err.println("Hibas XML file.");
+    		Element territoryElement = (Element) territoryNode;
+    		NodeList cellsNodeList = territoryElement.getElementsByTagName("Cell");
+    		Territory territory = new Territory();
+    		initCellsFromXML(cellsNodeList,territory);
+    		territory.setOwner(player);
+    		territories[i] = territory;
+    	}
+    }
+
+	private void initCellsFromXML(NodeList nodeList, Territory territory) {
+    	for(int i=0;i<nodeList.getLength();++i) {
+    		Node cellNode = nodeList.item(i);
+    		if(cellNode.getNodeType() != Node.ELEMENT_NODE) System.err.println("Hibas XML file.");
+    		Element cellElement = (Element) cellNode;
+    		int x = Integer.parseInt(cellElement.getAttribute("x"));
+    		int y = Integer.parseInt(cellElement.getAttribute("y"));
+    		Cell cell =  new Cell(x,y);
+    		territory.add(cell);
+    	}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }
+

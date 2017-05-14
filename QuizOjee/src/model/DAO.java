@@ -3,6 +3,7 @@ package model;
 import java.util.List;
 import java.util.Map;
 
+import org.w3c.dom.Document;
 import model.exceptions.UserAlreadyExistsException;
 import model.exceptions.UserNotFoundException;
 
@@ -89,5 +90,9 @@ public interface DAO {
 	boolean addForumEntry(ForumEntry forumEntry);
 
 	boolean addForumTopic(ForumTopic forumTopic);
+
+	List<Document> getMapXMLs();
+
+	boolean addMapXML(String name, String xmlString);
 
 }
