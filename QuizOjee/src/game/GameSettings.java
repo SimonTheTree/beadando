@@ -49,11 +49,11 @@ public class GameSettings implements Serializable{
   public int showRightAnswerDelay = 2000; //ms
   
   /* ----- GAME DIMENSIONS ----- */
-  public final int SCREEN_WIDTH = Settings.MAIN_WINDOW_WIDTH;
-  public final int SCREEN_HEIGHT = Settings.MAIN_WINDOW_HEIGHT;
-  public final int GAME_INFOLABEL_HEIGHT =(int) (SCREEN_WIDTH * 1/6.0);
-  public final int GAME_WIDTH = SCREEN_WIDTH;
-  public final int GAME_HEIGHT = SCREEN_HEIGHT-GAME_INFOLABEL_HEIGHT;
+  public int SCREEN_WIDTH = Settings.MAIN_WINDOW_WIDTH;
+  public int SCREEN_HEIGHT = Settings.MAIN_WINDOW_HEIGHT;
+  public int GAME_INFOLABEL_HEIGHT =(int) (SCREEN_WIDTH * 1/6.0);
+  public int GAME_WIDTH = SCREEN_WIDTH;
+  public int GAME_HEIGHT = SCREEN_HEIGHT-GAME_INFOLABEL_HEIGHT;
   
   /* ----- GAME VARIABLES ----- */
   public int numOfRounds;

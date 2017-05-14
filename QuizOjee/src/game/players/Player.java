@@ -20,6 +20,8 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *  Abstaract jatekos osztaly, mely tulajdonkeppen csak a jatekos interfesz miatt
@@ -30,7 +32,7 @@ public abstract class Player implements Serializable{
     
     protected int team;
     protected int color;
-    protected ArrayList<Territory> territories;
+    protected Set<Territory> territories;
     protected boolean isAlive;
     protected User user;
     protected Statistics globStats;
@@ -71,7 +73,7 @@ public abstract class Player implements Serializable{
     	this.color = color;
         this.team = team;
         points = 0;
-        territories = new ArrayList<>();
+        territories = new TreeSet<>();
         user = null;
         globStats = new Statistics();
         localStats = new Statistics();
@@ -87,9 +89,11 @@ public abstract class Player implements Serializable{
     
     public void save() {
     	try {
-    		globStats.setPoints( (int) (statsPoints + points));
-    		localStats.setPoints( (int) (points));
-			MainWindow.getInstance().controller.updateStatistics(globStats);
+    		Statistics stat = new Statistics(); //this will be added to the database after each turn
+    		stat.setPoints((int) points - localStats.getPoints()); 
+    		globStats.setPoints(globStats.getPoints() + stat.getPoints()); //total sum of the users points
+    		localStats.setPoints( stat.getPoints() + localStats.getPoints()); //sum of te users point for this game
+			MainWindow.getInstance().controller.updateStatistics(stat);
 		} catch (UserNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -168,7 +172,7 @@ public abstract class Player implements Serializable{
         territories.add(t);
     }
     public List<Territory> getTerritories(){
-        return territories;
+        return new ArrayList<>(territories);
     }
     public void removeTerritory(Territory t){
         territories.remove(t);

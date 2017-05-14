@@ -6,12 +6,16 @@
 )
 
 GUI
+!+* kérdezzen esc-nél játékban
+* tippkérdésnél annak a tippjeit is beveszi, akik nincsenek körön
 + kiírja h server launching | waiting for others
 + ha vki kilép, pause
 ¤ multicolor buttons
+* create-game 2.szor nem megy
 
-+ create-game 2.szor nem megy
-
+?* mindenki lenyomta a választ, de a helyes válasz mégis várat magára
+?* aki kiesett játékos még mindig sorra jön
+?* simon mindenkit tudott támadni
 ?* join cancelre nem abortol
 + játék vége észlelése
 ?+ játék pontozása
@@ -21,11 +25,10 @@ GUI
 ?+ racequestion double
 ?* néha nem tűnik el a kijelölés
 ? a támadó és védő játékoson kívül másnál nem jelenik meg kérdés
-
+* changed default font (őöüóúűí)
 CONTROLLER
 + összes topic lekérdezése listába (név, id kell) -> kell egy Topic bean
 
 MODEL
 
 DONE
-* default font őöüóúűí

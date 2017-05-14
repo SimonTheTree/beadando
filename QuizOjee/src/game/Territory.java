@@ -11,6 +11,7 @@ import gameTools.PointHD;
 import gameTools.map.Layout;
 import gameTools.map.Map;
 import gameTools.map.TileHex;
+import view.Settings;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -83,12 +84,13 @@ public class Territory implements Serializable, Comparable<Territory> {
 	}
 
 	public void setOwner(Player p) {
-		if (owner != null)
+		if (owner != null) {
 			owner.removeTerritory(this);
+		}
 		this.owner = p;
 		p.addTerritory(this);
 	}
-
+	
 	public Player getOwner() {
 		return this.owner;
 	}
@@ -194,15 +196,27 @@ public class Territory implements Serializable, Comparable<Territory> {
 	        }
 //		}
 
-		// draw strength
-		g.setColor(Color.WHITE);
-		Cell c = new Cell(getCenter().x, getCenter().y);
-		Point p = c.toPixel(layout).toPoint();
-		int X = p.x;
-		int Y = p.y + 15;
-		// String s = String.format("%d", strength);
-		// g.setFont(new Font("Courier New", Font.PLAIN, 20));
-		// g.drawString(s, X, Y);
+		// draw debuginfo
+		if(GameSettings.getInstance().dbg) {
+			try {
+				g.setColor(Color.WHITE);
+				Cell c = new Cell(getCenter().x, getCenter().y);
+				Point p = c.toPixel(layout).toPoint();
+				int X = p.x;
+				int Y = p.y + 15;
+				String s = String.format("%d", id);
+				g.setFont(new Font("Courier New", Font.PLAIN, 20));
+				g.drawString(s, X, Y);			
+				Y += 15;
+				s = getOwner().getUser().getUsername();
+				g.setFont(new Font("Courier New", Font.PLAIN, 20));
+				g.drawString(s, X, Y);			
+			}catch(NullPointerException e) {
+				
+			}
+		} else {
+//			System.out.println("nodebug");
+		}
 	}
 
 	@Override
@@ -219,8 +233,6 @@ public class Territory implements Serializable, Comparable<Territory> {
 	public int compareTo(Territory t) {
 		return id-t.id;
 	}
-	
-	
 	
 	Set<LineHD> getBorderLines(Layout layout){
 //		System.out.println();
@@ -243,4 +255,8 @@ public class Territory implements Serializable, Comparable<Territory> {
     	return border;
     }
 
+	@Override
+	public String toString() {
+		return "Territory#"+id+" Owner:"+owner.getUser().getUsername() +"("+ owner.getId() +")";
+	}
 }

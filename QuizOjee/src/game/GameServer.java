@@ -100,6 +100,8 @@ public class GameServer implements GameInputListener {
 		}
 		
 		settings = GameSettings.getInstance();
+		settings.setMapParamX(100);
+		settings.setMapParamY(100);
 		settings.TerrPerPlayer = Settings.game_TPP;
 		settings.setMapGenerator("Rectangular Hexmap");
 		// settings.setMapGenerator("Paralelloid Hexmap Pointy");
@@ -113,7 +115,7 @@ public class GameServer implements GameInputListener {
 		settings.layout.size = new Point(32, 10);
 		settings.layout.origin = new Point(0, 0);
 		settings.mapTileN = new Dimension(1, 1);
-		MapGeneratorHexRectangleFlat<Cell> gen = new MapGeneratorHexRectangleFlat<Cell>("name", new Cell(0,0), new int[]{25, 25});
+		MapGeneratorHexRectangleFlat<Cell> gen = new MapGeneratorHexRectangleFlat<Cell>("name", new Cell(0,0), new int[]{25,25});
 		List<Cell> l = gen.generate();
 		board = new GameBoard(gen, settings.layout);
 		settings.mapTileN = board.getDimensionInTiles();
@@ -170,6 +172,7 @@ public class GameServer implements GameInputListener {
 					//battle phase
 					while(!gameFinished){
 						for(Player p : settings.players){
+							if(p.getTerritoryNum() == 0) continue;
 							currentPlayer = p.getUser().getUsername();
 							host.broadCast(new GameMessage(Commands.YOUR_TURN, currentPlayer));
 							// ...meanwhile a serverlistener kezeli a kliens uzeneteit
@@ -376,7 +379,7 @@ public class GameServer implements GameInputListener {
 		defPlayer.incDiffN(question.getDifficulty());
 		
 		//should recieve 2 answers... wait for settings.questionTime max before continuing
-		GameMessage[] ans =  waitForMsg(Commands.NORM_ANSWER, settings.questionTime);
+		GameMessage[] ans =  waitForMsg(Commands.NORM_ANSWER, settings.questionTime, 2);
 
 		
 		//share users answers

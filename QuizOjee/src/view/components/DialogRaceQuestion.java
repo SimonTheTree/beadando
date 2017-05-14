@@ -183,6 +183,8 @@ public class DialogRaceQuestion extends JDialog {
 	 * @param bool true -> enabled false -> ha erted... 
 	 */
 	public void setInputEnabled(boolean bool) {
+		txtfAnswer.setVisible(bool);
+		btnGo.setVisible(bool);
 		txtfAnswer.setEditable(bool);
 		btnGo.setEnabled(bool);
 	}
@@ -213,6 +215,10 @@ public class DialogRaceQuestion extends JDialog {
 		rqDialog.lblSouth.setText("10s");
 		rqDialog.pack();
 		rqDialog.answersPanel.add(new GLabel("Hello"));
+		rqDialog.btnGo.addActionListener((e) -> {
+			System.out.println("éáááááááááéáéáéáéááá");
+		});
+		rqDialog.setInputEnabled(false);
 		
 		do {
 			try {

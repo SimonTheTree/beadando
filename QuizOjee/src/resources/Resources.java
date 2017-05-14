@@ -17,6 +17,7 @@ import resources.ResourceLoader;
 public class Resources {
 
 	public static final BufferedImage MAIN_WINDOW_BACKGROUND = ResourceLoader.getImage("questionBackground.jpg");
+	public static final BufferedImage GAME_WAIT_FOR_JOIN_BG = ResourceLoader.getImage("waitJoinBG.jpg");
 	public static final BufferedImage WOOD_BTN_BG = ResourceLoader.getImage("woodBg2.jpg");
 	
 	public static BufferedImage[] ARROW_RIGHT;
