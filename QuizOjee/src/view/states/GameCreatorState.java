@@ -11,16 +11,13 @@ import view.components.PanelTopicList;
 
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import game.GameBoard;
 import game.GameServer;
-import game.GameSettings;
 import view.components.GButton;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -37,7 +34,7 @@ public class GameCreatorState extends DefaultState {
 	private GButton btnCancel;
 	
 	private JSpinner spinner;
-	
+
 	private JSpinner spinTpp;
 
 	private ButtonGroup btnGroup;
@@ -45,20 +42,15 @@ public class GameCreatorState extends DefaultState {
 	private JRadioButton rdbtn30rounds;
 	private JRadioButton rdbtnBlitzkrieg;
 	private JComboBox cbSelectMap;
+	
 	public GameCreatorState(MainWindow r) {
 		super(MainWindow.STATE_GAME_SETTINGS, Settings.MAIN_WINDOW_WIDTH, Settings.MAIN_WINDOW_HEIGHT);
 		root = r;
-//		maps = r.controller.getMaps();
+		
 		inputManager.addKeyMapping("ESC", KeyEvent.VK_ESCAPE);
 		inputManager.addKeyMapping("s", KeyEvent.VK_S);
 		
 		JPanel paneMapDisplay = new JPanel();
-		GameSettings.getInstance().GAME_WIDTH = paneMapDisplay.getWidth();
-		GameSettings.getInstance().SCREEN_WIDTH = paneMapDisplay.getWidth();
-		GameSettings.getInstance().GAME_HEIGHT = paneMapDisplay.getHeight();
-		GameSettings.getInstance().SCREEN_HEIGHT = paneMapDisplay.getHeight();
-		GameSettings.getInstance().GAME_INFOLABEL_HEIGHT = 0;
-		
 		PanelTopicList topicsPanel = new PanelTopicList(root.controller.getTopicsWithQuestionNumbers());
 		
 		GLabel lblTitle = new GLabel(Labels.LBL_TITLE_GAME_CREATOR);
@@ -244,7 +236,5 @@ public class GameCreatorState extends DefaultState {
 		if(inputManager.isKeyTyped("next")){btnNextMap.doClick();}
 		if(inputManager.isKeyTyped("prev")){btnPrevMap.doClick();}
 		if(inputManager.isKeyTyped("ESC")){btnCancel.doClick();}
-		
-//		currentGameboard.render(paneMapDisplay);
 	}
 }
