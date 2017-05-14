@@ -86,6 +86,7 @@ public class DAOImp implements DAO {
 
 	private static final String SQL_GET_MAP_XMLs = "SELECT name, terrain FROM MAPS order by name";
 	private static final String SQL_ADD_MAP = "INSERT INTO MAPS (map_id, name, terrain) VALUES (?, ?, ?)";
+	private static final String SQL_GET_ADVERTISEMENTS = "SELECT HTML FROM ADS";
 	
 	
 	public DAOImp() {
@@ -1000,7 +1001,32 @@ public class DAOImp implements DAO {
 		}
 		return false;
 	}
-	
+
+	public List<String> getAdvertisements() {
+		System.out.println("get Advertisements");
+		List<String> re = new ArrayList<>();
+		
+		Session session = openSSHTunnel();
+		if (session == null) return null;
+		
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + DATABASE_LINK, "h664800", "jelszo");
+			Statement st = conn.createStatement();
+		) {
+			ResultSet rs = st.executeQuery(SQL_GET_ADVERTISEMENTS);
+			while(rs.next()) {
+				re.add(rs.getString(1));
+			}
+			return re;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			session.disconnect();
+		}
+		
+		return re;
+	}
 	//TODO lekerdezes
 	
 	public synchronized Map<String,Integer> getQuestionQuantityByCategory() {
@@ -1233,5 +1259,6 @@ public class DAOImp implements DAO {
 		}
 		return null;
 	}
+
 
 }

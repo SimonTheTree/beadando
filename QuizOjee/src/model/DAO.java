@@ -95,4 +95,6 @@ public interface DAO {
 
 	boolean addMapXML(String name, String xmlString);
 
+	List<String> getAdvertisements();
+
 }

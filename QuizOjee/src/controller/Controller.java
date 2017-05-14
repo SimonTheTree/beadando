@@ -49,6 +49,7 @@ public class Controller implements Refreshable {
 	private List<Topic> fullTopicList = null;
 	private Object forumTopicsKey = new Object();
 	private List<ForumTopic> forumTopics = null;
+	private List<String> advertisements = null;
 	
 	//lekerdezesekhez
 	private Object questionQuantityByCategoryKey = new Object();
@@ -222,6 +223,8 @@ public class Controller implements Refreshable {
 					actualMinDiff = -1;
 					actualMaxDiff = -1;
 					actualTopicList = null;
+				} else if(questions.size() == 0) {
+					return getQuestion(minDiff,maxDiff,topicList,n);
 				} else {
 					random = new Random().nextInt(questions.size());
 				}
@@ -255,6 +258,8 @@ public class Controller implements Refreshable {
 				if(raceQuestions.size() == 1) {
 					random = 0;
 					actualRaceTopicList = null;
+				} else if(raceQuestions.size() == 0) {
+					return getRaceQuestion(topicList, n);
 				} else {
 					random = new Random().nextInt(raceQuestions.size());
 				}
@@ -480,6 +485,14 @@ public class Controller implements Refreshable {
 	
 	public boolean addMap(GameBoard map) {
 		return db.addMapXML(map.getName(),map.toXMLString());
+	}
+	
+	public String getAdvertisement() {
+		if(advertisements == null) {
+			advertisements = db.getAdvertisements();
+		}
+		Random r = new Random();
+		return advertisements.get(r.nextInt(advertisements.size()));
 	}
 	
 	//TODO lekerdezesek
